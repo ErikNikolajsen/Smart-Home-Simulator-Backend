@@ -3,7 +3,7 @@ package entities;
 import java.awt.Point;
 import java.util.UUID;
 
-public class Entity {
+public abstract class Entity {
 	private UUID id;
 	private String name;
 	private Point position;

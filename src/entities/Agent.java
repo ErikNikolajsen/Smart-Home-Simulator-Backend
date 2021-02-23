@@ -4,7 +4,9 @@ import java.awt.Point;
 
 public class Agent extends Entity {
 	
-	int speed = 1;
+	int speed = 1; // m/s
+	int weigth = 70; // kg 
+	
 	
 	public Agent(String name, int x, int y) {
 		super(name, x, y);

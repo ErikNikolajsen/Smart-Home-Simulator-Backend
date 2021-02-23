@@ -12,7 +12,7 @@ public class Sensor extends Entity {
 		super(name, x, y);
 	}
 	
-	public void trigger() {
+	public void onInteraction() {
 		//Log.writeToFile("test", "??-??-?? ??.??.???", name, getName());
 	}
 }

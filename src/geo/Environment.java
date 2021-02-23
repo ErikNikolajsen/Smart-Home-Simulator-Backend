@@ -1,5 +1,6 @@
 package geo;
 
 public class Environment {
-	int[][] environment = new int[10][10];
+	float xMax, yMax;
+	int[][] tiles = new int[10][10];
 }
