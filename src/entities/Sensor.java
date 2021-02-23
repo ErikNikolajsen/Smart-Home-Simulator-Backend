@@ -6,13 +6,11 @@ import utils.Log;
  * Make same name trigger methods for values of type boolean, int, float, string, etc.
  */
 
-public class Sensor extends Entity {
+public abstract class Sensor extends Entity {
 	
 	public Sensor(String name, int x, int y) {
 		super(name, x, y);
 	}
 	
-	public void onInteraction() {
-		//Log.writeToFile("test", "??-??-?? ??.??.???", name, getName());
-	}
+	public abstract void onInteraction();
 }

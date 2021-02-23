@@ -6,17 +6,14 @@ import java.io.IOException;
 
 public class Log {
 	
-	/*
-	 * TODO:
-	 * Make methods non-static
-	 */
-	
-	public static void createFile(String filename) {
+	private static String fileName;
+
+	public static void createFile() {
 	    try {
-	      File myObj = new File("logs\\"+filename+".csv");
+	      File myObj = new File("logs\\"+fileName+".csv");
 	      if (myObj.createNewFile()) {
 	        System.out.println("File created: " + myObj.getName());
-	        writeToFile(filename, "timestamp", "sensor", "value"); //write .csv column headers
+	        writeToFile("timestamp", "sensor", "value"); //write .csv column headers
 	      } else {
 	        System.out.println("File already exists.");
 	      }
@@ -26,9 +23,9 @@ public class Log {
 	    }
 	}
 	
-	public static void writeToFile(String filename, String timestamp, String sensorName, String value) {
+	public static void writeToFile(String timestamp, String sensorName, String value) {
 	    try {
-	      FileWriter myWriter = new FileWriter("logs\\"+filename+".csv",true); //the true will append the new data instead of overwriting
+	      FileWriter myWriter = new FileWriter("logs\\"+fileName+".csv", true); //the true will append the new data instead of overwriting
 	      myWriter.write(timestamp + "," + sensorName + "," + value + "\n");
 	      myWriter.close();
 	      System.out.println("Logged: " + timestamp + ", " + sensorName + ", " + value);
@@ -39,4 +36,8 @@ public class Log {
 	}
 	
 	
+	//Accessors and Mutators
+	public static void setFileName(String fileName) {
+		Log.fileName = fileName;
+	}
 }
