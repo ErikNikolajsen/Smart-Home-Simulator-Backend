@@ -25,11 +25,10 @@ public class Main {
 		testSensor.onInteraction();
 		testSensor.onInteraction();
 		*/
-		
-		Log.setFileName("test");
-		Log.createFile();
-		Simulator world1 = new Simulator();
-		world1.startSimulator();
+		Model.setLog(new Log("test"));
+		Model.getLog().createFile();
+		Model.setSimulator(new Simulator());
+		Model.getSimulator().startSimulator();
 		
 		
 		/*

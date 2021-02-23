@@ -27,7 +27,7 @@ public class Simulator {
 			TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
 			//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
 			//System.out.println(datetime);
-			//testSensor.onInteraction();
+			testSensor.onInteraction();
 			//System.out.print("E");
 			tick++;
 		}
@@ -61,4 +61,10 @@ public class Simulator {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public LocalDateTime getDatetime() {
+		return datetime;
+	}
+	
+	
 }

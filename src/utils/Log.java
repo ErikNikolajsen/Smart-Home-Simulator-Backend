@@ -6,9 +6,13 @@ import java.io.IOException;
 
 public class Log {
 	
-	private static String fileName;
+	private String fileName;
 
-	public static void createFile() {
+	public Log(String name) {
+		fileName = name;
+	}
+	
+	public void createFile() {
 	    try {
 	      File myObj = new File("logs\\"+fileName+".csv");
 	      if (myObj.createNewFile()) {
@@ -23,7 +27,7 @@ public class Log {
 	    }
 	}
 	
-	public static void writeToFile(String timestamp, String sensorName, String value) {
+	public void writeToFile(String timestamp, String sensorName, String value) {
 	    try {
 	      FileWriter myWriter = new FileWriter("logs\\"+fileName+".csv", true); //the true will append the new data instead of overwriting
 	      myWriter.write(timestamp + "," + sensorName + "," + value + "\n");
@@ -35,9 +39,4 @@ public class Log {
 	    }
 	}
 	
-	
-	//Accessors and Mutators
-	public static void setFileName(String fileName) {
-		Log.fileName = fileName;
-	}
 }

@@ -1,5 +1,6 @@
 package entities.library;
 
+import controllers.Model;
 import entities.*;
 import utils.*;
 
@@ -15,10 +16,10 @@ public class Lamp extends Sensor {
 	public void onInteraction() {
 		if (value == false) {
 			value = true;
-			Log.writeToFile("??-??-?? ??.??.???", getName(), "true");
+			Model.getLog().writeToFile(Model.getSimulator().getDatetime().toString(), getName(), "true");
 		} else if (value == true) {
 			value = false;
-			Log.writeToFile("??-??-?? ??.??.???", getName(), "false");
+			Model.getLog().writeToFile(Model.getSimulator().getDatetime().toString(), getName(), "false");
 		}
 		
 	}
