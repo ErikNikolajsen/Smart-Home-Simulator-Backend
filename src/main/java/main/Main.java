@@ -3,11 +3,15 @@ package main;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import entities.*;
 import entities.library.*;
 import utils.*;
 import logic.*;
 
+@SpringBootApplication
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -25,11 +29,6 @@ public class Main {
 		testSensor.onInteraction();
 		testSensor.onInteraction();
 		*/
-		Model.setLog(new Log("test"));
-		Model.getLog().createFile();
-		Model.setSimulator(new Simulator());
-		Model.getSimulator().startSimulator();
-		
 		
 		/*
 		LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
@@ -37,6 +36,15 @@ public class Main {
 		datetime = datetime.plusNanos(16000000);
 		System.out.println(datetime);
 		*/
+		
+		/*
+		Model.setLog(new Log("test"));
+		Model.getLog().createFile();
+		Model.setSimulator(new Simulator());
+		Model.getSimulator().startSimulator();
+		*/
+		
+		SpringApplication.run(Main.class, args);
 		
 	}
 
