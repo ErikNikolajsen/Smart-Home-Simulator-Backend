@@ -1,4 +1,4 @@
-package controllers;
+package main;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,3 +16,4 @@ public class SystemController {
 		return "pong";
 	}
 }
+
