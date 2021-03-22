@@ -1,7 +1,7 @@
 package entities.library;
 
-import controllers.Model;
 import entities.*;
+import main.Model;
 import utils.*;
 
 public class Lamp extends Sensor {

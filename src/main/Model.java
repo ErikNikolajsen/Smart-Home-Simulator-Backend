@@ -1,4 +1,4 @@
-package controllers;
+package main;
 
 import logic.Simulator;
 import utils.Log;

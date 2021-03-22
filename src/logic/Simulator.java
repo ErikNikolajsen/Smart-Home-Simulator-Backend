@@ -24,7 +24,7 @@ public class Simulator {
 			update();
 			render();
 			
-			TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
+			//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
 			//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
 			//System.out.println(datetime);
 			testSensor.onInteraction();
