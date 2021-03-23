@@ -44,6 +44,7 @@ public class Main {
 		Model.getSimulator().startSimulator();
 		*/
 		
+		
 		SpringApplication.run(Main.class, args);
 		
 	}
