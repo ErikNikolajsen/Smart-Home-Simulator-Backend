@@ -7,16 +7,16 @@ import entities.Sensor;
 
 public class Environment {
 	// Map dimensions
-	int tileSize; // x and y dimensions of a square tile in centimeters
+	int tileSize = 100; // x and y dimensions of a square tile in centimeters
 	int xMax, yMax; // map dimensions defined as a rectangle of tiles
-	Tile[][] tiles = new Tile[10][10];
+	Tile[][] tiles;
 	
 	// Entitites
 	Agent agent;
 	ArrayList<Sensor> sensorList = new ArrayList<Sensor>();
 	
-	public Environment(int x, int y) {
-		tiles = new Tile[10][10];
+	public Environment(int xMax, int yMax) {
+		tiles = new Tile[xMax][yMax];
 	}
 	
 }

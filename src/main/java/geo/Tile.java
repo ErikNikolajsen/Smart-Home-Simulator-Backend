@@ -2,22 +2,31 @@ package geo;
 
 import java.awt.Point;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class Tile {
-	private final Point position;
-	private final int type;
+	@Getter @Setter private Point position;
+	@Getter @Setter private int type; // 0=nothing, 1=collisionObject, >1=sensorID
 
 	public Tile(int x, int y, int type) {
 		this.position = new Point(x,y);
 		this.type = type;
 	}
 	
-	
-	
-	public Point getPosition() {
-		return position;
+	// empty constructor used for POST requests
+	public Tile() {
 	}
+	
+	public boolean isPassable() {
+		if (this.type == 1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 
-	public int getType() {
-		return type;
-	}
+	
+	
 }

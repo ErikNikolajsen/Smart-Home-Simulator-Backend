@@ -28,6 +28,7 @@ public class SystemController {
 	public @ResponseBody int amount() {
 		return i;
 	}
+	// http://localhost:8080/api/v2/system/amount
 	
 	@GetMapping("/returnIntParameter")
 	public @ResponseBody int returnIntParameter(@RequestParam int n) {
@@ -53,20 +54,22 @@ public class SystemController {
 	// or
 	// http://localhost:8080/api/v2/system/returnOptionalStringParameterOrDefaultValue
 	
-	/*
-	@PostMapping("/increase")
-	public void increase(@RequestBody int n) throws IOException {
-		i++;
-		return i;
-	}
-	*/
-	
 	@GetMapping("/tile")
 	public @ResponseBody Tile tile() {
 		Tile x = new Tile(1,1,0);
 		return x;
 	}
 	// http://localhost:8080/api/v2/system/tile
+	
+	
+	@PostMapping("/increase")
+	public int increase(@RequestBody int n) {
+		i=i+n;
+		return i;
+	}
+	
+	
+	
 	
 	
 	/*
