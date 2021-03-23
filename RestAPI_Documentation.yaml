@@ -1,0 +1,102 @@
+---
+swagger: "2.0"
+info:
+  description: API for smart home simulator
+  version: 1.0.0
+  title: RestAPI interface
+host: virtserver.swaggerhub.com
+basePath: /munz11/RestAPIIteration1/1.0.0
+schemes:
+- https
+- http
+paths:
+  /system/ping:
+    get:
+      tags:
+      - system
+      summary: Ping the system
+      description: Checks if the system is online
+      produces:
+      - text/plain
+      parameters: []
+      responses:
+        "200":
+          description: The system is up and running
+  /roomConfig/floorPlan:
+    post:
+      summary: Send the floor plan
+      description: Send the floor plan to the heavy lifting component
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: floorPlan
+        description: graphical representation of floor plan describing what is present at each tile
+        required: true
+        schema:
+          $ref: '#/definitions/tile'
+      responses:
+        "200":
+          description: The floor plan has been sent successfully
+  /roomConfig/sensorsDefined:
+    post:
+      summary: Send list of sensors
+      description: Sends the list of sensors defined and being used in the room configuration
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: sensors
+        description: list of sensor objects defined and being used in the room configuration
+        required: true
+        schema:
+          $ref: '#/definitions/sensor'
+      responses:
+        "200":
+          description: The list of sensors has been sent successfully
+definitions:
+  tile:
+    type: object
+    required:
+    - entity
+    - placement
+    properties:
+      placement:
+        type: array
+        example:
+        - 1
+        - 2
+        description: the placement just has the [x,y] value
+        items:
+          type: integer
+      entity:
+        type: integer
+        example: 0
+        description: 0 means nothing, 1 means collision and any other would be the id of the sensor present.
+  sensor:
+    type: object
+    required:
+    - default value
+    - id
+    - placement
+    - type
+    properties:
+      id:
+        type: integer
+        example: 89727
+      type:
+        type: integer
+        example: 0
+        description: 0 is for passive and 1 is for active
+      placement:
+        type: array
+        example:
+        - 0
+        - 1
+        description: the array represents the coordinates of the tiles with alternating x and y depending on how many tiles the sensor occupies [x1,y1,x2,y2]
+        items:
+          type: integer
+      default value:
+        type: boolean
+        example: false
+        description: false if the sensor is turned off or true if the sensor is on
