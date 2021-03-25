@@ -1,6 +1,4 @@
-package pathfinding;
-
-import pathfinding.Node;
+package pathfinding3;
 
 public abstract class Network {
     
