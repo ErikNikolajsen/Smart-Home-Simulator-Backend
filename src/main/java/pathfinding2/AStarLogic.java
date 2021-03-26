@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * A* search logic.
- *
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
- */
 public class AStarLogic {
 
     /**
@@ -109,7 +104,7 @@ public class AStarLogic {
             x - 1, y - 1, 	// south-west
             x + 1, y - 1, 	// south-east
             x + 1, y + 1, 	// north-east
-            x - 1, y + 1, 	// north-west
+            x - 1, y + 1 	// north-west
         	
         };
 

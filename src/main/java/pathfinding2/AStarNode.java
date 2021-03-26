@@ -1,10 +1,5 @@
 package pathfinding2;
 
-/**
- * Generic A* node.
- *
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
- */
 public class AStarNode {
 
 

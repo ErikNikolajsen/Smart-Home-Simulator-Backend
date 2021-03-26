@@ -6,11 +6,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * A* grid containing A* nodes.
- *
- * @author Almas Baimagambetov (AlmasB) (almaslvl@gmail.com)
- */
 public class AStarGrid {
 
     private AStarLogic logic = new AStarLogic();

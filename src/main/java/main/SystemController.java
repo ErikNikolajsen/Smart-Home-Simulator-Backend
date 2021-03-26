@@ -67,18 +67,5 @@ public class SystemController {
 		i=i+n;
 		return i;
 	}
-	
-	
-	
-	
-	
-	/*
-	@GetMapping("/randomize")
-	public Process4Web generate() throws IOException {
-		Process p = new Process("");
-		ProcessGenerator.randomizeProcess(p, RandomizationConfiguration.BASIC_VALUES);
-		return new Process4Web(p.getId(), p);
-	}
-	*/
 }
 
