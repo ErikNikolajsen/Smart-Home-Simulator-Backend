@@ -53,6 +53,12 @@ public class RoomConfigController {
 	// pathfinding2 real
 	AStarGrid grid2;
 	
+	@GetMapping("/getGrid")
+	public @ResponseBody AStarGrid getGrid() {
+		AStarGrid testGrid = new AStarGrid(5,5);
+		return testGrid; 
+	}
+	
 	// instantiates a grid of @width and @height with tiles being WALKABLE by default.
 	@PostMapping("/instantiateGrid")
 	public void instantiateGrid(@RequestBody int width, int height) {

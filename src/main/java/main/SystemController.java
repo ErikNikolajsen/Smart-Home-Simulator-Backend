@@ -22,6 +22,8 @@ public class SystemController {
 	}
 	// http://localhost:8080/api/v2/system/ping
 	
+	
+	/*
 	int i = 0;
 	
 	@GetMapping("/amount")
@@ -67,5 +69,6 @@ public class SystemController {
 		i=i+n;
 		return i;
 	}
+	*/
 }
 
