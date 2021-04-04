@@ -23,6 +23,10 @@ public class AStarNode {
         this.y = y;
         this.state = state;
     }
+    
+    //default constructor for controller
+    public AStarNode() {
+	}
 
     /**
      * Set user specific data.

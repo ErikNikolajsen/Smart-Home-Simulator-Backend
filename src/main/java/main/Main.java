@@ -6,13 +6,14 @@ import java.util.Arrays;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import entities.*;
 import entities.library.*;
 import utils.*;
 import logic.*;
 
-@SpringBootApplication
+@SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -23,7 +24,10 @@ public class Main {
 		System.out.println(testSensor.getPosition().toString());
 		
 		System.out.println(testAgent.getPosition().distance(testSensor.getPosition()));
-
+  
+  
+  
+  
 		
 		Log.writeToFile("2020-02-11 13:14:00.099", "Thermometer", "21.3");
 		Log.writeToFile("2020-02-11 13:14:01.098", "Kitchen", "True");

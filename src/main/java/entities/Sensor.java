@@ -3,7 +3,8 @@ package entities;
 import utils.Log;
 
 /* TODO
- * Make same name trigger methods for values of type boolean, int, float, string, etc.
+ * Make interact method
+ * 
  */
 
 public abstract class Sensor extends Entity {

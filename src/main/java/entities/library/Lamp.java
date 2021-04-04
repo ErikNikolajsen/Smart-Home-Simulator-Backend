@@ -1,7 +1,7 @@
 package entities.library;
 
 import entities.*;
-import main.Model;
+import main.Resources;
 import utils.*;
 
 public class Lamp extends Sensor {
@@ -16,10 +16,10 @@ public class Lamp extends Sensor {
 	public void onInteraction() {
 		if (value == false) {
 			value = true;
-			Model.getLog().writeToFile(Model.getSimulator().getDatetime().toString(), getName(), "true");
+			Resources.getLog().writeToFile(Resources.getSimulator().getDatetime().toString(), getName(), "true");
 		} else if (value == true) {
 			value = false;
-			Model.getLog().writeToFile(Model.getSimulator().getDatetime().toString(), getName(), "false");
+			Resources.getLog().writeToFile(Resources.getSimulator().getDatetime().toString(), getName(), "false");
 		}
 		
 	}

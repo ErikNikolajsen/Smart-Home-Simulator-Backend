@@ -1,4 +1,4 @@
-package main;
+package controllers;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import geo.Tile;
 
 @RestController
-@RequestMapping("/api/v2/system/")
+@RequestMapping("/api/system/")
 @CrossOrigin
 public class SystemController {
 	
@@ -31,6 +31,13 @@ public class SystemController {
 		return i;
 	}
 	// http://localhost:8080/api/v2/system/amount
+	
+	@GetMapping("/increase2")
+	public @ResponseBody int increase2() {
+		i=i+2;
+		return i;
+	}
+	// http://localhost:8080/api/v2/system/increase2
 	
 	@GetMapping("/returnIntParameter")
 	public @ResponseBody int returnIntParameter(@RequestParam int n) {

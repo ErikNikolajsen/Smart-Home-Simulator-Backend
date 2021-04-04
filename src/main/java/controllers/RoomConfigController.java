@@ -1,4 +1,4 @@
-package main;
+package controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,17 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import geo.Grid;
 import geo.Tile;
+import main.Resources;
 import pathfinding2.AStarGrid;
 import pathfinding2.AStarNode;
 import pathfinding2.NodeState;
 
 @RestController
-@RequestMapping("/api/v2/roomConfig/")
+@RequestMapping("/api/roomConfig/")
 @CrossOrigin
 public class RoomConfigController {
 	
@@ -53,16 +55,24 @@ public class RoomConfigController {
 	// pathfinding2 real
 	AStarGrid grid2;
 	
-	@GetMapping("/getGrid")
-	public @ResponseBody AStarGrid getGrid() {
+	@GetMapping("/getGridTest")
+	public @ResponseBody AStarGrid getGridTest() {
 		AStarGrid testGrid = new AStarGrid(5,5);
 		return testGrid; 
 	}
-	
+	/*
 	// instantiates a grid of @width and @height with tiles being WALKABLE by default.
 	@PostMapping("/instantiateGrid")
 	public void instantiateGrid(@RequestBody int width, int height) {
 		this.grid2 = new AStarGrid(width,height);
+	}
+	*/
+	
+	
+
+	@PostMapping("/instantiateGrid")
+	public void instantiateGrid(@RequestBody AStarGrid aStarGrid) {
+		Resources.setaStarGrid(aStarGrid);
 	}
 	
 	@PostMapping("/insertCollisionObjects")
@@ -72,18 +82,16 @@ public class RoomConfigController {
 		}
 	}
 	
-	
-	
-	ArrayList<Tile> floorplan;
-	
-	@PostMapping("/floorplan")
-	public void floorplan(@RequestBody ArrayList<Tile> tiles) {
-		this.floorplan = tiles;
+	@GetMapping("/getGrid")
+	public @ResponseBody AStarGrid getGrid() {
+		return Resources.getaStarGrid();
 	}
 	
-	@GetMapping("/floorplanGet")
-	public @ResponseBody ArrayList<Tile> floorplanGet() {
-		return this.floorplan;
+	@GetMapping("/getPath")
+	public @ResponseBody List<AStarNode> getPath(@RequestParam int startx, int starty, int targetx, int targety ) {
+		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety);
 	}
+	// http://localhost:8080/api/roomConfig/getPath?startx=0&starty=0&targetx=4&targety=4
+
 
 }

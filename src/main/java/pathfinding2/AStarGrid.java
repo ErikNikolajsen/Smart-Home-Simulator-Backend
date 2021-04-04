@@ -29,6 +29,10 @@ public class AStarGrid {
             }
         }
     }
+    
+    //default constructor for controller
+    public AStarGrid() {
+	}
 
     /**
      * @return grid width
@@ -114,34 +118,6 @@ public class AStarGrid {
      */
     public final AStarNode getNode(int x, int y) {
         return grid[x][y];
-    }
-
-    /**
-     * @return a random node from the grid
-     */
-    public final AStarNode getRandomNode() {
-        int x = (int) (Math.random() * getWidth());
-        int y = (int) (Math.random() * getHeight());
-
-        return getNode(x, y);
-    }
-
-    /**
-     * @param predicate filter condition
-     * @return a random node that passes the filter or {@link Optional#empty()}
-     * if no such node exists
-     */
-    public final Optional<AStarNode> getRandomNode(Predicate<AStarNode> predicate) {
-        List<AStarNode> filtered = getNodes().stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
-
-        if (filtered.isEmpty())
-            return Optional.empty();
-
-        int index = (int) (Math.random() * filtered.size());
-
-        return Optional.of(filtered.get(index));
     }
 
     /**
