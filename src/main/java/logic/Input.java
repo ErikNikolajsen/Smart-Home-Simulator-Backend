@@ -22,7 +22,7 @@ public class Input {
 	 * Syntax
 	 * coordinates are within grid boundaries
 	 * coordinates are WALKABLE
-	 * interact IDs exist
+	 * interact IDs exist and is interactable
 	 * 
 	 */
 	public String test() {
