@@ -1,7 +1,11 @@
 package pathfinding2;
 
+/**
+ * Generic A* node.
+ *
+ * @author Erik Ravn Nikolajsen
+ */
 public class AStarNode {
-
 
     private AStarNode parent;
     private NodeState state;

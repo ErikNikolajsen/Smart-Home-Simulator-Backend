@@ -11,7 +11,6 @@ public class Tile {
 	
 	@Getter @Setter private Point position;
 	@Getter @Setter private int type; // 0=nothing, 1=collisionObject, >1=sensorID
-	private Entity entity = new Agent("agent1",1,1);
 
 	public Tile(int x, int y, int type) {
 		this.position = new Point(x,y);

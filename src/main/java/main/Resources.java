@@ -1,5 +1,7 @@
 package main;
 
+import entities.Agent;
+import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
 import pathfinding2.AStarGrid;
@@ -10,6 +12,7 @@ public class Resources {
 	private static Simulator simulator;
 	private static Input input;
 	private static AStarGrid aStarGrid;
+	private static Floorplan floorplan;
 	
 
 	//Accessors and Mutators
@@ -37,6 +40,14 @@ public class Resources {
 	public static void setaStarGrid(AStarGrid aStarGrid) {
 		Resources.aStarGrid = aStarGrid;
 	}
+	public static Floorplan getFloorplan() {
+		return floorplan;
+	}
+	public static void setFloorplan(Floorplan floorplan) {
+		Resources.floorplan = floorplan;
+	}
+	
+	
 	
 	
 	

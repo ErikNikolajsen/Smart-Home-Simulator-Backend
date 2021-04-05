@@ -1,5 +1,6 @@
 package controllers;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import entities.Agent;
+import entities.Floorplan;
+import entities.Sensor;
+import entities.Wall;
 import geo.Grid;
 import geo.Tile;
 import main.Resources;
@@ -37,7 +42,7 @@ public class RoomConfigController {
 		return new Grid(5,5,testList); 
 	}
 	
-	// pathfinding2 test
+	// pathfinding2
 	@GetMapping("/test2")
 	public @ResponseBody List<AStarNode> test2() {
 		AStarGrid grid1 = new AStarGrid(5,5);
@@ -51,28 +56,22 @@ public class RoomConfigController {
 		
 		return grid1.getPath(0, 0, 4, 4);
 	}
+
 	
-	// pathfinding2 real
-	AStarGrid grid2;
-	
+	// get a predefined grid tester
 	@GetMapping("/getGridTest")
 	public @ResponseBody AStarGrid getGridTest() {
 		AStarGrid testGrid = new AStarGrid(5,5);
 		return testGrid; 
 	}
 	/*
+	
+	AStarGrid grid2;
+	
 	// instantiates a grid of @width and @height with tiles being WALKABLE by default.
 	@PostMapping("/instantiateGrid")
 	public void instantiateGrid(@RequestBody int width, int height) {
 		this.grid2 = new AStarGrid(width,height);
-	}
-	*/
-	
-	
-
-	@PostMapping("/instantiateGrid")
-	public void instantiateGrid(@RequestBody AStarGrid aStarGrid) {
-		Resources.setaStarGrid(aStarGrid);
 	}
 	
 	@PostMapping("/insertCollisionObjects")
@@ -81,17 +80,49 @@ public class RoomConfigController {
 			this.grid2.setNodeState(positions.get(i)[0], positions.get(i)[1], NodeState.NOT_WALKABLE);
 		}
 	}
+	*/
 	
-	@GetMapping("/getGrid")
+	
+
+	@PostMapping("/grid")
+	public void instantiateGrid(@RequestBody AStarGrid aStarGrid) {
+		Resources.setaStarGrid(aStarGrid);
+	}
+	
+	@GetMapping("/grid")
 	public @ResponseBody AStarGrid getGrid() {
 		return Resources.getaStarGrid();
 	}
 	
+	//get path tester
 	@GetMapping("/getPath")
 	public @ResponseBody List<AStarNode> getPath(@RequestParam int startx, int starty, int targetx, int targety ) {
 		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety);
 	}
 	// http://localhost:8080/api/roomConfig/getPath?startx=0&starty=0&targetx=4&targety=4
 
+	
+	
+	//Floorplan testing
+	@GetMapping("/floorplanTest")
+	public @ResponseBody Floorplan getFloorplanTest() {
+		Floorplan floorplan = new Floorplan(
+				5, 
+				5, 
+				new Agent(new Point(0,0)), 
+				new ArrayList<Sensor>(Arrays.asList(new Sensor("Light_1", new ArrayList<Point>(Arrays.asList(new Point(3,2))), new ArrayList<Point>(Arrays.asList(new Point(2,2)))))), 
+				new ArrayList<Wall>(Arrays.asList(new Wall(new Point(1,1)), new Wall(new Point(2,2)))));
+		return floorplan; 
+	}
+	
+	@PostMapping("/floorplan")
+	public void postFloorplan(@RequestBody Floorplan floorplan) {
+		Resources.setFloorplan(floorplan);
+	}
+	
+	@GetMapping("/floorplan")
+	public @ResponseBody Floorplan getFloorplan() {
+		return Resources.getFloorplan(); 
+	}
 
 }

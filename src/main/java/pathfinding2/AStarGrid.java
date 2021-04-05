@@ -1,11 +1,17 @@
 package pathfinding2;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * A* grid containing A* nodes.
+ *
+ * @author Erik Ravn Nikolajsen
+ */
 public class AStarGrid {
 
     private AStarLogic logic = new AStarLogic();
@@ -30,7 +36,9 @@ public class AStarGrid {
         }
     }
     
-    //default constructor for controller
+    /**
+     * Default constructor for POST requests
+     */
     public AStarGrid() {
 	}
 

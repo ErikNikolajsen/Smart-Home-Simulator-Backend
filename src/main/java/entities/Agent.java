@@ -2,13 +2,22 @@ package entities;
 
 import java.awt.Point;
 
-public class Agent extends Entity {
+public class Agent {
 	
-	private int speed = 1; // m/s
+	private Point position;
+	private final int speed = 1; // m/s
 	
-	public Agent(String name, int x, int y) {
-		super(name, x, y);
+	public Agent(Point point) {
+		this.position = point;
 	}
+	
+	public Agent() {
+	}
+
+	
+	
+	
+	
 	/*
 	public move(int x, int y) {
 		
@@ -19,4 +28,16 @@ public class Agent extends Entity {
 		object.interact(this, interactionName);
 	}
 	*/
+	
+	
+	
+	//Accessors and Mutators
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
 }

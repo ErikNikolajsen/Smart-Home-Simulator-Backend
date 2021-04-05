@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A* search logic.
+ *
+ * @author Erik Ravn Nikolajsen
+ */
 public class AStarLogic {
 
     /**

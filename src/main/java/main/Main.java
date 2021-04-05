@@ -1,7 +1,9 @@
 package main;
 
+import java.awt.Point;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,7 @@ import entities.*;
 import entities.library.*;
 import utils.*;
 import logic.*;
+import pathfinding2.AStarGrid;
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {

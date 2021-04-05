@@ -1,8 +1,11 @@
 package logic;
 
+import java.awt.Point;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import entities.Sensor;
 import entities.library.Lamp;
 
 public class Simulator {
@@ -11,6 +14,35 @@ public class Simulator {
 	private int tick = 0;
 	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	
+	public void startSimulator() throws InterruptedException {
+		//Pre-simulation operations
+		ArrayList<Point> positions = new ArrayList<Point>();
+		positions.add(new Point(3,2));
+		ArrayList<Point> triggerArea = new ArrayList<Point>();
+		triggerArea.add(new Point(2,2));
+		triggerArea.add(new Point(3,1));
+		triggerArea.add(new Point(4,2));
+		Sensor light1 = new Sensor("light1", positions, triggerArea);
+		
+		//Simulation Logic-Loop
+		while (tick<60) {
+			long start = System.nanoTime();
+			datetime = datetime.plusNanos(nsPerTick); //updates datetime
+			
+			processInput();
+			update();
+			render();
+			
+			//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
+			//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
+			//System.out.println(datetime);
+			testSensor.onInteraction();
+			//System.out.print("E");
+			tick++;
+		}
+	}
+	
+	/*
 	public void startSimulator() throws InterruptedException {
 		//Pre-simulation operations
 		Lamp testSensor = new Lamp("Lamp Sensor", false ,1 ,1);
@@ -45,6 +77,7 @@ public class Simulator {
 			tick++;
 		}
 	}
+	*/
 
 	private void processInput() {
 		
