@@ -34,8 +34,10 @@ public class Floorplan {
 	
 	public void transformToGrid() {
 		Resources.setaStarGrid(new AStarGrid(this.width, this.height));
-		for (Wall i : this.walls)
-		Resources.getaStarGrid().setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
+		for (Wall i : this.walls) {
+			Resources.getaStarGrid().setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
+		}
+		
 	}
 	
 	//Accessors and Mutators

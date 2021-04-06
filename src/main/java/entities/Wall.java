@@ -1,14 +1,15 @@
 package entities;
 
-import java.awt.Point;
 import java.util.UUID;
+
+import geo.Position;
 
 public class Wall {
 	
 	private UUID id;
-	private Point position;
+	private Position position;
 	
-	public Wall(Point position) {
+	public Wall(Position position) {
 		this.id = UUID.randomUUID();
 		this.position = position;
 	}
@@ -16,11 +17,11 @@ public class Wall {
 	public Wall() {
 	}
 
-	public Point getPosition() {
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setPosition(Point position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 

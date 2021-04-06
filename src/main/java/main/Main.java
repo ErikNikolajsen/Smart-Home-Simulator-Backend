@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import entities.*;
 import entities.library.*;
+import geo.Position;
 import utils.*;
 import logic.*;
 import pathfinding2.AStarGrid;
@@ -51,7 +52,9 @@ public class Main {
 		Model.setSimulator(new Simulator());
 		Model.getSimulator().startSimulator();
 		*/
-		
+		Position test1 = new Position(1,1);
+		Position test2 = new Position(2,2);
+		System.out.println(test1.distance(test2));
 		
 		SpringApplication.run(Main.class, args);
 		

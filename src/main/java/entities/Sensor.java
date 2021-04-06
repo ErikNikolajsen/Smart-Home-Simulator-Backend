@@ -2,7 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.UUID;
-import java.awt.Point;
+
+import geo.Position;
 
 /* TODO
  * Make interact method
@@ -14,10 +15,10 @@ public class Sensor {
 	
 	private UUID id;
 	private String name;
-	private ArrayList<Point> positions;
-	private ArrayList<Point> triggerArea;
+	private ArrayList<Position> positions;
+	private ArrayList<Position> triggerArea;
 	
-	public Sensor(String name, ArrayList<Point> positions, ArrayList<Point> triggerArea) {
+	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
 		this.id = UUID.randomUUID();
 		this.name = name;
 		this.positions = positions;
@@ -41,19 +42,19 @@ public class Sensor {
 		this.name = name;
 	}
 
-	public ArrayList<Point> getPositions() {
+	public ArrayList<Position> getPositions() {
 		return positions;
 	}
 
-	public void setPositions(ArrayList<Point> positions) {
+	public void setPositions(ArrayList<Position> positions) {
 		this.positions = positions;
 	}
 
-	public ArrayList<Point> getTriggerArea() {
+	public ArrayList<Position> getTriggerArea() {
 		return triggerArea;
 	}
 
-	public void setTriggerArea(ArrayList<Point> triggerArea) {
+	public void setTriggerArea(ArrayList<Position> triggerArea) {
 		this.triggerArea = triggerArea;
 	}
 

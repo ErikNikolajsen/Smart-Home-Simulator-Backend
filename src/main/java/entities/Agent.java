@@ -1,13 +1,13 @@
 package entities;
 
-import java.awt.Point;
+import geo.Position;
 
 public class Agent {
 	
-	private Point position;
+	private Position position;
 	private final int speed = 1; // m/s
 	
-	public Agent(Point point) {
+	public Agent(Position point) {
 		this.position = point;
 	}
 	
@@ -32,11 +32,11 @@ public class Agent {
 	
 	
 	//Accessors and Mutators
-	public Point getPosition() {
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setPosition(Point position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 

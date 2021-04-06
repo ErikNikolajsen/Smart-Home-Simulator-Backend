@@ -19,6 +19,7 @@ import entities.Floorplan;
 import entities.Sensor;
 import entities.Wall;
 import geo.Grid;
+import geo.Position;
 import geo.Tile;
 import main.Resources;
 import pathfinding2.AStarGrid;
@@ -109,9 +110,9 @@ public class RoomConfigController {
 		Floorplan floorplan = new Floorplan(
 				5, 
 				5, 
-				new Agent(new Point(0,0)), 
-				new ArrayList<Sensor>(Arrays.asList(new Sensor("Light_1", new ArrayList<Point>(Arrays.asList(new Point(3,2))), new ArrayList<Point>(Arrays.asList(new Point(2,2)))))), 
-				new ArrayList<Wall>(Arrays.asList(new Wall(new Point(1,1)), new Wall(new Point(2,2)))));
+				new Agent(new Position(0,0)), 
+				new ArrayList<Sensor>(Arrays.asList(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2)))))), 
+				new ArrayList<Wall>(Arrays.asList(new Wall(new Position(1,1)), new Wall(new Position(2,2)))));
 		return floorplan; 
 	}
 	
