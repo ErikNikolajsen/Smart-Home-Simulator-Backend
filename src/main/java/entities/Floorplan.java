@@ -2,14 +2,11 @@ package entities;
 
 import java.util.ArrayList;
 
-import main.Resources;
-import pathfinding2.AStarGrid;
-import pathfinding2.NodeState;
-
 public class Floorplan {
 	
-	private int width;
-	private int height;
+	private int tileDimensions = 100; // width and height of a square tile in centimeters
+	private int width; // width of floor plan in tiles
+	private int height; // height of floor plan in tiles
 	private Agent agent;
 	private ArrayList<Sensor> sensors;
 	private ArrayList<Wall> walls;
@@ -30,14 +27,6 @@ public class Floorplan {
 	}
 	
 	public Floorplan() {
-	}
-	
-	public void transformToGrid() {
-		Resources.setaStarGrid(new AStarGrid(this.width, this.height));
-		for (Wall i : this.walls) {
-			Resources.getaStarGrid().setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
-		}
-		
 	}
 	
 	//Accessors and Mutators

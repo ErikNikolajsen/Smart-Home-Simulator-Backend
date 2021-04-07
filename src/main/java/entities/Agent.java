@@ -1,17 +1,22 @@
 package entities;
 
+import java.util.UUID;
+
 import geo.Position;
 
 public class Agent {
 	
+	private UUID id;
 	private Position position;
 	private final int speed = 1; // m/s
 	
 	public Agent(Position point) {
+		this.id = UUID.randomUUID();
 		this.position = point;
 	}
 	
 	public Agent() {
+		this.id = UUID.randomUUID();
 	}
 
 	

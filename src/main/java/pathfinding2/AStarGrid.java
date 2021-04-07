@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import entities.Floorplan;
+import entities.Wall;
+
 /**
  * A* grid containing A* nodes.
  *
@@ -40,6 +43,23 @@ public class AStarGrid {
      * Default constructor for POST requests
      */
     public AStarGrid() {
+	}
+    
+    /**
+     * Constructs A* grid with A* nodes from a given Floorplan.
+     *
+     * @param floorplan grid representation of a floorplan
+     */
+    public AStarGrid(Floorplan floorplan) {
+    	grid = new AStarNode[floorplan.getWidth()][floorplan.getHeight()];
+        for (int y = 0; y < floorplan.getHeight(); y++) {
+            for (int x = 0; x < floorplan.getWidth(); x++) {
+                grid[x][y] = new AStarNode(x, y, NodeState.WALKABLE);
+            }
+        }
+		for (Wall i : floorplan.getWalls()) {
+			setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
+		}
 	}
 
     /**

@@ -46,15 +46,12 @@ public class Main {
 		System.out.println(datetime);
 		*/
 		
-		/*
-		Model.setLog(new Log("test"));
-		Model.getLog().createFile();
-		Model.setSimulator(new Simulator());
-		Model.getSimulator().startSimulator();
-		*/
-		Position test1 = new Position(1,1);
-		Position test2 = new Position(2,2);
-		System.out.println(test1.distance(test2));
+		
+		//Resources.setLog(new Log("test"));
+		//Resources.getLog().createFile();
+		//Resources.setSimulator(new Simulator());
+		//Resources.getSimulator().startSimulator();
+		
 		
 		SpringApplication.run(Main.class, args);
 		

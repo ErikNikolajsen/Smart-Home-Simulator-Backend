@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import geo.Position;
+import main.Resources;
 
 /* TODO
  * Make interact method
@@ -17,6 +18,7 @@ public class Sensor {
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
+	private boolean walkable;
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
 		this.id = UUID.randomUUID();
@@ -26,12 +28,15 @@ public class Sensor {
 	}
 	
 	public Sensor() {
+		this.id = UUID.randomUUID();
 	}
 	
 	public void onInteraction() {
-		System.out.println(name+" interaction");
+		Resources.getLog().writeToFile(Resources.getSimulator().getDatetime().toString(), getName(), "true");
+		//System.out.println(name+": interaction");	
 	}
 	
+
 	
 	//Accessors and Mutators
 	public String getName() {
@@ -60,6 +65,15 @@ public class Sensor {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public boolean isWalkable() {
+		return walkable;
+	}
+
+	public void setWalkable(boolean walkable) {
+		this.walkable = walkable;
 	};
+	
 	
 }

@@ -15,6 +15,7 @@ public class Wall {
 	}
 	
 	public Wall() {
+		this.id = UUID.randomUUID();
 	}
 
 	public Position getPosition() {

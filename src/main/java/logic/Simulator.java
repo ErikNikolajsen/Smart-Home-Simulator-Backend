@@ -1,27 +1,28 @@
 package logic;
 
-import java.awt.Point;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import entities.Sensor;
 import entities.library.Lamp;
+import geo.Position;
 
 public class Simulator {
 	
 	private long nsPerTick = 16000000; //UPS == 1000000000 / NS_PER_TICK
 	private int tick = 0;
 	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
-	
+	/*
 	public void startSimulator() throws InterruptedException {
 		//Pre-simulation operations
-		ArrayList<Point> positions = new ArrayList<Point>();
-		positions.add(new Point(3,2));
-		ArrayList<Point> triggerArea = new ArrayList<Point>();
-		triggerArea.add(new Point(2,2));
-		triggerArea.add(new Point(3,1));
-		triggerArea.add(new Point(4,2));
+		ArrayList<Position> positions = new ArrayList<Position>();
+		positions.add(new Position(3,2));
+		ArrayList<Position> triggerArea = new ArrayList<Position>();
+		triggerArea.add(new Position(2,2));
+		triggerArea.add(new Position(3,1));
+		triggerArea.add(new Position(4,2));
 		Sensor light1 = new Sensor("light1", positions, triggerArea);
 		
 		//Simulation Logic-Loop
@@ -41,11 +42,11 @@ public class Simulator {
 			tick++;
 		}
 	}
+	*/
 	
-	/*
 	public void startSimulator() throws InterruptedException {
 		//Pre-simulation operations
-		Lamp testSensor = new Lamp("Lamp Sensor", false ,1 ,1);
+		Sensor testSensor = new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))));
 		
 		//Simulation Logic-Loop
 		while (tick<60) {
@@ -57,8 +58,8 @@ public class Simulator {
 			render();
 			
 			//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
-			//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-			//System.out.println(datetime);
+			System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
+			System.out.println(datetime);
 			testSensor.onInteraction();
 			//System.out.print("E");
 			tick++;
@@ -77,7 +78,7 @@ public class Simulator {
 			tick++;
 		}
 	}
-	*/
+	
 
 	private void processInput() {
 		
