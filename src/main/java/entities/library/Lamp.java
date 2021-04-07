@@ -1,3 +1,4 @@
+/*
 package entities.library;
 
 import entities.*;
@@ -24,3 +25,4 @@ public class Lamp extends Sensor {
 		
 	}
 }
+*/

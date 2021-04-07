@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import entities.Sensor;
-import entities.library.Lamp;
 import geo.Position;
 
 public class Simulator {
