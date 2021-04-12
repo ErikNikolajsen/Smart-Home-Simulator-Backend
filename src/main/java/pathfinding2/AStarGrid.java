@@ -8,7 +8,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import entities.Floorplan;
+import entities.Sensor;
 import entities.Wall;
+import geo.Position;
 
 /**
  * A* grid containing A* nodes.
@@ -46,9 +48,8 @@ public class AStarGrid {
 	}
     
     /**
-     * Constructs A* grid with A* nodes from a given Floorplan.
+     * Constructs A* grid with A* nodes from a given Floorplan
      *
-     * @param floorplan grid representation of a floorplan
      */
     public AStarGrid(Floorplan floorplan) {
     	grid = new AStarNode[floorplan.getWidth()][floorplan.getHeight()];
@@ -59,6 +60,11 @@ public class AStarGrid {
         }
 		for (Wall i : floorplan.getWalls()) {
 			setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
+		}
+		for (Sensor sensor : floorplan.getSensors()) {
+			for (Position triggerPosition : sensor.getTriggerArea()) {
+				getNode(triggerPosition.getX(), triggerPosition.getY()).addPassiveTriggers(sensor);
+			}
 		}
 	}
 

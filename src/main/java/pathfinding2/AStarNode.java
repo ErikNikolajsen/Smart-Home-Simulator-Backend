@@ -1,5 +1,9 @@
 package pathfinding2;
 
+import java.util.ArrayList;
+
+import entities.Sensor;
+
 /**
  * Generic A* node.
  *
@@ -14,6 +18,8 @@ public class AStarNode {
     private int gCost; //current node to end node
     private int hCost; //current node to start node
     private Object userData = null;
+    ArrayList<Sensor> passiveTriggers = new ArrayList<Sensor>();
+    ArrayList<Sensor> activeTriggers = new ArrayList<Sensor>();
 
     /**
      * Constructs A* node with x, y values and state.
@@ -137,4 +143,28 @@ public class AStarNode {
     public String toString() {
         return "A* Node[x=" + x + ",y=" + y + "," + state + "]";
     }
+
+	public ArrayList<Sensor> getPassiveTriggers() {
+		return passiveTriggers;
+	}
+	/*
+	public void setPassiveTriggers(ArrayList<Sensor> passiveTriggers) {
+		this.passiveTriggers = passiveTriggers;
+	}
+	*/
+	public ArrayList<Sensor> getActiveTriggers() {
+		return activeTriggers;
+	}
+	/*
+	public void setActiveTriggers(ArrayList<Sensor> activeTriggers) {
+		this.activeTriggers = activeTriggers;
+	}
+	*/
+	public void addPassiveTriggers(Sensor sensor) {
+		this.passiveTriggers.add(sensor);
+	}
+
+	public void addActiveTriggers(Sensor sensor) {
+		this.activeTriggers.add(sensor);
+	}
 }

@@ -9,9 +9,9 @@ public class Input {
 	private String[] inputArray;
 	private boolean tested = false;
 	
-	private final static String gotoPattern = "\\s*goto\\(\\s*\\(d+)\\s*,\\s*\\(d+)\\s*\\)\\s*";
-	private final static String interactPattern = "\\s*interact\\(\\s*\\(w+)\\s*\\)\\s*";
-	private final static String waitPattern = "\\s*wait\\(\\s*\\d+\\s*\\)\\s*";
+	private final static String gotoPattern = "\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*";
+	private final static String interactPattern = "\\s*interact\\(\\s*(\\w+)\\s*\\)\\s*";
+	private final static String waitPattern = "\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*";
 
 	public Input(String input) {
 		this.input = input;
@@ -46,8 +46,39 @@ public class Input {
 			return "ERROR: syntax error in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 		}
 	}
+	
+	
+	
+	
+	
 	this.tested = true;
 	return "consumed";
 	}
+
+	public String getInput() {
+		return input;
+	}
+
+	public void setInput(String input) {
+		this.input = input;
+	}
+
+	public String[] getInputArray() {
+		return inputArray;
+	}
+
+	public static String getGotopattern() {
+		return gotoPattern;
+	}
+
+	public static String getInteractpattern() {
+		return interactPattern;
+	}
+
+	public static String getWaitpattern() {
+		return waitPattern;
+	}
+	
+	
 	
 }

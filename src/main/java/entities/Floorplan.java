@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Floorplan {
 	
-	private int tileDimensions = 100; // width and height of a square tile in centimeters
+	private int tileSideLength = 1; // width and height of a square tile in meters
 	private int width; // width of floor plan in tiles
 	private int height; // height of floor plan in tiles
 	private Agent agent;
@@ -18,7 +18,8 @@ public class Floorplan {
 	 * @param sensors
 	 * @param walls
 	 */
-	public Floorplan(int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Wall> walls) {
+	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Wall> walls) {
+		this.tileSideLength = tileSideLength;
 		this.width = width;
 		this.height = height;
 		this.agent = agent;
@@ -69,6 +70,15 @@ public class Floorplan {
 	public void setWalls(ArrayList<Wall> walls) {
 		this.walls = walls;
 	}
+
+	public int getTileSideLength() {
+		return tileSideLength;
+	}
+
+	public void setTileSideLength(int tileSideLength) {
+		this.tileSideLength = tileSideLength;
+	}
+	
 	
 	
 }

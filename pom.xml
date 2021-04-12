@@ -53,11 +53,13 @@
 		    <version>2.12.2</version>
 		</dependency>		
 		
-		<!-- https://mvnrepository.com/artifact/org.fusesource.mqtt-client/mqtt-client -->
+		<!-- MQTT  -->
+		
+		<!-- https://mvnrepository.com/artifact/com.hivemq/hivemq-mqtt-client -->
 		<dependency>
-		    <groupId>org.fusesource.mqtt-client</groupId>
-		    <artifactId>mqtt-client</artifactId>
-		    <version>1.16</version>
+		    <groupId>com.hivemq</groupId>
+		    <artifactId>hivemq-mqtt-client</artifactId>
+		    <version>1.2.1</version>
 		</dependency>
 		
 	    

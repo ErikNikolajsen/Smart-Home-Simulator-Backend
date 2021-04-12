@@ -8,7 +8,7 @@ public class Agent {
 	
 	private UUID id;
 	private Position position;
-	private final int speed = 1; // m/s
+	private final double speed = 1; // m/s
 	
 	public Agent(Position point) {
 		this.id = UUID.randomUUID();
@@ -20,16 +20,8 @@ public class Agent {
 	}
 
 	
-	
-	
-	
 	/*
-	public move(int x, int y) {
-		
-	}
-	*/
-	/*
-	public void interactWith(ActiveObject object, String interactionName) throws InteractionException {
+	public void interact(ActiveObject object, String interactionName) throws InteractionException {
 		object.interact(this, interactionName);
 	}
 	*/
@@ -44,5 +36,15 @@ public class Agent {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+	
+	public void setPosition(int x, int y) {
+		this.position = new Position(x,y);
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+	
+	
 
 }
