@@ -61,7 +61,7 @@ public class Simulator {
 			System.out.println(statement); //test
 			
 			
-			/* GOTO */
+			// GOTO
 			if (statement.matches(gotoPattern)) {
 				Position gotoPosition = new Position(
 					Integer.parseInt(statement.replaceAll(gotoPattern, "$1")),
@@ -94,7 +94,7 @@ public class Simulator {
 					System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
 				}
 			
-			/* WAIT */
+			// WAIT
 			} else if (statement.matches(waitPattern)) {
 				long waitTime = Long.parseLong(statement.replaceAll(waitPattern, "$1")) * 1000000000;
 				for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
@@ -107,8 +107,9 @@ public class Simulator {
 						System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
 					}
 					
-					datetime = datetime.plusNanos(waitTime); //updates datetime
 				}
+				datetime = datetime.plusNanos(waitTime); //updates datetime
+				System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
 			}
 		}
 	}
@@ -117,6 +118,7 @@ public class Simulator {
 		datetime.plusNanos(nanos);
 		TimeUnit.NANOSECONDS.sleep(nanos);
 	}
+	
 		
 	
 	/*

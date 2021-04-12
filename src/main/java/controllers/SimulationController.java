@@ -21,8 +21,8 @@ import utils.Log;
 public class SimulationController {
 	
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
-	public String input(@RequestBody String inputString) {
-		Resources.setInput(new Input(inputString));
+	public String input(@RequestBody Input input) {
+		Resources.setInput(input);
 		return Resources.getInput().test();
 	}
 	

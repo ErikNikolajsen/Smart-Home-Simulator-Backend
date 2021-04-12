@@ -18,6 +18,10 @@ public class Input {
 		//this.inputArray = input.split(";"); // splits statements into array elements;
 	}
 	
+	
+	public Input() {	
+	}
+	
 	/* Tests:
 	 * Syntax
 	 * coordinates are within grid boundaries
