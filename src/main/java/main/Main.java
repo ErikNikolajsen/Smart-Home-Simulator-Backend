@@ -6,14 +6,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.hivemq.client.mqtt.MqttClient;
-import com.hivemq.client.mqtt.datatypes.MqttQos;
-import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
+//import com.hivemq.client.mqtt.MqttClient;
+//import com.hivemq.client.mqtt.datatypes.MqttQos;
+//import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 
 import entities.*;
 import entities.library.*;
@@ -24,7 +28,7 @@ import pathfinding2.AStarGrid;
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, MqttException {
 		
 		/*
 		Agent testAgent = new Agent("Agent",0,0);
@@ -51,67 +55,7 @@ public class Main {
 		System.out.println(datetime);
 		*/
 		
-		/*
-		// *** HIVEMQ MQTT Client ***
-		// creating the client
-		Mqtt3AsyncClient client = MqttClient.builder()
-		        .useMqttVersion3()
-		        .identifier(UUID.randomUUID().toString())
-		        .serverHost("broker.hivemq.com")
-		        .serverPort(1883)
-		        .buildAsync();
 		
-		// connecting
-		client.connect()
-        .whenComplete((connAck, throwable) -> {
-            if (throwable != null) {
-                // Handle connection failure
-            } else {
-                // Setup subscribes or start publishing
-            }
-        });
-		
-		// connecting with authentication
-		client.connectWith()
-        .simpleAuth()
-            .username("my-user")
-            .password("my-password".getBytes())
-            .applySimpleAuth()
-        .send()
-        .whenComplete((connAck, throwable) -> {
-            // Handle connection complete
-        });
-		
-		// connecting with will
-		client.connectWith()
-        .willPublish()
-            .topic("my/will")
-            .payload("payload".getBytes())
-            .qos(MqttQos.AT_MOST_ONCE)
-            .retain(true)
-            .applyWillPublish()
-        .send()
-        .whenComplete((connAck, throwable) -> {
-            // Handle connection complete
-        });
-		
-		// payload
-		byte[] myPayload = "hello world".getBytes();
-		
-		// Publish
-		client.publishWith()
-        .topic("my/topic")
-        .payload(myPayload)
-        .qos(MqttQos.EXACTLY_ONCE)
-        .send()
-        .whenComplete((mqtt3Publish, throwable) -> {
-            if (throwable != null) {
-                // Handle failure to publish
-            } else {
-                // Handle successful publish, e.g. logging or incrementing a metric
-            }
-        });
-        */
 		
 		/*
 		Resources.setLog(new Log("test"));
@@ -120,7 +64,96 @@ public class Main {
 		Resources.getSimulator().startSimulator();
 		*/
 		
-		SpringApplication.run(Main.class, args);
+		/*
+		// Paho hivemq
+		
+		MqttClient client = new MqttClient( 
+			    "tcp://broker.mqttdashboard.com:1883", //URI 
+			    MqttClient.generateClientId(), //ClientId 
+			    new MemoryPersistence()); //Persistence
+		
+		client.connect();
+		
+		client.publish( 
+			    "my/topic", // topic 
+			    "Hello PAHO!".getBytes(), // payload 
+			    2, // QoS 
+			    false); // retained? 
+		
+		client.disconnect();
+		*/
+		/*
+		// Paho baeldung
+		
+		String publisherId = UUID.randomUUID().toString();
+		IMqttClient publisher = new MqttClient("tcp://iot.eclipse.org:1883",publisherId);
+		*/
+		
+		/*
+		//HiveMQ 2 works
+		Mqtt3AsyncClient client = MqttClient.builder()
+		        .useMqttVersion3()
+		        .identifier(UUID.randomUUID().toString())
+		        .serverHost("broker.hivemq.com")
+		        .serverPort(1883)
+		        .buildAsync();
+		
+		
+		client.connect()
+        .whenComplete((connAck, throwable) -> {
+            if (throwable != null) {
+            	System.out.println("Client connect error: "+throwable);
+            } else {
+            	System.out.println("Client connected succcessfully");
+            }
+        });
+		
+		TimeUnit.NANOSECONDS.sleep(1000000000);
+		
+		String inputString = "Hello World!";
+		byte[] myPayload = inputString.getBytes();
+		
+		
+		client.publishWith()
+        .topic("my/topic")
+        .payload(myPayload)
+        .qos(MqttQos.EXACTLY_ONCE)
+        .send()
+        .whenComplete((mqtt3Publish, throwable) -> {
+            if (throwable != null) {
+                // Handle failure to publish
+            	System.out.println("Publish error: "+throwable);
+            } else {
+                // Handle successful publish, e.g. logging or incrementing a metric
+            	System.out.println("Published successfully");
+            }
+        });
+		System.out.println("end of the line");
+		*/
+		
+		
+		/*
+		// MqttPaho class
+		MqttPaho mqtt = new MqttPaho();
+		mqtt.connect();
+		mqtt.subscribe("my/topic");
+		mqtt.publish("my/topic","payload1");
+		mqtt.publish("my/topic","payload2");
+		mqtt.publish("my/topic","payload3");
+		TimeUnit.NANOSECONDS.sleep(1000000000);
+		mqtt.disconnectMqtt();
+		*/
+		
+		/*
+		// MqttHive class
+		MqttHive mqtt = new MqttHive();
+		mqtt.connect();
+		mqtt.subscribe("my/topic");
+		TimeUnit.NANOSECONDS.sleep(1000000000);
+		mqtt.publish("my/topic","asdfasd");
+		*/
+		
+		//SpringApplication.run(Main.class, args);
 		
 	}
 

@@ -10,6 +10,7 @@ import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
 import geo.Position;
+import main.MqttPaho;
 import main.Resources;
 import pathfinding2.AStarGrid;
 import pathfinding2.AStarNode;
@@ -48,7 +49,7 @@ public class Simulator {
 		String interactPattern = input.getInteractpattern();
 		String waitPattern = input.getWaitpattern();
 		Agent agent = floorplan.getAgent();
-		long triggerFrequency = 500000000;
+		long triggerFrequency = 300000000;
 		
 		boolean statementCondition = true;
 		List<AStarNode> path;
