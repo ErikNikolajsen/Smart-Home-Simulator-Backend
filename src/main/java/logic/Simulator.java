@@ -17,14 +17,16 @@ import pathfinding2.AStarNode;
 
 public class Simulator {
 	
-	private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK
+	private int tick = 0; // OLD
+	private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
+	long triggerFrequency = 300000000;
 	
 	private Input input;
 	private Floorplan floorplan;
 	private AStarGrid grid;
 	
-	private int tick = 0;
+	private Agent agent;
 
 	/**
 	 * @param nsPerTick
@@ -40,6 +42,8 @@ public class Simulator {
 		this.floorplan = floorplan;
 		this.grid = grid;
 		
+		this.agent = floorplan.getAgent();
+		
 	}
 	
 	// next-event time progression discrete-event simulation
@@ -48,19 +52,11 @@ public class Simulator {
 		String gotoPattern = input.getGotopattern();
 		String interactPattern = input.getInteractpattern();
 		String waitPattern = input.getWaitpattern();
-		Agent agent = floorplan.getAgent();
-		long triggerFrequency = 300000000;
 		
-		boolean statementCondition = true;
-		List<AStarNode> path;
-		double speed = floorplan.getAgent().getSpeed();
-		
-		
-		System.out.println("Simulator has started"); //test
+		System.out.println("*** Simulation has started ***"); //test
 		
 		for (String statement : statementArray) {
-			System.out.println(statement); //test
-			
+			System.out.println("* "+statement+":"); //test
 			
 			// GOTO
 			if (statement.matches(gotoPattern)) {
@@ -68,51 +64,70 @@ public class Simulator {
 					Integer.parseInt(statement.replaceAll(gotoPattern, "$1")),
 					Integer.parseInt(statement.replaceAll(gotoPattern, "$2"))
 				);
-				path = grid.getPath(
-						agent.getPosition().getX(), 
-						agent.getPosition().getY(), 
-						gotoPosition.getX(), 
-						gotoPosition.getY());
-				
-				for (AStarNode node : path) {
-					double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
-					long time = (long) ((distance / speed) * 1000000000);
-					
-					for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
-						int triggerAmount = (int) (time / triggerFrequency); // trigger amount in the time slice where agent moves from A to B
-						if (time % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
-							triggerAmount--;
-						}
-						
-						for (int i = 0; i <= triggerAmount; i++) {
-							System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
-						}
-					}
-					
-					datetime = datetime.plusNanos(time); //updates datetime
-					agent.setPosition(node.getX(), node.getY()); // moves agent
-					
-					System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
-				}
+				gotoInstructions(gotoPosition);
 			
 			// WAIT
 			} else if (statement.matches(waitPattern)) {
 				long waitTime = Long.parseLong(statement.replaceAll(waitPattern, "$1")) * 1000000000;
-				for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
-					int triggerAmount = (int) (waitTime / triggerFrequency); // trigger amount in the time slice where agent waits
-					if (waitTime % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
-						triggerAmount--;
-					}
-					
-					for (int i = 0; i <= triggerAmount; i++) {
-						System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
-					}
-					
-				}
-				datetime = datetime.plusNanos(waitTime); //updates datetime
-				System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+				waitInstructions(waitTime);
+			
+			// INTERACT
+			} else if (statement.matches(interactPattern)) {
+				String sensorName = statement.replaceAll(gotoPattern, "$1");
+				interactInstructions(sensorName);
 			}
 		}
+	}
+
+	private void gotoInstructions(Position gotoPosition) {
+		List<AStarNode> path;
+		path = grid.getPath(
+				agent.getPosition().getX(), 
+				agent.getPosition().getY(), 
+				gotoPosition.getX(), 
+				gotoPosition.getY());
+		
+		for (AStarNode node : path) {
+			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
+			long time = (long) ((distance / agent.getSpeed()) * 1000000000);
+			
+			for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
+				int triggerAmount = (int) (time / triggerFrequency); // trigger amount in the time slice where agent moves from A to B
+				if (time % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
+					triggerAmount--;
+				}
+				
+				for (int i = 0; i <= triggerAmount; i++) {
+					System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
+				}
+			}
+			
+			datetime = datetime.plusNanos(time); //updates datetime
+			agent.setPosition(node.getX(), node.getY()); // moves agent
+			
+			System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+		}
+	}
+	
+	
+	private void waitInstructions(long waitTime) {
+		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
+			int triggerAmount = (int) (waitTime / triggerFrequency); // trigger amount in the time slice where agent waits
+			if (waitTime % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
+				triggerAmount--;
+			}
+			
+			for (int i = 0; i <= triggerAmount; i++) {
+				System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
+			}
+			
+		}
+		datetime = datetime.plusNanos(waitTime); //updates datetime
+		System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+	}
+	
+	private void interactInstructions(String sensorName) {
+		
 	}
 
 	private void updateTime(long nanos) throws InterruptedException {
@@ -129,7 +144,6 @@ public class Simulator {
 		String gotoPattern = input.getGotopattern();
 		Agent agent = floorplan.getAgent();
 		
-		boolean statementCondition = true;
 		List<AStarNode> path;
 		double speed = floorplan.getAgent().getSpeed();
 		
