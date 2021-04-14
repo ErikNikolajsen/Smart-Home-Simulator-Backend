@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import logic.Input;
 import logic.Simulator;
 import main.Resources;
-import pathfinding2.AStarGrid;
 import utils.Log;
-
 
 @RestController
 @RequestMapping("/api/simulation/")
@@ -22,8 +20,12 @@ public class SimulationController {
 	
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
 	public String input(@RequestBody Input input) {
-		Resources.setInput(input);
-		return Resources.getInput().test();
+		// TODO test for prior instantiation of a Floorplan object
+		String testResult = input.test();
+		if (testResult == "consumed") {
+			Resources.setInput(input);
+		}
+		return testResult;
 	}
 	
 	@GetMapping("/simulator")

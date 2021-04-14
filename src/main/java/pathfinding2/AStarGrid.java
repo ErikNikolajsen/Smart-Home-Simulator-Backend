@@ -61,6 +61,7 @@ public class AStarGrid {
 		for (Wall i : floorplan.getWalls()) {
 			setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
 		}
+		// TODO only add triggerArea of passive sensors
 		for (Sensor sensor : floorplan.getSensors()) {
 			for (Position triggerPosition : sensor.getTriggerArea()) {
 				getNode(triggerPosition.getX(), triggerPosition.getY()).addPassiveTriggers(sensor);

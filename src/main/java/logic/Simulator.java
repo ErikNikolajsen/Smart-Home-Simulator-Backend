@@ -21,6 +21,8 @@ public class Simulator {
 	private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	long triggerFrequency = 300000000;
+	boolean realtime;
+	
 	
 	private Input input;
 	private Floorplan floorplan;
@@ -38,6 +40,7 @@ public class Simulator {
 	public Simulator(Input input, Floorplan floorplan, AStarGrid grid) { //long nsPerTick, LocalDateTime datetime, 
 		//this.nsPerTick = nsPerTick;
 		//this.datetime = datetime;
+		//this.realtime = datetime;
 		this.input = input;
 		this.floorplan = floorplan;
 		this.grid = grid;
@@ -68,7 +71,7 @@ public class Simulator {
 			
 			// WAIT
 			} else if (statement.matches(waitPattern)) {
-				long waitTime = Long.parseLong(statement.replaceAll(waitPattern, "$1")) * 1000000000;
+				long waitTime = Long.parseLong(statement.replaceAll(waitPattern, "$1")) * 1000000000; // converts seconds to nanoseconds
 				waitInstructions(waitTime);
 			
 			// INTERACT
@@ -118,6 +121,7 @@ public class Simulator {
 			}
 			
 			for (int i = 0; i <= triggerAmount; i++) {
+				
 				System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
 			}
 			
@@ -131,8 +135,10 @@ public class Simulator {
 	}
 
 	private void updateTime(long nanos) throws InterruptedException {
-		datetime.plusNanos(nanos);
-		TimeUnit.NANOSECONDS.sleep(nanos);
+		datetime = datetime.plusNanos(nanos);
+		if (realtime == true) {
+			TimeUnit.NANOSECONDS.sleep(nanos);
+		}
 	}
 	
 		
@@ -256,8 +262,6 @@ public class Simulator {
 	*/
 
 	private void processInput() {
-		
-		
 		
 	}
 

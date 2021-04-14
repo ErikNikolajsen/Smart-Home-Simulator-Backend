@@ -6,11 +6,6 @@ import java.util.UUID;
 import geo.Position;
 import main.Resources;
 
-/* TODO
- * Make interact method
- * Make positions field
- * Make trigger field
- */
 
 public class Sensor {
 	
@@ -18,6 +13,7 @@ public class Sensor {
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
+	private TriggerType triggerType;
 	private boolean walkable;
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
@@ -34,6 +30,7 @@ public class Sensor {
 	public void onInteraction() {
 		Resources.getLog().writeToFile(Resources.getSimulator().getDatetime().toString(), getName(), "true");
 		//System.out.println(name+": interaction");	
+		
 	}
 	
 

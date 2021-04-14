@@ -153,6 +153,7 @@ public class Main {
 		mqtt.publish("my/topic","asdfasd");
 		*/
 		
+		
 		SpringApplication.run(Main.class, args);
 		
 	}
