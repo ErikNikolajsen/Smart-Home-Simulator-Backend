@@ -1,8 +1,10 @@
 package logic;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -17,8 +19,8 @@ import pathfinding2.AStarNode;
 
 public class Simulator {
 	
-	private int tick = 0; // OLD
-	private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
+	//private int tick = 0; // OLD
+	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	long triggerFrequency = 300000000;
 	boolean realtime;
@@ -80,6 +82,8 @@ public class Simulator {
 				interactInstructions(sensorName);
 			}
 		}
+		
+		System.out.println("*** Simulation has ended ***"); //test
 	}
 
 	private void gotoInstructions(Position gotoPosition) {
@@ -112,8 +116,25 @@ public class Simulator {
 		}
 	}
 	
-	
+	//private long residualTime;
 	private void waitInstructions(long waitTime) {
+		
+		LocalDateTime newTileTime = datetime.plusNanos(waitTime);
+		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
+		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
+			for (long i = 0/*-residualTime + triggerFrequency*/; i < waitTime; i = i + triggerFrequency) {
+				eventList.add(new TriggerEvent(sensor,datetime.plusNanos(i)));
+			}
+		}
+		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
+		for (TriggerEvent triggerEvent : eventList) {
+			updateTime(datetime.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
+			System.out.println(datetime+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
+		}
+		updateTime(datetime.until(newTileTime,ChronoUnit.NANOS));
+		System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+		
+		/*
 		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
 			int triggerAmount = (int) (waitTime / triggerFrequency); // trigger amount in the time slice where agent waits
 			if (waitTime % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
@@ -122,23 +143,28 @@ public class Simulator {
 			
 			for (int i = 0; i <= triggerAmount; i++) {
 				
+				
+				
 				System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
 			}
 			
 		}
 		datetime = datetime.plusNanos(waitTime); //updates datetime
 		System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+		*/
 	}
 	
 	private void interactInstructions(String sensorName) {
 		
 	}
 
-	private void updateTime(long nanos) throws InterruptedException {
+	private void updateTime(long nanos) {
 		datetime = datetime.plusNanos(nanos);
+		/*
 		if (realtime == true) {
 			TimeUnit.NANOSECONDS.sleep(nanos);
 		}
+		*/
 	}
 	
 		
@@ -277,6 +303,18 @@ public class Simulator {
 
 	public LocalDateTime getDatetime() {
 		return datetime;
+	}
+
+	public boolean isRealtime() {
+		return realtime;
+	}
+
+	public void setRealtime(boolean realtime) {
+		this.realtime = realtime;
+	}
+
+	public void setDatetime(LocalDateTime datetime) {
+		this.datetime = datetime;
 	}
 	
 	
