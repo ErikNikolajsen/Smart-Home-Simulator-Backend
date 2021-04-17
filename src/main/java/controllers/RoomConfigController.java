@@ -57,7 +57,7 @@ public class RoomConfigController {
 				5, 
 				5, 
 				new Agent(new Position(0,0)), 
-				new ArrayList<Sensor>(Arrays.asList(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2)))))), 
+				new ArrayList<Sensor>(Arrays.asList(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000))), 
 				new ArrayList<Wall>(Arrays.asList(new Wall(new Position(1,1)), new Wall(new Position(2,2)))));
 		return floorplan; 
 	}

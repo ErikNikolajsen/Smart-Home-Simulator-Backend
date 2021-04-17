@@ -22,7 +22,7 @@ public class Simulator {
 	//private int tick = 0; // OLD
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
-	long triggerFrequency = 300000000;
+	//long triggerFrequency = 300000000; // OLD
 	boolean realtime;
 	
 	
@@ -130,10 +130,10 @@ public class Simulator {
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
 			long i = 0;
-			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < triggerFrequency) {
-				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + triggerFrequency;
+			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
+				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
 			}
-			for (; i < time; i = i + triggerFrequency) {
+			for (; i < time; i = i + sensor.getTriggerFrequency()) {
 				eventList.add(new TriggerEvent(sensor,clock.plusNanos(i)));
 				sensor.setLastTriggerTime(clock.plusNanos(i));
 			}

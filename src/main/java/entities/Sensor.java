@@ -17,12 +17,14 @@ public class Sensor {
 	private TriggerType triggerType;
 	private boolean walkable;
 	private LocalDateTime lastTriggerTime;
+	private long triggerFrequency;
 	
-	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
+	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, long triggerFrequency) {
 		this.id = UUID.randomUUID();
 		this.name = name;
 		this.positions = positions;
 		this.triggerArea = triggerArea;
+		this.triggerFrequency = triggerFrequency;
 	}
 	
 	public Sensor() {
@@ -80,6 +82,14 @@ public class Sensor {
 
 	public void setLastTriggerTime(LocalDateTime lastTriggerTime) {
 		this.lastTriggerTime = lastTriggerTime;
+	}
+
+	public long getTriggerFrequency() {
+		return triggerFrequency;
+	}
+
+	public void setTriggerFrequency(long triggerFrequency) {
+		this.triggerFrequency = triggerFrequency;
 	};
 	
 	
