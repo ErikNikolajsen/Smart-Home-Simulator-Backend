@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
 import main.Resources;
@@ -29,7 +30,7 @@ public class SimulationController {
 	}
 	
 	@GetMapping("/simulator")
-	public @ResponseBody void runSimulation() {
+	public @ResponseBody void runSimulation() throws InterruptedException {
 		Resources.setLog(new Log("test"));
 		Resources.getLog().createFile();
 		Resources.setSimulator(new Simulator(
@@ -40,7 +41,10 @@ public class SimulationController {
 		Resources.getSimulator().startSimulator();
 	}
 	
-	
+	@GetMapping("/getSimulator")
+	public @ResponseBody Simulator getSimulator() {
+		return Resources.getSimulator(); 
+	}
     
 }
 

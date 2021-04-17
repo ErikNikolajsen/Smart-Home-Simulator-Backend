@@ -23,7 +23,7 @@ public class Simulator {
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	//long triggerFrequency = 300000000; // OLD
-	boolean realtime;
+	boolean instantSimulation = false;
 	
 	
 	private Input input;
@@ -52,7 +52,7 @@ public class Simulator {
 	}
 	
 	// next-event time progression discrete-event simulation
-	public void startSimulator() {
+	public void startSimulator() throws InterruptedException {
 		String[] statementArray = input.getInputArray();
 		String gotoPattern = input.getGotopattern();
 		String interactPattern = input.getInteractpattern();
@@ -86,7 +86,7 @@ public class Simulator {
 		System.out.println("*** Simulation has ended ***"); //test
 	}
 
-	private void gotoInstructions(Position gotoPosition) {
+	private void gotoInstructions(Position gotoPosition) throws InterruptedException {
 		List<AStarNode> path;
 		path = grid.getPath(
 				agent.getPosition().getX(), 
@@ -105,9 +105,8 @@ public class Simulator {
 			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 		}
 	}
-	
-	//private long residualTime;
-	private void waitInstructions(long waitTime) {
+
+	private void waitInstructions(long waitTime) throws InterruptedException {
 		triggerPassiveSensors(waitTime);
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
@@ -116,16 +115,16 @@ public class Simulator {
 		
 	}
 
-	private void updateTime(long nanos) {
+	private void updateTime(long nanos) throws InterruptedException {
 		clock = clock.plusNanos(nanos);
-		/*
-		if (realtime == true) {
+		
+		if (instantSimulation == false) {
 			TimeUnit.NANOSECONDS.sleep(nanos);
 		}
-		*/
+		
 	}
 	
-	private void triggerPassiveSensors(long time) {
+	private void triggerPassiveSensors(long time) throws InterruptedException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
