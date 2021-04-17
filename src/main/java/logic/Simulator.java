@@ -24,6 +24,7 @@ public class Simulator {
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	//long triggerFrequency = 300000000; // OLD
 	boolean instantSimulation = false;
+	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
 	
 	private Input input;
@@ -119,7 +120,7 @@ public class Simulator {
 		clock = clock.plusNanos(nanos);
 		
 		if (instantSimulation == false) {
-			TimeUnit.NANOSECONDS.sleep(nanos);
+			TimeUnit.NANOSECONDS.sleep( (long) Math.round(nanos * timeFactor));
 		}
 		
 	}
@@ -278,21 +279,15 @@ public class Simulator {
 		
 	}
 
-	public LocalDateTime getDatetime() {
-		return clock;
-	}
-
-	public boolean isRealtime() {
-		return realtime;
-	}
-
-	public void setRealtime(boolean realtime) {
-		this.realtime = realtime;
-	}
-
-	public void setDatetime(LocalDateTime clock) {
+	public void setClock(LocalDateTime clock) {
 		this.clock = clock;
 	}
+
+	public void setInstantSimulation(boolean instantSimulation) {
+		this.instantSimulation = instantSimulation;
+	}
+
+	
 	
 	
 }
