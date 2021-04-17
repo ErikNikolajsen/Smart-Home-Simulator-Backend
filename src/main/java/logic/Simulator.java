@@ -21,7 +21,7 @@ public class Simulator {
 	
 	//private int tick = 0; // OLD
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
-	private LocalDateTime datetime = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
+	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	long triggerFrequency = 300000000;
 	boolean realtime;
 	
@@ -34,15 +34,15 @@ public class Simulator {
 
 	/**
 	 * @param nsPerTick
-	 * @param datetime
+	 * @param clock
 	 * @param input
 	 * @param floorplan
 	 * @param grid
 	 */
-	public Simulator(Input input, Floorplan floorplan, AStarGrid grid) { //long nsPerTick, LocalDateTime datetime, 
+	public Simulator(Input input, Floorplan floorplan, AStarGrid grid) { //long nsPerTick, LocalDateTime clock, 
 		//this.nsPerTick = nsPerTick;
-		//this.datetime = datetime;
-		//this.realtime = datetime;
+		//this.clock = clock;
+		//this.realtime;
 		this.input = input;
 		this.floorplan = floorplan;
 		this.grid = grid;
@@ -98,65 +98,18 @@ public class Simulator {
 			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
 			long time = (long) ((distance / agent.getSpeed()) * 1000000000);
 			
-			for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
-				int triggerAmount = (int) (time / triggerFrequency); // trigger amount in the time slice where agent moves from A to B
-				if (time % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
-					triggerAmount--;
-				}
-				
-				for (int i = 0; i <= triggerAmount; i++) {
-					System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
-				}
-			}
+			triggerPassiveSensors(time);
 			
-			datetime = datetime.plusNanos(time); //updates datetime
 			agent.setPosition(node.getX(), node.getY()); // moves agent
 			
-			System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
+			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 		}
 	}
 	
 	//private long residualTime;
 	private void waitInstructions(long waitTime) {
-		
-		LocalDateTime newTileTime = datetime.plusNanos(waitTime);
-		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
-		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
-			long i = 0;
-			if (sensor.getLastTriggerTime().until(datetime,ChronoUnit.NANOS) < triggerFrequency) {
-				i = -sensor.getLastTriggerTime().until(datetime,ChronoUnit.NANOS) + triggerFrequency;
-			}
-			for (; i < waitTime; i = i + triggerFrequency) {
-				eventList.add(new TriggerEvent(sensor,datetime.plusNanos(i)));
-				sensor.setLastTriggerTime(datetime.plusNanos(i));
-			}
-		}
-		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
-		for (TriggerEvent triggerEvent : eventList) {
-			updateTime(datetime.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
-			System.out.println(datetime+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
-		}
-		updateTime(datetime.until(newTileTime,ChronoUnit.NANOS));
-		System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
-		
-		/*
-		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
-			int triggerAmount = (int) (waitTime / triggerFrequency); // trigger amount in the time slice where agent waits
-			if (waitTime % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
-				triggerAmount--;
-			}
-			
-			for (int i = 0; i <= triggerAmount; i++) {
-				
-				
-				
-				System.out.println(datetime.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
-			}
-			
-		}
-		datetime = datetime.plusNanos(waitTime); //updates datetime
-		System.out.println(datetime+" : "+agent.getPosition().toString()); // print time & position
-		*/
+		triggerPassiveSensors(waitTime);
+		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
 	
 	private void interactInstructions(String sensorName) {
@@ -164,7 +117,7 @@ public class Simulator {
 	}
 
 	private void updateTime(long nanos) {
-		datetime = datetime.plusNanos(nanos);
+		clock = clock.plusNanos(nanos);
 		/*
 		if (realtime == true) {
 			TimeUnit.NANOSECONDS.sleep(nanos);
@@ -172,6 +125,26 @@ public class Simulator {
 		*/
 	}
 	
+	private void triggerPassiveSensors(long time) {
+		LocalDateTime newTileTime = clock.plusNanos(time);
+		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
+		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
+			long i = 0;
+			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < triggerFrequency) {
+				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + triggerFrequency;
+			}
+			for (; i < time; i = i + triggerFrequency) {
+				eventList.add(new TriggerEvent(sensor,clock.plusNanos(i)));
+				sensor.setLastTriggerTime(clock.plusNanos(i));
+			}
+		}
+		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
+		for (TriggerEvent triggerEvent : eventList) {
+			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
+			System.out.println(clock+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
+		}
+		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
+	}
 		
 	
 	/*
@@ -208,17 +181,17 @@ public class Simulator {
 					while (passedTime<time) {
 						long start = System.nanoTime();
 						
-						System.out.println(datetime+" : "+agent.getPosition().toString());
+						System.out.println(clock+" : "+agent.getPosition().toString());
 						
 						for (Sensor sensor : node.getPassiveTriggers()) {
-							System.out.println(datetime+" : "+sensor.getName()+" has been triggered!");
+							System.out.println(clock+" : "+sensor.getName()+" has been triggered!");
 						}
 						
 						
 						
 						
 						
-						datetime = datetime.plusNanos(nsPerTick); //updates datetime
+						clock = clock.plusNanos(nsPerTick); //updates clock
 						passedTime = passedTime + nsPerTick;
 						
 						try {
@@ -230,7 +203,7 @@ public class Simulator {
 						
 						//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
 					}
-					datetime = datetime.minusNanos(passedTime-time);
+					clock = clock.minusNanos(passedTime-time);
 					agent.setPosition(node.getX(), node.getY());
 				}
 				
@@ -254,7 +227,7 @@ public class Simulator {
 	while (tick<60) {
 		tick++;
 		long start = System.nanoTime();
-		datetime = datetime.plusNanos(nsPerTick); //updates datetime
+		clock = clock.plusNanos(nsPerTick); //updates clock
 		
 		processInput();
 		update();
@@ -262,7 +235,7 @@ public class Simulator {
 		
 		//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
 		System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-		System.out.println(datetime);
+		System.out.println(clock);
 		testSensor.onInteraction();
 		//System.out.print("E");
 		
@@ -276,14 +249,14 @@ public class Simulator {
 		
 		while (tick<60) {
 			long start = System.nanoTime();
-			datetime = datetime.plusNanos(nsPerTick); //updates datetime
+			clock = clock.plusNanos(nsPerTick); //updates clock
 			processInput();
 			update();
 			render();
 			TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
 			
 			System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-			System.out.println(datetime);
+			System.out.println(clock);
 			testSensor.onInteraction();
 			System.out.print("E");
 			
@@ -307,7 +280,7 @@ public class Simulator {
 	}
 
 	public LocalDateTime getDatetime() {
-		return datetime;
+		return clock;
 	}
 
 	public boolean isRealtime() {
@@ -318,9 +291,42 @@ public class Simulator {
 		this.realtime = realtime;
 	}
 
-	public void setDatetime(LocalDateTime datetime) {
-		this.datetime = datetime;
+	public void setDatetime(LocalDateTime clock) {
+		this.clock = clock;
 	}
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Old way of triggering passive sensors
+
+/*
+for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
+	int triggerAmount = (int) (time / triggerFrequency); // trigger amount in the time slice where agent moves from A to B
+	if (time % triggerFrequency == 0) { // avoid edge-case where sensor in tile A is trigger, agent moves from A to B, and a sensor in tile B is triggered - all at the same time.
+		triggerAmount--;
+	}
+	
+	for (int i = 0; i <= triggerAmount; i++) {
+		System.out.println(clock.plusNanos(i*triggerFrequency)+" : "+sensor.getName()+" has been triggered!");
+	}
+}
+
+clock = clock.plusNanos(time); //updates clock
+*/

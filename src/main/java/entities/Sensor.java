@@ -16,7 +16,7 @@ public class Sensor {
 	private ArrayList<Position> triggerArea;
 	private TriggerType triggerType;
 	private boolean walkable;
-	private LocalDateTime lastTriggerTime = LocalDateTime.of(1970, 1, 1, 0, 0, 0, 0);
+	private LocalDateTime lastTriggerTime;
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
 		this.id = UUID.randomUUID();
