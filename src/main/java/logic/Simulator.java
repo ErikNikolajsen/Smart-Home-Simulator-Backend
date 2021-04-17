@@ -23,7 +23,7 @@ public class Simulator {
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	//long triggerFrequency = 300000000; // OLD
-	boolean instantSimulation = false;
+	boolean instantSimulation = true;
 	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
 	
@@ -99,11 +99,21 @@ public class Simulator {
 			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
 			long time = (long) ((distance / agent.getSpeed()) * 1000000000);
 			
-			triggerPassiveSensors(time);
+			long halfTime = time/2;
+			triggerPassiveSensors(halfTime);
 			
 			agent.setPosition(node.getX(), node.getY()); // moves agent
-			
 			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
+			
+			triggerPassiveSensors(halfTime);
+			
+			/* Agent jumps from middle of tile to middle of tile instead of start of tile to start of tile.
+			 * 
+			triggerPassiveSensors(time);
+			agent.setPosition(node.getX(), node.getY()); // moves agent
+			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
+			 */
+			
 		}
 	}
 
