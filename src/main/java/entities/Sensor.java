@@ -1,5 +1,6 @@
 package entities;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ public class Sensor {
 	private ArrayList<Position> triggerArea;
 	private TriggerType triggerType;
 	private boolean walkable;
+	private LocalDateTime lastTriggerTime = LocalDateTime.of(1970, 1, 1, 0, 0, 0, 0);
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
 		this.id = UUID.randomUUID();
@@ -70,6 +72,14 @@ public class Sensor {
 
 	public void setWalkable(boolean walkable) {
 		this.walkable = walkable;
+	}
+
+	public LocalDateTime getLastTriggerTime() {
+		return lastTriggerTime;
+	}
+
+	public void setLastTriggerTime(LocalDateTime lastTriggerTime) {
+		this.lastTriggerTime = lastTriggerTime;
 	};
 	
 	

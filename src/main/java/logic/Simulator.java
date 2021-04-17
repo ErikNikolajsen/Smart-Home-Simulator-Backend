@@ -122,8 +122,13 @@ public class Simulator {
 		LocalDateTime newTileTime = datetime.plusNanos(waitTime);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
-			for (long i = 0/*-residualTime + triggerFrequency*/; i < waitTime; i = i + triggerFrequency) {
+			long i = 0;
+			if (sensor.getLastTriggerTime().until(datetime,ChronoUnit.NANOS) < triggerFrequency) {
+				i = -sensor.getLastTriggerTime().until(datetime,ChronoUnit.NANOS) + triggerFrequency;
+			}
+			for (; i < waitTime; i = i + triggerFrequency) {
 				eventList.add(new TriggerEvent(sensor,datetime.plusNanos(i)));
+				sensor.setLastTriggerTime(datetime.plusNanos(i));
 			}
 		}
 		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
