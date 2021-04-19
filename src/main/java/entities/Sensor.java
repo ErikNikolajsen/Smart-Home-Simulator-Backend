@@ -4,19 +4,26 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import geo.Position;
 import main.Resources;
 
 
+@JsonTypeInfo(use = Id.CLASS,
+include = JsonTypeInfo.As.PROPERTY,
+property = "type")
 public class Sensor {
 	
-	private UUID id;
+	@JsonIgnore private UUID id;
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
 	private TriggerType triggerType;
 	private boolean walkable;
-	private LocalDateTime lastTriggerTime;
+	@JsonIgnore private LocalDateTime lastTriggerTime;
 	private long triggerFrequency;
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, long triggerFrequency) {
@@ -32,7 +39,7 @@ public class Sensor {
 	}
 	
 	public void onInteraction() {
-		Resources.getLog().writeToFile(Resources.getSimulator().getDatetime().toString(), getName(), "true");
+		Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		//System.out.println(name+": interaction");	
 		
 	}
