@@ -23,7 +23,7 @@ public class Simulator {
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	//long triggerFrequency = 300000000; // OLD
-	boolean instantSimulation = true;
+	boolean instantSimulation = false;
 	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
 	
@@ -291,6 +291,10 @@ public class Simulator {
 
 	public void setClock(LocalDateTime clock) {
 		this.clock = clock;
+	}
+
+	public LocalDateTime getClock() {
+		return clock;
 	}
 
 	public void setInstantSimulation(boolean instantSimulation) {

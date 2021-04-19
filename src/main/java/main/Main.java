@@ -15,6 +15,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 //import com.hivemq.client.mqtt.MqttClient;
 //import com.hivemq.client.mqtt.datatypes.MqttQos;
 //import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
@@ -28,7 +31,7 @@ import pathfinding2.AStarGrid;
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {
-	public static void main(String[] args) throws InterruptedException, MqttException {
+	public static void main(String[] args) throws InterruptedException, MqttException, JsonProcessingException {
 		
 		/*
 		Agent testAgent = new Agent("Agent",0,0);
@@ -153,7 +156,12 @@ public class Main {
 		mqtt.publish("my/topic","asdfasd");
 		*/
 		
-		
+		/*
+		ArrayList<Sensor> sensorList = new ArrayList<Sensor>();
+		sensorList.add(new SensorChild("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000,1337));
+		sensorList.add(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000));
+		System.out.println(sensorList.toString());
+		*/
 		SpringApplication.run(Main.class, args);
 		
 	}
