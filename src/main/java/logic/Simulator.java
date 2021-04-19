@@ -23,7 +23,7 @@ public class Simulator {
 	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	//long triggerFrequency = 300000000; // OLD
-	boolean instantSimulation = false;
+	boolean instantSimulation = true;
 	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
 	
@@ -155,139 +155,6 @@ public class Simulator {
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
-		
-	
-	/*
-	// fixed-increment time progression discrete-event simulation
-	public void startSimulator() {
-		String[] statementArray = input.getInputArray();
-		String gotoPattern = input.getGotopattern();
-		Agent agent = floorplan.getAgent();
-		
-		List<AStarNode> path;
-		double speed = floorplan.getAgent().getSpeed();
-		
-		System.out.println("Simulator has started"); //test
-		
-		for (String statement : statementArray) {
-			System.out.println(statement); //test
-			if (statement.matches(gotoPattern)) {
-				Position gotoPosition = new Position(
-					Integer.parseInt(statement.replaceAll(gotoPattern, "$1")),
-					Integer.parseInt(statement.replaceAll(gotoPattern, "$2"))
-				);
-				path = grid.getPath(
-						agent.getPosition().getX(), 
-						agent.getPosition().getY(), 
-						gotoPosition.getX(), 
-						gotoPosition.getY());
-				
-				for (AStarNode node : path) {
-					double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
-					long time = (long) ((distance / speed) * 1000000000);
-					
-					long passedTime = 0; 
-					//Simulation Logic-Loop
-					while (passedTime<time) {
-						long start = System.nanoTime();
-						
-						System.out.println(clock+" : "+agent.getPosition().toString());
-						
-						for (Sensor sensor : node.getPassiveTriggers()) {
-							System.out.println(clock+" : "+sensor.getName()+" has been triggered!");
-						}
-						
-						
-						
-						
-						
-						clock = clock.plusNanos(nsPerTick); //updates clock
-						passedTime = passedTime + nsPerTick;
-						
-						try {
-							TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime());
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} //thread sleeps for real-time rendering
-						
-						//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-					}
-					clock = clock.minusNanos(passedTime-time);
-					agent.setPosition(node.getX(), node.getY());
-				}
-				
-				
-			}
-			
-			
-		}
-	}
-	*/
-	
-	
-
-	/*
-	public void startSimulator() {
-
-	//Pre-simulation operations
-	Sensor testSensor = new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))));
-	
-	//Simulation Logic-Loop
-	while (tick<60) {
-		tick++;
-		long start = System.nanoTime();
-		clock = clock.plusNanos(nsPerTick); //updates clock
-		
-		processInput();
-		update();
-		render();
-		
-		//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
-		System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-		System.out.println(clock);
-		testSensor.onInteraction();
-		//System.out.print("E");
-		
-	}
-
-	}
-	
-	public void startRenderingSimulator() throws InterruptedException {
-		//Pre-simulation operations
-		Sensor testSensor = new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))));
-		
-		while (tick<60) {
-			long start = System.nanoTime();
-			clock = clock.plusNanos(nsPerTick); //updates clock
-			processInput();
-			update();
-			render();
-			TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
-			
-			System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
-			System.out.println(clock);
-			testSensor.onInteraction();
-			System.out.print("E");
-			
-			tick++;
-		}
-	}
-	*/
-
-	private void processInput() {
-		
-	}
-
-	private void render() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void update() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public void setClock(LocalDateTime clock) {
 		this.clock = clock;
@@ -322,7 +189,7 @@ public class Simulator {
 
 
 
-// Old way of triggering passive sensors
+// *****************************Old way of triggering passive sensors
 
 /*
 for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) {
@@ -337,4 +204,141 @@ for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition(
 }
 
 clock = clock.plusNanos(time); //updates clock
+*/
+
+
+// ****************************fixed-increment time progression discrete-event simulation
+
+
+/*
+// fixed-increment time progression discrete-event simulation
+public void startSimulator() {
+	String[] statementArray = input.getInputArray();
+	String gotoPattern = input.getGotopattern();
+	Agent agent = floorplan.getAgent();
+	
+	List<AStarNode> path;
+	double speed = floorplan.getAgent().getSpeed();
+	
+	System.out.println("Simulator has started"); //test
+	
+	for (String statement : statementArray) {
+		System.out.println(statement); //test
+		if (statement.matches(gotoPattern)) {
+			Position gotoPosition = new Position(
+				Integer.parseInt(statement.replaceAll(gotoPattern, "$1")),
+				Integer.parseInt(statement.replaceAll(gotoPattern, "$2"))
+			);
+			path = grid.getPath(
+					agent.getPosition().getX(), 
+					agent.getPosition().getY(), 
+					gotoPosition.getX(), 
+					gotoPosition.getY());
+			
+			for (AStarNode node : path) {
+				double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
+				long time = (long) ((distance / speed) * 1000000000);
+				
+				long passedTime = 0; 
+				//Simulation Logic-Loop
+				while (passedTime<time) {
+					long start = System.nanoTime();
+					
+					System.out.println(clock+" : "+agent.getPosition().toString());
+					
+					for (Sensor sensor : node.getPassiveTriggers()) {
+						System.out.println(clock+" : "+sensor.getName()+" has been triggered!");
+					}
+					
+					
+					
+					
+					
+					clock = clock.plusNanos(nsPerTick); //updates clock
+					passedTime = passedTime + nsPerTick;
+					
+					try {
+						TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime());
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} //thread sleeps for real-time rendering
+					
+					//System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
+				}
+				clock = clock.minusNanos(passedTime-time);
+				agent.setPosition(node.getX(), node.getY());
+			}
+			
+			
+		}
+		
+		
+	}
+}
+*/
+
+
+
+/*
+public void startSimulator() {
+
+//Pre-simulation operations
+Sensor testSensor = new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))));
+
+//Simulation Logic-Loop
+while (tick<60) {
+	tick++;
+	long start = System.nanoTime();
+	clock = clock.plusNanos(nsPerTick); //updates clock
+	
+	processInput();
+	update();
+	render();
+	
+	//TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
+	System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
+	System.out.println(clock);
+	testSensor.onInteraction();
+	//System.out.print("E");
+	
+}
+
+}
+
+public void startRenderingSimulator() throws InterruptedException {
+	//Pre-simulation operations
+	Sensor testSensor = new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))));
+	
+	while (tick<60) {
+		long start = System.nanoTime();
+		clock = clock.plusNanos(nsPerTick); //updates clock
+		processInput();
+		update();
+		render();
+		TimeUnit.NANOSECONDS.sleep(start + nsPerTick - System.nanoTime()); //thread sleeps for real-time rendering
+		
+		System.out.println(start + nsPerTick - System.nanoTime()); //computation time left per loop 
+		System.out.println(clock);
+		testSensor.onInteraction();
+		System.out.print("E");
+		
+		tick++;
+	}
+}
+
+
+	private void processInput() {
+		
+	}
+
+	private void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void update() {
+		// TODO Auto-generated method stub
+		
+	}
 */

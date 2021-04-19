@@ -21,7 +21,6 @@ public class Sensor {
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
-	private TriggerType triggerType;
 	private boolean walkable;
 	@JsonIgnore private LocalDateTime lastTriggerTime;
 	private long triggerFrequency;
@@ -41,6 +40,7 @@ public class Sensor {
 	public void onInteraction() {
 		Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		//System.out.println(name+": interaction");	
+		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
 		
 	}
 	
