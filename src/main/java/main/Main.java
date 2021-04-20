@@ -154,6 +154,7 @@ public class Main {
 		mqtt.subscribe("my/topic");
 		TimeUnit.NANOSECONDS.sleep(1000000000);
 		mqtt.publish("my/topic","asdfasd");
+		mqtt.disconnect();
 		*/
 		
 		/*

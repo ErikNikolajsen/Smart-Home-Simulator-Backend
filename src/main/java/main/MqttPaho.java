@@ -1,15 +1,27 @@
 package main;
 
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MqttPaho {
 	
 	private MqttClient client;
 	
-	public void connect() throws MqttException {
+	
+
+	public MqttPaho(String broker, String port) throws MqttException {
+		connect(broker, port);
+	}
+
+	public void connect(String broker, String port) throws MqttException {
 		client = new MqttClient( 
-			    "tcp://broker.mqttdashboard.com:1883", //URI 
+			    "tcp://"+broker+":"+port, //URI //"tcp://broker.hivemq.com:1883" 
 			    MqttClient.generateClientId(), //ClientId 
 			    new MemoryPersistence()); //Persistence
 		
@@ -41,7 +53,6 @@ public class MqttPaho {
 	}
 	
 	public void subscribe(String topic) throws MqttException {
-		clearRetainedMessage(topic);
 		client.subscribe(topic, 2);
 	}
 	
