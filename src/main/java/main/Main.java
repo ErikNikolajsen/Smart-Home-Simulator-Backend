@@ -135,7 +135,7 @@ public class Main {
 		*/
 		
 		
-		/*
+		
 		// MqttPaho class
 		MqttPaho mqtt = new MqttPaho();
 		mqtt.connect();
@@ -145,7 +145,7 @@ public class Main {
 		mqtt.publish("my/topic","payload3");
 		TimeUnit.NANOSECONDS.sleep(1000000000);
 		mqtt.disconnectMqtt();
-		*/
+		
 		
 		/*
 		// MqttHive class
@@ -163,7 +163,7 @@ public class Main {
 		sensorList.add(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000));
 		System.out.println(sensorList.toString());
 		*/
-		SpringApplication.run(Main.class, args);
+		//SpringApplication.run(Main.class, args);
 		
 	}
 

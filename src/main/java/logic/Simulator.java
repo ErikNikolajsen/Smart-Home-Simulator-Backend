@@ -26,9 +26,7 @@ public class Simulator {
 	boolean instantSimulation = true;
 	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
-	//MQTT
-	//private MqttPaho mqttClient = new MqttPaho("broker.hivemq.com", "1883");
-	
+
 	
 	private Input input;
 	private Floorplan floorplan;

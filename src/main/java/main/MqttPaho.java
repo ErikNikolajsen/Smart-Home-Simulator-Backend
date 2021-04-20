@@ -13,15 +13,10 @@ public class MqttPaho {
 	
 	private MqttClient client;
 	
-	
 
-	public MqttPaho(String broker, String port) throws MqttException {
-		connect(broker, port);
-	}
-
-	public void connect(String broker, String port) throws MqttException {
+	public void connect() throws MqttException {
 		client = new MqttClient( 
-			    "tcp://"+broker+":"+port, //URI //"tcp://broker.hivemq.com:1883" 
+				"tcp://broker.hivemq.com:1883", //URI //"tcp://broker.hivemq.com:1883" 
 			    MqttClient.generateClientId(), //ClientId 
 			    new MemoryPersistence()); //Persistence
 		
