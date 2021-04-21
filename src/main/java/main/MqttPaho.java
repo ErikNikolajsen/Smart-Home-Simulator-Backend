@@ -12,9 +12,11 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 public class MqttPaho {
 	
 	private MqttClient client;
+	private String rootTopic;
 	
-	public MqttPaho(String host, String port) throws MqttException {
+	public MqttPaho(String host, String port, String rootTopic) throws MqttException {
 		connect(host, port);
+		this.rootTopic = rootTopic;
 	}
 	
 	public void connect(String host, String port) throws MqttException {
@@ -57,7 +59,7 @@ public class MqttPaho {
 	
 	public void publish(String topic, String payload) throws MqttPersistenceException, MqttException {
 		client.publish( 
-			    topic, // topic 
+			    rootTopic, // topic 
 			    payload.getBytes(), // payload 
 			    2, // QoS 
 			    false); // retained? 

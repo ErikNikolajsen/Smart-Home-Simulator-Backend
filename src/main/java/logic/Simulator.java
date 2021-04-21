@@ -32,6 +32,7 @@ public class Simulator {
 	private boolean mqttOutput;
 	private String mqttHost;
 	private String mqttPort;
+	private String rootTopic;
 
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
@@ -54,7 +55,9 @@ public class Simulator {
 		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
-			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort));
+			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic));
+		} else if (mqttOutput == true) {
+			Resources.setMqtt(null);
 		}
 		
 		String[] statementArray = input.getInputArray();
@@ -201,7 +204,7 @@ public class Simulator {
 		this.timeFactor = timeFactor;
 	}
 
-	public boolean isMqttOutput() {
+	public boolean getMqttOutput() {
 		return mqttOutput;
 	}
 
@@ -223,6 +226,14 @@ public class Simulator {
 
 	public void setMqttPort(String mqttPort) {
 		this.mqttPort = mqttPort;
+	}
+
+	public String getRootTopic() {
+		return rootTopic;
+	}
+
+	public void setRootTopic(String rootTopic) {
+		this.rootTopic = rootTopic;
 	}
 	
 

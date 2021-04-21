@@ -44,7 +44,9 @@ public abstract class Sensor {
 	public void trigger() throws MqttPersistenceException, MqttException {
 		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
-		Resources.getMqtt().publish("my/topic",Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
+		if (Resources.getSimulator().getMqttOutput() == true) {
+			Resources.getMqtt().publish("my/topic",Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
+		}
 	}
 	
 
