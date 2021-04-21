@@ -25,9 +25,9 @@ import entities.SensorPassive;
 
 public class Simulator {
 	
-	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
-	private boolean instantSimulation = true;
-	private double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take
+	private LocalDateTime clock; // LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
+	private boolean instantSimulation;
+	private double relativeTime; // how many/few real-time seconds should a virtual second take
 	
 	private boolean mqttOutput;
 	private String mqttHost;
@@ -150,7 +150,7 @@ public class Simulator {
 		clock = clock.plusNanos(nanos);
 		
 		if (instantSimulation == false) {
-			TimeUnit.NANOSECONDS.sleep( (long) Math.round(nanos * timeFactor));
+			TimeUnit.NANOSECONDS.sleep( (long) Math.round(nanos * relativeTime));
 		}
 		
 	}
@@ -188,7 +188,7 @@ public class Simulator {
 		return clock;
 	}
 
-	public boolean isInstantSimulation() {
+	public boolean getInstantSimulation() {
 		return instantSimulation;
 	}
 
@@ -196,12 +196,12 @@ public class Simulator {
 		this.instantSimulation = instantSimulation;
 	}
 
-	public double getTimeFactor() {
-		return timeFactor;
+	public double getRelativeTime() {
+		return relativeTime;
 	}
 
-	public void setTimeFactor(double timeFactor) {
-		this.timeFactor = timeFactor;
+	public void setRelativeTime(double timeFactor) {
+		this.relativeTime = timeFactor;
 	}
 
 	public boolean getMqttOutput() {
