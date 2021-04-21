@@ -26,17 +26,18 @@ public class Simulator {
 	
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	private boolean instantSimulation = true;
-	private double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
+	private double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take
 	
+	private boolean mqttOutput;
+	private String mqttHost;
+	private String mqttPort;
 
-	
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
 	private Agent agent = new Agent(floorplan.getAgent());
 
-
-	public Simulator() { 
+	public Simulator() throws MqttException { 
 		// reset sensors
 		for (Sensor sensor : floorplan.getSensors()) {
 			if (sensor instanceof SensorPassive) {
@@ -47,6 +48,12 @@ public class Simulator {
 	
 	// next-event time progression discrete-event simulation
 	public void startSimulator() throws InterruptedException, MqttPersistenceException, MqttException {
+		
+		// start MQTT client if appropriate
+		if (mqttOutput == true) {
+			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort));
+		}
+		
 		String[] statementArray = input.getInputArray();
 		String gotoPattern = input.getGotopattern();
 		String interactPattern = input.getInteractpattern();
@@ -177,6 +184,31 @@ public class Simulator {
 	public void setTimeFactor(double timeFactor) {
 		this.timeFactor = timeFactor;
 	}
+
+	public boolean isMqttOutput() {
+		return mqttOutput;
+	}
+
+	public void setMqttOutput(boolean mqttOutput) {
+		this.mqttOutput = mqttOutput;
+	}
+
+	public String getMqttHost() {
+		return mqttHost;
+	}
+
+	public void setMqttHost(String mqttHost) {
+		this.mqttHost = mqttHost;
+	}
+
+	public String getMqttPort() {
+		return mqttPort;
+	}
+
+	public void setMqttPort(String mqttPort) {
+		this.mqttPort = mqttPort;
+	}
+	
 
 	
 	

@@ -38,9 +38,6 @@ public class SimulationController {
 		Resources.setLog(new Log("test"));
 		Resources.getLog().createFile();
 		
-		Resources.setMqtt(new MqttPaho());
-		Resources.getMqtt().connect();
-		
 		Resources.setSimulator(simulator);
 		Resources.getSimulator().startSimulator();
 	}
