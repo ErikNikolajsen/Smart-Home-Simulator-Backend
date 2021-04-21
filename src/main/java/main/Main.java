@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -163,8 +164,34 @@ public class Main {
 		sensorList.add(new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000));
 		System.out.println(sensorList.toString());
 		*/
+		/*
+		Random rand = new Random();
+		System.out.println(rand.nextInt(5));
+		*/
+		
 		SpringApplication.run(Main.class, args);
 		
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

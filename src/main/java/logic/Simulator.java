@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -36,6 +37,8 @@ public class Simulator {
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
 	private Agent agent = new Agent(floorplan.getAgent());
+	
+	
 
 	public Simulator() throws MqttException { 
 		// reset sensors
@@ -79,7 +82,7 @@ public class Simulator {
 			
 			// INTERACT
 			} else if (statement.matches(interactPattern)) {
-				String sensorName = statement.replaceAll(gotoPattern, "$1");
+				String sensorName = statement.replaceAll(interactPattern, "$1");
 				interactInstructions(sensorName);
 			}
 		}
@@ -122,10 +125,24 @@ public class Simulator {
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
 	
-	private void interactInstructions(String sensorName) {
-		
+	private void interactInstructions(String sensorName) throws MqttPersistenceException, InterruptedException, MqttException {
+		for (Sensor activeSensor : floorplan.getSensors()) {
+			if (activeSensor.getName().equals(sensorName)) {
+				activeSensor.getTriggerArea();
+				Random rand = new Random();
+				Position randomTriggerPosition = activeSensor.getTriggerArea().get(rand.nextInt(activeSensor.getTriggerArea().size()));
+				System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
+				gotoInstructions(randomTriggerPosition);
+				activeSensor.trigger();
+				break;
+			}
+		}
 	}
-
+	
+	private void returnError(String message) {
+		System.out.println(message);
+	}
+	
 	private void updateTime(long nanos) throws InterruptedException {
 		clock = clock.plusNanos(nanos);
 		
@@ -152,7 +169,6 @@ public class Simulator {
 		for (TriggerEvent triggerEvent : eventList) {
 			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
 			triggerEvent.getSensor().trigger();
-			//System.out.println(clock+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}

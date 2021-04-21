@@ -35,8 +35,8 @@ public class SimulationController {
 	// TODO Only make runable if floorplan and input has been instantiated
 	@PostMapping("/simulator")
 	public void runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException {
-		Resources.setLog(new Log("test"));
-		Resources.getLog().createFile();
+		//Resources.setLog(new Log("test"));
+		//Resources.getLog().createFile();
 		
 		Resources.setSimulator(simulator);
 		Resources.getSimulator().startSimulator();
