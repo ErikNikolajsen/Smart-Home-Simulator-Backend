@@ -51,7 +51,6 @@ public class AStarGrid {
     
     /**
      * Constructs A* grid with A* nodes from a given Floorplan
-     *
      */
     public AStarGrid(Floorplan floorplan) {
     	// instantiate grid with specified width and height and insert walkable nodes for all tiles

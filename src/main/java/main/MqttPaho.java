@@ -57,7 +57,7 @@ public class MqttPaho {
 	}
 	
 	
-	public void publish(String topic, String payload) throws MqttPersistenceException, MqttException {
+	public void publish(String payload) throws MqttPersistenceException, MqttException {
 		client.publish( 
 			    rootTopic, // topic 
 			    payload.getBytes(), // payload 

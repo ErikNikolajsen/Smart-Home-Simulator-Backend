@@ -45,7 +45,7 @@ public abstract class Sensor {
 		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
 		if (Resources.getSimulator().getMqttOutput() == true) {
-			Resources.getMqtt().publish("my/topic",Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
+			Resources.getMqtt().publish(Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
 		}
 	}
 	
@@ -87,6 +87,7 @@ public abstract class Sensor {
 	public void setWalkable(boolean walkable) {
 		this.walkable = walkable;
 	}
+	
 	/*
 	public LocalDateTime getLastTriggerTime() {
 		return lastTriggerTime;
