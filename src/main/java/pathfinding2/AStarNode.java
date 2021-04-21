@@ -3,6 +3,8 @@ package pathfinding2;
 import java.util.ArrayList;
 
 import entities.Sensor;
+import entities.SensorActive;
+import entities.SensorPassive;
 
 /**
  * Generic A* node.
@@ -18,8 +20,8 @@ public class AStarNode {
     private int gCost; //current node to end node
     private int hCost; //current node to start node
     private Object userData = null;
-    ArrayList<Sensor> passiveTriggers = new ArrayList<Sensor>();
-    ArrayList<Sensor> activeTriggers = new ArrayList<Sensor>();
+    ArrayList<SensorPassive> passiveTriggers = new ArrayList<SensorPassive>();
+    ArrayList<SensorActive> activeTriggers = new ArrayList<SensorActive>();
 
     /**
      * Constructs A* node with x, y values and state.
@@ -144,7 +146,7 @@ public class AStarNode {
         return "A* Node[x=" + x + ",y=" + y + "," + state + "]";
     }
 
-	public ArrayList<Sensor> getPassiveTriggers() {
+	public ArrayList<SensorPassive> getPassiveTriggers() {
 		return passiveTriggers;
 	}
 	/*
@@ -152,7 +154,7 @@ public class AStarNode {
 		this.passiveTriggers = passiveTriggers;
 	}
 	*/
-	public ArrayList<Sensor> getActiveTriggers() {
+	public ArrayList<SensorActive> getActiveTriggers() {
 		return activeTriggers;
 	}
 	/*
@@ -160,11 +162,11 @@ public class AStarNode {
 		this.activeTriggers = activeTriggers;
 	}
 	*/
-	public void addPassiveTriggers(Sensor sensor) {
+	public void addPassiveTriggers(SensorPassive sensor) {
 		this.passiveTriggers.add(sensor);
 	}
 
-	public void addActiveTriggers(Sensor sensor) {
+	public void addActiveTriggers(SensorActive sensor) {
 		this.activeTriggers.add(sensor);
 	}
 }

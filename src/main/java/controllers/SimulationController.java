@@ -1,5 +1,6 @@
 package controllers;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
+import main.MqttPaho;
 import main.Resources;
 import utils.Log;
 
@@ -30,9 +32,13 @@ public class SimulationController {
 	}
 	
 	@GetMapping("/simulator")
-	public @ResponseBody void runSimulation() throws InterruptedException {
+	public @ResponseBody void runSimulation() throws InterruptedException, MqttException {
 		Resources.setLog(new Log("test"));
 		Resources.getLog().createFile();
+		
+		Resources.setMqtt(new MqttPaho());
+		Resources.getMqtt().connect();
+		
 		Resources.setSimulator(new Simulator(
 				Resources.getInput(),
 				Resources.getFloorplan(),
@@ -41,9 +47,8 @@ public class SimulationController {
 		Resources.getSimulator().startSimulator();
 	}
 	
-	@GetMapping("/getSimulator")
-	public @ResponseBody Simulator getSimulator() {
-		return Resources.getSimulator(); 
+	@PostMapping("/simulator2")
+	public void runSimulation2(@RequestBody Boolean input) {
 	}
     
 }

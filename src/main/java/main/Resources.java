@@ -8,6 +8,7 @@ import pathfinding2.AStarGrid;
 import utils.Log;
 
 public class Resources {
+	private static MqttPaho mqtt;
 	private static Log log;
 	private static Simulator simulator;
 	private static Input input;
@@ -46,6 +47,13 @@ public class Resources {
 	public static void setFloorplan(Floorplan floorplan) {
 		Resources.floorplan = floorplan;
 	}
+	public static MqttPaho getMqtt() {
+		return mqtt;
+	}
+	public static void setMqtt(MqttPaho mqtt) {
+		Resources.mqtt = mqtt;
+	}
+	
 	
 	
 	

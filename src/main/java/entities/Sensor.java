@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -15,33 +18,33 @@ import main.Resources;
 @JsonTypeInfo(use = Id.CLASS,
 include = JsonTypeInfo.As.PROPERTY,
 property = "type")
-public class Sensor {
+public abstract class Sensor {
 	
 	@JsonIgnore private UUID id;
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
 	private boolean walkable;
-	@JsonIgnore private LocalDateTime lastTriggerTime;
-	private long triggerFrequency;
+	//@JsonIgnore private LocalDateTime lastTriggerTime;
+	//private long triggerFrequency;
 	
-	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, long triggerFrequency) {
+	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea/*, long triggerFrequency*/) {
 		this.id = UUID.randomUUID();
 		this.name = name;
 		this.positions = positions;
 		this.triggerArea = triggerArea;
-		this.triggerFrequency = triggerFrequency;
+		//this.triggerFrequency = triggerFrequency;
 	}
 	
 	public Sensor() {
 		this.id = UUID.randomUUID();
 	}
 	
-	public void onInteraction() {
-		Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
-		//System.out.println(name+": interaction");	
+	
+	public void trigger() throws MqttPersistenceException, MqttException {
+		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
-		
+		Resources.getMqtt().publish("my/topic",Resources.getSimulator().getClock()+" : "+getName()+" has been triggered!");
 	}
 	
 
@@ -75,14 +78,14 @@ public class Sensor {
 		return id;
 	}
 
-	public boolean isWalkable() {
+	public boolean getWalkable() {
 		return walkable;
 	}
 
 	public void setWalkable(boolean walkable) {
 		this.walkable = walkable;
 	}
-
+	/*
 	public LocalDateTime getLastTriggerTime() {
 		return lastTriggerTime;
 	}
@@ -98,6 +101,6 @@ public class Sensor {
 	public void setTriggerFrequency(long triggerFrequency) {
 		this.triggerFrequency = triggerFrequency;
 	};
-	
+	*/
 	
 }

@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import entities.Floorplan;
 import entities.Sensor;
+import entities.SensorActive;
+import entities.SensorPassive;
 import entities.Wall;
 import geo.Position;
 
@@ -52,19 +54,36 @@ public class AStarGrid {
      *
      */
     public AStarGrid(Floorplan floorplan) {
+    	// instantiate grid with specified width and height and insert walkable nodes for all tiles
     	grid = new AStarNode[floorplan.getWidth()][floorplan.getHeight()];
         for (int y = 0; y < floorplan.getHeight(); y++) {
             for (int x = 0; x < floorplan.getWidth(); x++) {
                 grid[x][y] = new AStarNode(x, y, NodeState.WALKABLE);
             }
         }
+        // make nodes of tiles with walls non-walkable
 		for (Wall i : floorplan.getWalls()) {
 			setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
 		}
-		// TODO only add triggerArea of passive sensors
+		// make nodes of tiles with non-walkable sensors not-walkable
 		for (Sensor sensor : floorplan.getSensors()) {
-			for (Position triggerPosition : sensor.getTriggerArea()) {
-				getNode(triggerPosition.getX(), triggerPosition.getY()).addPassiveTriggers(sensor);
+			if (sensor.getWalkable() == false) {
+				for (Position position : sensor.getPositions()) {
+					setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+				}
+			}
+		}
+		
+		// Add triggerArea of active and passive sensors to respective nodes
+		for (Sensor sensor : floorplan.getSensors()) {
+			if (sensor instanceof SensorPassive) {
+				for (Position triggerPosition : sensor.getTriggerArea()) {
+					getNode(triggerPosition.getX(), triggerPosition.getY()).addPassiveTriggers((SensorPassive) sensor);
+				}
+			} else if (sensor instanceof SensorActive) {
+				for (Position triggerPosition : sensor.getTriggerArea()) {
+					getNode(triggerPosition.getX(), triggerPosition.getY()).addActiveTriggers((SensorActive) sensor);
+				}
 			}
 		}
 	}

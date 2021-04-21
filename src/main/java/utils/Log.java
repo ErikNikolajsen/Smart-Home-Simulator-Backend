@@ -32,7 +32,7 @@ public class Log {
 	      FileWriter myWriter = new FileWriter("logs\\"+fileName+".csv", true); //the true will append the new data instead of overwriting
 	      myWriter.write(timestamp + "," + sensorName + "," + value + "\n");
 	      myWriter.close();
-	      System.out.println("Logged: " + timestamp + ", " + sensorName + ", " + value);
+	      //System.out.println("Logged: " + timestamp + ", " + sensorName + ", " + value);
 	    } catch (IOException e) {
 	      System.out.println("An error occurred.");
 	      e.printStackTrace();

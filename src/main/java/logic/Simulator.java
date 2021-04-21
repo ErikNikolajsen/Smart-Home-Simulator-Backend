@@ -8,6 +8,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+
 import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
@@ -16,6 +19,8 @@ import main.MqttPaho;
 import main.Resources;
 import pathfinding2.AStarGrid;
 import pathfinding2.AStarNode;
+import entities.SensorActive;
+import entities.SensorPassive;
 
 public class Simulator {
 	
@@ -54,7 +59,7 @@ public class Simulator {
 	}
 	
 	// next-event time progression discrete-event simulation
-	public void startSimulator() throws InterruptedException {
+	public void startSimulator() throws InterruptedException, MqttPersistenceException, MqttException {
 		String[] statementArray = input.getInputArray();
 		String gotoPattern = input.getGotopattern();
 		String interactPattern = input.getInteractpattern();
@@ -88,7 +93,7 @@ public class Simulator {
 		System.out.println("*** Simulation has ended ***"); //test
 	}
 
-	private void gotoInstructions(Position gotoPosition) throws InterruptedException {
+	private void gotoInstructions(Position gotoPosition) throws InterruptedException, MqttPersistenceException, MqttException {
 		List<AStarNode> path;
 		path = grid.getPath(
 				agent.getPosition().getX(), 
@@ -118,7 +123,7 @@ public class Simulator {
 		}
 	}
 
-	private void waitInstructions(long waitTime) throws InterruptedException {
+	private void waitInstructions(long waitTime) throws InterruptedException, MqttPersistenceException, MqttException {
 		triggerPassiveSensors(waitTime);
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
@@ -136,10 +141,10 @@ public class Simulator {
 		
 	}
 	
-	private void triggerPassiveSensors(long time) throws InterruptedException {
+	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
-		for (Sensor sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
+		for (SensorPassive sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
 			long i = 0;
 			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
 				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
@@ -152,7 +157,8 @@ public class Simulator {
 		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
 		for (TriggerEvent triggerEvent : eventList) {
 			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
-			System.out.println(clock+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
+			triggerEvent.getSensor().trigger();
+			//System.out.println(clock+" : "+triggerEvent.getSensor().getName()+" has been triggered!");
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
