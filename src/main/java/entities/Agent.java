@@ -8,17 +8,25 @@ public class Agent {
 	
 	private UUID id;
 	private Position position;
-	private final double speed = 1; // m/s
+	private double speed = 1; // m/s
 	
-	public Agent(Position point) {
+	public Agent(Position point, double speed) {
 		this.id = UUID.randomUUID();
 		this.position = point;
+		this.speed = speed;
 	}
 	
 	public Agent() {
 		this.id = UUID.randomUUID();
 	}
-
+	
+	// copy constructor
+	public Agent(Agent another) {
+		this.id = UUID.randomUUID();
+		this.position = another.position;
+		this.speed = another.speed;
+	}
+	
 	
 	/*
 	public void interact(ActiveObject object, String interactionName) throws InteractionException {
@@ -43,6 +51,10 @@ public class Agent {
 
 	public double getSpeed() {
 		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 	
 	

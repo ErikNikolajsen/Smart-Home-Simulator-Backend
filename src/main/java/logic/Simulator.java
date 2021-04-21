@@ -24,38 +24,25 @@ import entities.SensorPassive;
 
 public class Simulator {
 	
-	//private int tick = 0; // OLD
-	//private long nsPerTick = 30000000; //UPS == 1000000000 / NS_PER_TICK // OLD
 	private LocalDateTime clock = LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
-	//long triggerFrequency = 300000000; // OLD
-	boolean instantSimulation = true;
-	double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
+	private boolean instantSimulation = true;
+	private double timeFactor = 1.0; // how many real-time seconds should a virtual seconds take 
 	
 
 	
-	private Input input;
-	private Floorplan floorplan;
-	private AStarGrid grid;
-	
-	private Agent agent;
+	private Input input = Resources.getInput();
+	private Floorplan floorplan = Resources.getFloorplan();
+	private AStarGrid grid = Resources.getaStarGrid();
+	private Agent agent = new Agent(floorplan.getAgent());
 
-	/**
-	 * @param nsPerTick
-	 * @param clock
-	 * @param input
-	 * @param floorplan
-	 * @param grid
-	 */
-	public Simulator(Input input, Floorplan floorplan, AStarGrid grid) { //long nsPerTick, LocalDateTime clock, 
-		//this.nsPerTick = nsPerTick;
-		//this.clock = clock;
-		//this.realtime;
-		this.input = input;
-		this.floorplan = floorplan;
-		this.grid = grid;
-		
-		this.agent = floorplan.getAgent();
-		
+
+	public Simulator() { 
+		// reset sensors
+		for (Sensor sensor : floorplan.getSensors()) {
+			if (sensor instanceof SensorPassive) {
+				((SensorPassive) sensor).setLastTriggerTime(null);
+			}
+		}
 	}
 	
 	// next-event time progression discrete-event simulation
@@ -163,6 +150,10 @@ public class Simulator {
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
 
+	
+	
+	
+	//Accessors and Mutators
 	public void setClock(LocalDateTime clock) {
 		this.clock = clock;
 	}
@@ -171,9 +162,24 @@ public class Simulator {
 		return clock;
 	}
 
+	public boolean isInstantSimulation() {
+		return instantSimulation;
+	}
+
 	public void setInstantSimulation(boolean instantSimulation) {
 		this.instantSimulation = instantSimulation;
 	}
+
+	public double getTimeFactor() {
+		return timeFactor;
+	}
+
+	public void setTimeFactor(double timeFactor) {
+		this.timeFactor = timeFactor;
+	}
+
+	
+	
 
 	
 	

@@ -1,6 +1,7 @@
 package controllers;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,24 +32,22 @@ public class SimulationController {
 		return testResult;
 	}
 	
-	@GetMapping("/simulator")
-	public @ResponseBody void runSimulation() throws InterruptedException, MqttException {
+	// TODO Only make runable if floorplan and input has been instantiated
+	@PostMapping("/simulator")
+	public void runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException {
 		Resources.setLog(new Log("test"));
 		Resources.getLog().createFile();
 		
 		Resources.setMqtt(new MqttPaho());
 		Resources.getMqtt().connect();
 		
-		Resources.setSimulator(new Simulator(
-				Resources.getInput(),
-				Resources.getFloorplan(),
-				Resources.getaStarGrid()
-				));
+		Resources.setSimulator(simulator);
 		Resources.getSimulator().startSimulator();
 	}
 	
-	@PostMapping("/simulator2")
-	public void runSimulation2(@RequestBody Boolean input) {
+	@GetMapping("/getSimulator")
+	public @ResponseBody Simulator getSimulator() {
+		return Resources.getSimulator(); 
 	}
     
 }
