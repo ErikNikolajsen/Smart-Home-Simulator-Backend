@@ -38,6 +38,7 @@ public class Simulator {
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
 	private Agent agent = new Agent(floorplan.getAgent());
+
 	
 	
 
@@ -101,10 +102,16 @@ public class Simulator {
 				gotoPosition.getX(), 
 				gotoPosition.getY());
 		
+		// detects if goto is impossible (HALTING ERROR)
+		if (path.isEmpty()) {
+			System.out.println("ERROR: coordinates are not reachable");
+		}
+		
 		for (AStarNode node : path) {
 			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
 			long time = (long) ((distance / agent.getSpeed()) * 1000000000);
 			
+			//Agent jumps from start of tile to start of tile
 			long halfTime = time/2;
 			triggerPassiveSensors(halfTime);
 			
@@ -113,8 +120,9 @@ public class Simulator {
 			
 			triggerPassiveSensors(halfTime);
 			
-			/* Agent jumps from middle of tile to middle of tile instead of start of tile to start of tile.
-			 * 
+			
+			/*
+			//Agent jumps from middle of tile to middle of tile instead of start of tile to start of tile
 			triggerPassiveSensors(time);
 			agent.setPosition(node.getX(), node.getY()); // moves agent
 			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
@@ -143,7 +151,7 @@ public class Simulator {
 	}
 	
 	private void returnError(String message) {
-		System.out.println(message);
+		System.out.println("ERROR: "+message);
 	}
 	
 	private void updateTime(long nanos) throws InterruptedException {

@@ -1,5 +1,7 @@
 package logic;
 
+
+
 import main.Resources;
 import pathfinding2.NodeState;
 
@@ -7,12 +9,20 @@ public class Input {
 	
 	private String input;
 	private String[] inputArray;
-	private boolean tested = false;
 	
 	private final static String gotoPattern = "\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*";
-	private final static String interactPattern = "\\s*interact\\(\\s*(\\w+)\\s*\\)\\s*";
-	private final static String waitPattern = "\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*";
-
+	private final static String interactPattern = "\\s*interact\\(\\s*(\\w+)\\s*\\)\\s*"; // interactPattern that accepts sensorName
+	//private final static String interactPattern = "\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"; // interactPattern that accepts sensorName and command
+	private final static String waitPattern = "\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"; //waitPattern that accepts integer
+	//private final static String waitPattern = "\\s*wait\\(\\s*((\\d+)|(\\d*\\.\\d+)|(\\d+\\.\\d*))\\s*\\)\\s*"; //waitPattern that accepts decimal number
+	//private final static String emptyPattern = "\\s*"; //empty statement and whitespace at end of input string 
+	
+	private final static String macroPattern = "\\s*let\\s+(\\w+)\\{(.*)\\}\\s*";
+	
+	private final static String commentLinePattern = "//.*";
+	private final static String commentBlockPattern = "/\\*[\\s\\S]*\\*/"; // instead of [\\s\\S] one might use . with DOTALL flag enabled 
+	
+	
 	public Input(String input) {
 		this.input = input;
 		//this.inputArray = input.split(";"); // splits statements into array elements;
@@ -30,7 +40,10 @@ public class Input {
 	 * 
 	 */
 	public String test() {
-	inputArray = this.input.split(";");
+	
+		
+	String inputSansComments = this.input.replaceAll(commentLinePattern, "").replaceAll(commentBlockPattern, "");
+	inputArray = inputSansComments.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 
 		if (inputArray[i].matches(gotoPattern)) { 
 			// tests if coordinate are within grid boundaries
@@ -50,12 +63,7 @@ public class Input {
 			return "ERROR: syntax error in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 		}
 	}
-	
-	
-	
-	
-	
-	this.tested = true;
+
 	return "consumed";
 	}
 

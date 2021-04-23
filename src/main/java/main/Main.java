@@ -168,7 +168,14 @@ public class Main {
 		Random rand = new Random();
 		System.out.println(rand.nextInt(5));
 		*/
+		/*
+		double wait10hours = 86400.2;
+		long secondInNanos = 1000000000;
+		long size = (long)(secondInNanos * wait10hours);
+		System.out.println(size);
 		
+		System.out.println(Long.parseLong("86400.2"));
+		*/
 		SpringApplication.run(Main.class, args);
 		
 	}
