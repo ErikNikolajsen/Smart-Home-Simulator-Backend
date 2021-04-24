@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
@@ -62,9 +63,9 @@ public class Simulator {
 		}
 		
 		String[] statementArray = input.getInputArray();
-		String gotoPattern = input.getGotopattern();
-		String interactPattern = input.getInteractpattern();
-		String waitPattern = input.getWaitpattern();
+		Pattern gotoPattern = input.getGotopattern();
+		Pattern interactPattern = input.getInteractpattern();
+		Pattern waitPattern = input.getWaitpattern();
 		
 		System.out.println("*** Simulation has started ***"); //test
 		
@@ -72,21 +73,21 @@ public class Simulator {
 			System.out.println("* "+statement+":"); //test
 			
 			// GOTO
-			if (statement.matches(gotoPattern)) {
+			if (gotoPattern.matcher(statement).matches()) {
 				Position gotoPosition = new Position(
-					Integer.parseInt(statement.replaceAll(gotoPattern, "$1")),
-					Integer.parseInt(statement.replaceAll(gotoPattern, "$2"))
+					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$1")),
+					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$2"))
 				);
 				gotoInstructions(gotoPosition);
 			
 			// WAIT
-			} else if (statement.matches(waitPattern)) {
-				long waitTime = Long.parseLong(statement.replaceAll(waitPattern, "$1")) * 1000000000; // converts seconds to nanoseconds
+			} else if (waitPattern.matcher(statement).matches()) {
+				long waitTime = Long.parseLong(waitPattern.matcher(statement).replaceAll("$1")) * 1000000000; // converts seconds to nanoseconds
 				waitInstructions(waitTime);
 			
 			// INTERACT
-			} else if (statement.matches(interactPattern)) {
-				String sensorName = statement.replaceAll(interactPattern, "$1");
+			} else if (interactPattern.matcher(statement).matches()) {
+				String sensorName = interactPattern.matcher(statement).replaceAll("$1");
 				interactInstructions(sensorName);
 			}
 		}
