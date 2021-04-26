@@ -140,12 +140,13 @@ public class Simulator {
 	private void interactInstructions(String sensorName) throws MqttPersistenceException, InterruptedException, MqttException {
 		for (Sensor activeSensor : floorplan.getSensors()) {
 			if (activeSensor.getName().equals(sensorName)) {
-				activeSensor.getTriggerArea();
-				Random rand = new Random();
-				Position randomTriggerPosition = activeSensor.getTriggerArea().get(rand.nextInt(activeSensor.getTriggerArea().size()));
-				System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
-				gotoInstructions(randomTriggerPosition);
-				activeSensor.trigger();
+				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
+					Random rand = new Random();
+					Position randomTriggerPosition = activeSensor.getTriggerArea().get(rand.nextInt(activeSensor.getTriggerArea().size()));
+					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
+					gotoInstructions(randomTriggerPosition);
+				}
+				((SensorActive) activeSensor).trigger(command);
 				break;
 			}
 		}
