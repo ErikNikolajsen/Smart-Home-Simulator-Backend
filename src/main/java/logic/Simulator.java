@@ -40,6 +40,8 @@ public class Simulator {
 	private AStarGrid grid = Resources.getaStarGrid();
 	private Agent agent = new Agent(floorplan.getAgent());
 
+	ArrayList<SensorPassive> passiveSensors = new ArrayList<SensorPassive>();
+	ArrayList<SensorActive> activeSensors = new ArrayList<SensorActive>();
 	
 	
 
@@ -48,6 +50,15 @@ public class Simulator {
 		for (Sensor sensor : floorplan.getSensors()) {
 			if (sensor instanceof SensorPassive) {
 				((SensorPassive) sensor).setLastTriggerTime(null);
+			}
+		}
+		
+		// instantiate list for active and passive sensors
+		for (int i = 0 ; i < floorplan.getSensors().size() ; i++) {
+			if (floorplan.getSensors().get(i) instanceof SensorPassive) {
+				passiveSensors.add((SensorPassive) floorplan.getSensors().get(i));
+			} else if (floorplan.getSensors().get(i) instanceof SensorActive) {
+				activeSensors.add((SensorActive) floorplan.getSensors().get(i));
 			}
 		}
 	}
@@ -88,7 +99,8 @@ public class Simulator {
 			// INTERACT
 			} else if (interactPattern.matcher(statement).matches()) {
 				String sensorName = interactPattern.matcher(statement).replaceAll("$1");
-				interactInstructions(sensorName);
+				String command = interactPattern.matcher(statement).replaceAll("$2");
+				interactInstructions(sensorName, command);
 			}
 		}
 		
@@ -137,7 +149,7 @@ public class Simulator {
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
 	
-	private void interactInstructions(String sensorName) throws MqttPersistenceException, InterruptedException, MqttException {
+	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException {
 		for (Sensor activeSensor : floorplan.getSensors()) {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
@@ -181,7 +193,7 @@ public class Simulator {
 		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
 		for (TriggerEvent triggerEvent : eventList) {
 			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
-			triggerEvent.getSensor().trigger();
+			((SensorPassive) triggerEvent.getSensor()).trigger();
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}

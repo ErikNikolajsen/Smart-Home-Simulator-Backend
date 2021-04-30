@@ -3,6 +3,9 @@ package entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import geo.Position;
@@ -21,7 +24,9 @@ public class SensorPassive extends Sensor {
 	public SensorPassive() {
 	}
 
-
+	public void trigger() throws MqttPersistenceException, MqttException {
+		output("has been triggered!");
+	}
 	
 	//Accessors and Mutators
 	public LocalDateTime getLastTriggerTime() {
