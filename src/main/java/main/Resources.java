@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 import entities.Agent;
 import entities.Floorplan;
 import logic.Input;
@@ -14,6 +16,7 @@ public class Resources {
 	private static Input input;
 	private static AStarGrid aStarGrid;
 	private static Floorplan floorplan;
+	private static Random random;
 	
 
 	//Accessors and Mutators
@@ -53,6 +56,13 @@ public class Resources {
 	public static void setMqtt(MqttPaho mqtt) {
 		Resources.mqtt = mqtt;
 	}
+	public static Random getRandom() {
+		return random;
+	}
+	public static void setRandom(Random random) {
+		Resources.random = random;
+	}
+	
 	
 	
 	

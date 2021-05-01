@@ -34,6 +34,8 @@ public class Simulator {
 	private String mqttHost;
 	private String mqttPort;
 	private String rootTopic;
+	
+	private Long seed;
 
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
@@ -46,7 +48,7 @@ public class Simulator {
 	
 
 	public Simulator() throws MqttException { 
-		// reset sensors
+		// reset sensors' lastTriggerTime variable
 		for (Sensor sensor : floorplan.getSensors()) {
 			if (sensor instanceof SensorPassive) {
 				((SensorPassive) sensor).setLastTriggerTime(null);
@@ -61,6 +63,9 @@ public class Simulator {
 				activeSensors.add((SensorActive) floorplan.getSensors().get(i));
 			}
 		}
+		
+		
+		
 	}
 	
 	// next-event time progression discrete-event simulation
@@ -73,6 +78,13 @@ public class Simulator {
 			Resources.setMqtt(null);
 		}
 		
+		// instantiate Random object with specified seed
+		if (seed == null) {
+			Resources.setRandom(new Random());
+		} else {
+			Resources.setRandom(new Random(seed));
+		}
+				
 		String[] statementArray = input.getInputArray();
 		Pattern gotoPattern = input.getGotopattern();
 		Pattern interactPattern = input.getInteractpattern();
@@ -153,8 +165,7 @@ public class Simulator {
 		for (Sensor activeSensor : floorplan.getSensors()) {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
-					Random rand = new Random();
-					Position randomTriggerPosition = activeSensor.getTriggerArea().get(rand.nextInt(activeSensor.getTriggerArea().size()));
+					Position randomTriggerPosition = activeSensor.getTriggerArea().get(Resources.getRandom().nextInt(activeSensor.getTriggerArea().size()));
 					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
 					gotoInstructions(randomTriggerPosition);
 				}
@@ -257,8 +268,18 @@ public class Simulator {
 	public void setRootTopic(String rootTopic) {
 		this.rootTopic = rootTopic;
 	}
-	
 
+	public Long getSeed() {
+		return seed;
+	}
+
+	public void setSeed(Long seed) {
+		this.seed = seed;
+	}
+	
+	
+	
+	
 	
 	
 
