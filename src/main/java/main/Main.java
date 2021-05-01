@@ -1,10 +1,12 @@
 package main;
 
 import java.awt.Point;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -176,6 +178,15 @@ public class Main {
 		
 		System.out.println(Long.parseLong("86400.2"));
 		*/
+		/*
+		HashMap<String, String> capitalCities = new HashMap<String, String>();
+		capitalCities.put("England", "London");
+		capitalCities.put("Germany", "Berlin");
+	    capitalCities.put("Norway", "Oslo");
+		
+	    String json = new ObjectMapper().writeValueAsString(capitalCities);
+	    System.out.println(json);
+	    */
 		SpringApplication.run(Main.class, args);
 		
 	}

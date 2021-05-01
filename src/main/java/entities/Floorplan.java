@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import geo.Position;
+
 public class Floorplan {
 	
 	private int tileSideLength = 1; // width and height of a square tile in meters
@@ -9,7 +11,7 @@ public class Floorplan {
 	private int height; // height of floor plan in tiles
 	private Agent agent;
 	private ArrayList<Sensor> sensors;
-	private ArrayList<Wall> walls;
+	private ArrayList<Position> walls;
 	
 	/**
 	 * @param width
@@ -18,7 +20,7 @@ public class Floorplan {
 	 * @param sensors
 	 * @param walls
 	 */
-	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Wall> walls) {
+	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Position> walls) {
 		this.tileSideLength = tileSideLength;
 		this.width = width;
 		this.height = height;
@@ -63,11 +65,11 @@ public class Floorplan {
 		this.sensors = sensors;
 	}
 
-	public ArrayList<Wall> getWalls() {
+	public ArrayList<Position> getWalls() {
 		return walls;
 	}
 
-	public void setWalls(ArrayList<Wall> walls) {
+	public void setWalls(ArrayList<Position> walls) {
 		this.walls = walls;
 	}
 

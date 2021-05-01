@@ -11,7 +11,6 @@ import entities.Floorplan;
 import entities.Sensor;
 import entities.SensorActive;
 import entities.SensorPassive;
-import entities.Wall;
 import geo.Position;
 
 /**
@@ -61,8 +60,8 @@ public class AStarGrid {
             }
         }
         // make nodes of tiles with walls non-walkable
-		for (Wall i : floorplan.getWalls()) {
-			setNodeState(i.getPosition().getX(), i.getPosition().getY(), NodeState.NOT_WALKABLE);
+		for (Position i : floorplan.getWalls()) {
+			setNodeState(i.getX(), i.getY(), NodeState.NOT_WALKABLE);
 		}
 		// make nodes of tiles with non-walkable sensors not-walkable
 		for (Sensor sensor : floorplan.getSensors()) {

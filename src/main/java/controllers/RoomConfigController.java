@@ -66,7 +66,7 @@ public class RoomConfigController {
 						new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))), 300000000),
 						new SensorChild("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000,1337)
 						)), 
-				new ArrayList<Wall>(Arrays.asList(new Wall(new Position(1,1)), new Wall(new Position(2,2)))));
+				new ArrayList<Position>(Arrays.asList(new Position(1,1), new Position(2,2))));
 		return floorplan; 
 	}
 	
