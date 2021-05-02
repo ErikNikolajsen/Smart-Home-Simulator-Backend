@@ -18,6 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -178,17 +179,26 @@ public class Main {
 		
 		System.out.println(Long.parseLong("86400.2"));
 		*/
+		
 		/*
-		HashMap<String, String> capitalCities = new HashMap<String, String>();
+		// Output
+		HashMap<String, Object> capitalCities = new HashMap<String, Object>();
 		capitalCities.put("England", "London");
 		capitalCities.put("Germany", "Berlin");
 	    capitalCities.put("Norway", "Oslo");
-		
-	    String json = new ObjectMapper().writeValueAsString(capitalCities);
+	    
+	    LocalDateTime datetime = LocalDateTime.parse("2020-01-01T16:11:34.500000000"); 
+
+	    String name = "John Doe";
+	    Output output = new Output(datetime, name, capitalCities);
+	    
+	    String json = new ObjectMapper().writeValueAsString(output);
 	    System.out.println(json);
 	    */
+	    
 		SpringApplication.run(Main.class, args);
 		
+	  
 	}
 
 }

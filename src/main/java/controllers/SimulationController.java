@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
@@ -34,7 +36,7 @@ public class SimulationController {
 	
 	// TODO Only make runable if floorplan and input has been instantiated
 	@PostMapping("/simulator")
-	public void runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException {
+	public void runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		//Resources.setLog(new Log("test"));
 		//Resources.getLog().createFile();
 		

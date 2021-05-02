@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
@@ -69,7 +71,7 @@ public class Simulator {
 	}
 	
 	// next-event time progression discrete-event simulation
-	public void startSimulator() throws InterruptedException, MqttPersistenceException, MqttException {
+	public void startSimulator() throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
@@ -161,7 +163,7 @@ public class Simulator {
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
 	
-	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException {
+	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		for (Sensor activeSensor : floorplan.getSensors()) {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
