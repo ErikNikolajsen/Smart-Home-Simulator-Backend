@@ -25,7 +25,7 @@ public class SmartTV extends SensorActive {
 	}
 	
 	// Trigger behavior 
-	public void trigger2(String commandString) throws MqttPersistenceException, MqttException {
+	public void updateState(String commandString) throws MqttPersistenceException, MqttException {
 		Command command = Command.valueOf(commandString);
 		// Turn TV off
 		if (command == Command.OFF) {

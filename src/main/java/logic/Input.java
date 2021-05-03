@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,20 +45,21 @@ public class Input {
 	 */
 	public String test() {
 	
+	//Remove comments
 	String inputSansComments = this.input;
 	inputSansComments = commentLinePattern.matcher(inputSansComments).replaceAll("");
 	inputSansComments = commentBlockPattern.matcher(inputSansComments).replaceAll("");
 	
 	/*
-	Pattern p = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
-	Matcher m = p.matcher(inputSansComments);
+	//Match macros
+	HashMap<String, String> macros = new HashMap<String, String>();
+	Matcher m = macroPattern.matcher(inputSansComments);
 	int lastMatchPos = 0;
 	while (m.find()) {
-	   System.out.println(m.group(1));
-	   System.out.println(m.group(2));
+	   //System.out.println(m.group(1));
+	   //System.out.println(m.group(2));
 	   
-	   //Pattern p1 = Pattern.compile(m.group(1)+"());
-	   
+	   macros.put(m.group(1), m.group(2));	   
 	   
 	   lastMatchPos = m.end();
 	}
@@ -65,6 +67,7 @@ public class Input {
 	   System.out.println("Invalid string!");
 	}
 	*/
+	
 	
 	inputArray = inputSansComments.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 

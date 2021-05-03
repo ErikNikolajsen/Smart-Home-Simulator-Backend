@@ -25,10 +25,10 @@ public abstract class SensorActive extends Sensor {
 	public SensorActive() throws MqttPersistenceException, MqttException {
 	}
 	
-	public abstract void trigger2(String command) throws MqttPersistenceException, MqttException;
+	public abstract void updateState(String command) throws MqttPersistenceException, MqttException;
 	
 	public void trigger(String command) throws MqttPersistenceException, MqttException, JsonProcessingException {
-		trigger2(command);
+		updateState(command);
 		output();
 	}
 	
