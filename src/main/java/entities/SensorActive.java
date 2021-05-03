@@ -33,13 +33,13 @@ public abstract class SensorActive extends Sensor {
 	}
 	
 	public void output() throws MqttPersistenceException, MqttException, JsonProcessingException {
-		Output output = new Output(Resources.getSimulator().getClock(),getName(),state);
+		Output output = new Output(Resources.getSimulator().getClock(),getClass().getName(),getName(),state);
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(output);
 	    System.out.println(json);
 	    
-	    //System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getName()+" : "+state.toString());
-		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"sensor\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
+	    //System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getClass().getName()+" : "+getName()+" : "+state.toString());
+		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"type\":\""+getClass().getName()+"\",\"name\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(json);
 		}
@@ -49,12 +49,14 @@ public abstract class SensorActive extends Sensor {
 	
 	private class Output {
 		private LocalDateTime time;
-		private String sensor;
+		private String type;
+		private String name;
 		private HashMap<String, Object> state;
 		
-		public Output(LocalDateTime time, String sensor, HashMap<String, Object> state) {
+		public Output(LocalDateTime time, String type, String name, HashMap<String, Object> state) {
 			this.time = time;
-			this.sensor = sensor;
+			this.name = name;
+			this.type = type;
 			this.state = state;
 		}
 		
@@ -66,8 +68,12 @@ public abstract class SensorActive extends Sensor {
 			return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString();
 		}
 
-		public String getSensor() {
-			return sensor;
+		public String getName() {
+			return name;
+		}
+
+		public String getType() {
+			return type;
 		}
 
 		public HashMap<String, Object> getState() {
