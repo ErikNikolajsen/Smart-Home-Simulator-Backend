@@ -24,7 +24,8 @@ public class Input {
 	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/"); // instead of [\\s\\S] one might use . with DOTALL flag enabled 
 	
 	
-	private final static Pattern macroPattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
+	private final static Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
+	private final static Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
 	
 	
 	
@@ -43,33 +44,30 @@ public class Input {
 	 * interact IDs exist and is interactable
 	 * 
 	 */
+	//Preprocessor
 	public String test() {
 	
 	//Remove comments
-	String inputSansComments = this.input;
-	inputSansComments = commentLinePattern.matcher(inputSansComments).replaceAll("");
-	inputSansComments = commentBlockPattern.matcher(inputSansComments).replaceAll("");
+	String processedInput = this.input;
+	processedInput = commentLinePattern.matcher(processedInput).replaceAll("");
+	processedInput = commentBlockPattern.matcher(processedInput).replaceAll("");
 	
-	/*
-	//Match macros
+	//Represent macros internally
 	HashMap<String, String> macros = new HashMap<String, String>();
-	Matcher m = macroPattern.matcher(inputSansComments);
-	int lastMatchPos = 0;
+	Matcher m = macroDefinePattern.matcher(processedInput);
 	while (m.find()) {
-	   //System.out.println(m.group(1));
-	   //System.out.println(m.group(2));
-	   
 	   macros.put(m.group(1), m.group(2));	   
-	   
-	   lastMatchPos = m.end();
 	}
-	if (lastMatchPos != inputSansComments.length()) {
-	   System.out.println("Invalid string!");
-	}
-	*/
+	processedInput = macroDefinePattern.matcher(processedInput).replaceAll("");
+
+	//Expand macros
+	for (HashMap.Entry<String, String> entry : macros.entrySet()) {
+        processedInput = Pattern.compile("\\s*"+entry.getKey()+"\\(\\s*\\)\\s*;").matcher(processedInput).replaceAll(entry.getValue());
+		System.out.println(entry.getKey() + ":" + entry.getValue());
+    }
 	
-	
-	inputArray = inputSansComments.split(";");
+	//Test input
+	inputArray = processedInput.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 
 		if (gotoPattern.matcher(inputArray[i]).matches()) { 
 			// tests if coordinate are within grid boundaries
