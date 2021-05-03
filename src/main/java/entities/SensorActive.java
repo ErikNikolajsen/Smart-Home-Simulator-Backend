@@ -33,13 +33,13 @@ public abstract class SensorActive extends Sensor {
 	}
 	
 	public void output() throws MqttPersistenceException, MqttException, JsonProcessingException {
-		Output output = new Output(Resources.getSimulator().getClock(),getClass().getName(),getName(),state);
+		Output output = new Output(Resources.getSimulator().getClock(),getClass().getSimpleName(),getName(),state);
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(output);
 	    System.out.println(json);
 	    
-	    //System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getClass().getName()+" : "+getName()+" : "+state.toString());
-		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"type\":\""+getClass().getName()+"\",\"name\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
+	    //System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getClass().getSimpleName()+" : "+getName()+" : "+state.toString());
+		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"type\":\""+getClass().getSimpleName()+"\",\"name\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(json);
 		}
