@@ -1,28 +1,22 @@
 package entities;
 
-import java.util.UUID;
-
 import geo.Position;
 
 public class Agent {
 	
-	private UUID id;
 	private Position position;
 	private double speed = 1; // m/s
 	
 	public Agent(Position point, double speed) {
-		this.id = UUID.randomUUID();
 		this.position = point;
 		this.speed = speed;
 	}
 	
 	public Agent() {
-		this.id = UUID.randomUUID();
 	}
 	
 	// copy constructor
 	public Agent(Agent another) {
-		this.id = UUID.randomUUID();
 		this.position = another.position;
 		this.speed = another.speed;
 	}

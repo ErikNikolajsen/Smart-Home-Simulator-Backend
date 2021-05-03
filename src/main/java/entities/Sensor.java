@@ -1,13 +1,10 @@
 package entities;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -19,25 +16,18 @@ import main.Resources;
 include = JsonTypeInfo.As.PROPERTY,
 property = "type")
 public abstract class Sensor {
-	
-	@JsonIgnore private UUID id;
 	private String name;
 	private ArrayList<Position> positions;
 	private ArrayList<Position> triggerArea;
 	private boolean walkable;
-	//@JsonIgnore private LocalDateTime lastTriggerTime;
-	//private long triggerFrequency;
 	
 	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea/*, long triggerFrequency*/) {
-		this.id = UUID.randomUUID();
 		this.name = name;
 		this.positions = positions;
 		this.triggerArea = triggerArea;
-		//this.triggerFrequency = triggerFrequency;
 	}
 	
 	public Sensor() {
-		this.id = UUID.randomUUID();
 	}
 	
 	public void output(String message) throws MqttPersistenceException, MqttException {
@@ -75,10 +65,6 @@ public abstract class Sensor {
 		this.triggerArea = triggerArea;
 	}
 
-	public UUID getId() {
-		return id;
-	}
-
 	public boolean getWalkable() {
 		return walkable;
 	}
@@ -86,23 +72,5 @@ public abstract class Sensor {
 	public void setWalkable(boolean walkable) {
 		this.walkable = walkable;
 	}
-	
-	/*
-	public LocalDateTime getLastTriggerTime() {
-		return lastTriggerTime;
-	}
-
-	public void setLastTriggerTime(LocalDateTime lastTriggerTime) {
-		this.lastTriggerTime = lastTriggerTime;
-	}
-
-	public long getTriggerFrequency() {
-		return triggerFrequency;
-	}
-
-	public void setTriggerFrequency(long triggerFrequency) {
-		this.triggerFrequency = triggerFrequency;
-	};
-	*/
 	
 }

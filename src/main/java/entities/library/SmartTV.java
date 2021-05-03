@@ -1,14 +1,9 @@
 package entities.library;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import entities.SensorActive;
-import geo.Position;
-import main.Resources;
 
 public class SmartTV extends SensorActive {
 

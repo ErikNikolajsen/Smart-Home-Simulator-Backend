@@ -18,8 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
-import entities.SensorChild;
-import entities.Wall;
+import entities.SensorPassive;
 import geo.Grid;
 import geo.Position;
 import geo.Tile;
@@ -53,7 +52,7 @@ public class RoomConfigController {
 	
 	
 	
-	
+	/*
 	//Floorplan get test
 	@GetMapping("/floorplanTest")
 	public @ResponseBody Floorplan getFloorplanTest() {
@@ -61,14 +60,15 @@ public class RoomConfigController {
 				100,
 				5, 
 				5, 
-				new Agent(new Position(0,0)), 
+				new Agent(new Position(0,0),1), 
 				new ArrayList<Sensor>(Arrays.asList(
-						new Sensor("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))), 300000000),
+						new SensorPassive("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))), 300000000),
 						new SensorChild("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000,1337)
 						)), 
 				new ArrayList<Position>(Arrays.asList(new Position(1,1), new Position(2,2))));
 		return floorplan; 
 	}
+	*/
 	
 	@PostMapping("/floorplan")
 	public void postFloorplan(@RequestBody Floorplan floorplan) {

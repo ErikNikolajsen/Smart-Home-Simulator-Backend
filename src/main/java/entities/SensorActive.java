@@ -38,8 +38,8 @@ public abstract class SensorActive extends Sensor {
 		String json = mapper.writeValueAsString(output);
 	    System.out.println(json);
 	    
-	    System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getName()+" : "+state.toString());
-		System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"sensor\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
+	    //System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getName()+" : "+state.toString());
+		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"sensor\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(json);
 		}
