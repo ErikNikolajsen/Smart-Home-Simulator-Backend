@@ -30,13 +30,7 @@ public abstract class Sensor {
 	public Sensor() {
 	}
 	
-	public void output(String message) throws MqttPersistenceException, MqttException {
-		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
-		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" : "+message);
-		if (Resources.getSimulator().getMqttOutput() == true) {
-			Resources.getMqtt().publish(Resources.getSimulator().getClock()+", "+getName()+", "+message);
-		}
-	}
+	
 	
 
 	

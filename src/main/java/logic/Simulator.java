@@ -278,6 +278,10 @@ public class Simulator {
 	public void setSeed(Long seed) {
 		this.seed = seed;
 	}
+
+	public Agent getAgent() {
+		return agent;
+	}
 	
 	
 	
