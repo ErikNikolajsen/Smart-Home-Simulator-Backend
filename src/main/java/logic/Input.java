@@ -1,7 +1,5 @@
 package logic;
 
-
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +12,7 @@ public class Input {
 	private String[] inputArray;
 	
 	private final static Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*");
+	private final static Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*");
 	//private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+)\\s*\\)\\s*"); // interactPattern that accepts sensorName
 	private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); // interactPattern that accepts sensorName and command
 	private final static Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
@@ -24,7 +23,9 @@ public class Input {
 	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/"); // instead of [\\s\\S] one might use . with DOTALL flag enabled 
 	
 	
-	private final static Pattern macroPattern = Pattern.compile("\\s*let\\s+\\w+\\b(?<!\\bboy)\\s*\\{[\\s\\S]*\\}");
+	private final static Pattern macroPattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
+	
+	
 	
 	
 	public Input(String input) {
@@ -55,13 +56,14 @@ public class Input {
 	   System.out.println(m.group(1));
 	   System.out.println(m.group(2));
 	   
-	   Pattern p1 = Pattern.compile(m.group(1)+"());
+	   //Pattern p1 = Pattern.compile(m.group(1)+"());
 	   
 	   
 	   lastMatchPos = m.end();
 	}
-	if (lastMatchPos != inputSansComments.length())
+	if (lastMatchPos != inputSansComments.length()) {
 	   System.out.println("Invalid string!");
+	}
 	*/
 	
 	inputArray = inputSansComments.split(";");
@@ -75,18 +77,31 @@ public class Input {
 			if (Resources.getaStarGrid().getNodeState(Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$1")), Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$2"))) == NodeState.NOT_WALKABLE) {
 				return "ERROR: target coordinate is not walkable in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 			}
-			
-		} else if (interactPattern.matcher(inputArray[i]).matches()) {
+			continue;
+		}
+		
+		if (interactPattern.matcher(inputArray[i]).matches()) {
 			// test if sensor exists in floorplan
 			
 			// test if command is applicable for the sensor
-		} else if (waitPattern.matcher(inputArray[i]).matches()) {
-			
-		} else if (emptyPattern.matcher(inputArray[i]).matches()) {
-			
-		} else {
-			return "ERROR: syntax error in statement "+(i+1)+": "+inputArray[i]; // returns error-message
+			continue;
 		}
+		
+		if (waitPattern.matcher(inputArray[i]).matches()) {
+			continue;
+		}
+		
+		if (gotoEntityPattern.matcher(inputArray[i]).matches()) {
+			// test if entity exists
+			continue;
+		}
+		
+		if (emptyPattern.matcher(inputArray[i]).matches()) {
+			continue;
+		}
+		
+		return "ERROR: syntax error in statement "+(i+1)+": "+inputArray[i]; // returns error-message
+		
 	}
 
 	return "consumed";
