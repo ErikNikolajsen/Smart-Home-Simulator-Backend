@@ -12,7 +12,6 @@ public class Lamp extends SensorPassive {
 	// Default constructor
 	public Lamp()  throws MqttPersistenceException, MqttException {
 		state.put("triggered", true);
-		state.put("proximity", null);
 	}
 	
 	// Trigger behavior 

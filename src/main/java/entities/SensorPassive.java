@@ -1,6 +1,7 @@
 package entities;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import geo.Position;
 import main.Resources;
@@ -34,7 +36,8 @@ public class SensorPassive extends Sensor {
 	
 	public void output(String message) throws MqttPersistenceException, MqttException {
 		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
-		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" : "+message);
+		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" : "+message); // console human-readable
+		
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(Resources.getSimulator().getClock()+", "+getName()+", "+message);
 		}

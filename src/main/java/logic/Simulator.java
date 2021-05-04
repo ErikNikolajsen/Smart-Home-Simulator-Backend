@@ -50,23 +50,19 @@ public class Simulator {
 	
 
 	public Simulator() throws MqttException { 
-		// reset sensors' lastTriggerTime variable
-		for (Sensor sensor : floorplan.getSensors()) {
-			if (sensor instanceof SensorPassive) {
-				((SensorPassive) sensor).setLastTriggerTime(null);
-			}
-		}
-		
 		// instantiate list for active and passive sensors
-		for (int i = 0 ; i < floorplan.getSensors().size() ; i++) {
-			if (floorplan.getSensors().get(i) instanceof SensorPassive) {
-				passiveSensors.add((SensorPassive) floorplan.getSensors().get(i));
-			} else if (floorplan.getSensors().get(i) instanceof SensorActive) {
-				activeSensors.add((SensorActive) floorplan.getSensors().get(i));
-			}
+				for (int i = 0 ; i < floorplan.getSensors().size() ; i++) {
+					if (floorplan.getSensors().get(i) instanceof SensorPassive) {
+						passiveSensors.add((SensorPassive) floorplan.getSensors().get(i));
+					} else if (floorplan.getSensors().get(i) instanceof SensorActive) {
+						activeSensors.add((SensorActive) floorplan.getSensors().get(i));
+					}
+				}
+		
+		// reset sensors' lastTriggerTime variable
+		for (SensorPassive sensor : passiveSensors) {
+			sensor.setLastTriggerTime(null);
 		}
-		
-		
 		
 	}
 	
@@ -164,14 +160,14 @@ public class Simulator {
 	}
 	
 	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
-		for (Sensor activeSensor : floorplan.getSensors()) {
+		for (SensorActive activeSensor : activeSensors) {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
 					Position randomTriggerPosition = activeSensor.getTriggerArea().get(Resources.getRandom().nextInt(activeSensor.getTriggerArea().size()));
 					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
 					gotoInstructions(randomTriggerPosition);
 				}
-				((SensorActive) activeSensor).trigger(command);
+				activeSensor.trigger(command);
 				break;
 			}
 		}
