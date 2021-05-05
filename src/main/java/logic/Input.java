@@ -51,7 +51,7 @@ public class Input {
 	String processedInput = this.input;
 	processedInput = commentLinePattern.matcher(processedInput).replaceAll("");
 	processedInput = commentBlockPattern.matcher(processedInput).replaceAll("");
-	
+	/*
 	//Represent macros internally
 	HashMap<String, String> macros = new HashMap<String, String>();
 	Matcher m = macroDefinePattern.matcher(processedInput);
@@ -65,7 +65,7 @@ public class Input {
         processedInput = Pattern.compile("\\s*"+entry.getKey()+"\\(\\s*\\)\\s*;").matcher(processedInput).replaceAll(entry.getValue());
 		System.out.println(entry.getKey() + ":" + entry.getValue());
     }
-	
+	*/
 	//Test input
 	inputArray = processedInput.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 
@@ -130,6 +130,10 @@ public class Input {
 
 	public static Pattern getWaitpattern() {
 		return waitPattern;
+	}
+
+	public static Pattern getGotoentitypattern() {
+		return gotoEntityPattern;
 	}
 	
 	

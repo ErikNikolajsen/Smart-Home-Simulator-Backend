@@ -12,6 +12,7 @@ public class Floorplan {
 	private Agent agent;
 	private ArrayList<Sensor> sensors;
 	private ArrayList<Position> walls;
+	private ArrayList<Entity> entities;
 	
 	/**
 	 * @param width
@@ -20,13 +21,14 @@ public class Floorplan {
 	 * @param sensors
 	 * @param walls
 	 */
-	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Position> walls) {
+	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Position> walls, ArrayList<Entity> entities) {
 		this.tileSideLength = tileSideLength;
 		this.width = width;
 		this.height = height;
 		this.agent = agent;
 		this.sensors = sensors;
 		this.walls = walls;
+		this.entities = entities;
 	}
 	
 	public Floorplan() {
@@ -79,6 +81,14 @@ public class Floorplan {
 
 	public void setTileSideLength(int tileSideLength) {
 		this.tileSideLength = tileSideLength;
+	}
+
+	public ArrayList<Entity> getEntities() {
+		return entities;
+	}
+
+	public void setEntities(ArrayList<Entity> entities) {
+		this.entities = entities;
 	}
 	
 	

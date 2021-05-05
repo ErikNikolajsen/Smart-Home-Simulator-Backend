@@ -195,7 +195,7 @@ public class Main {
 	    String json = new ObjectMapper().writeValueAsString(output);
 	    System.out.println(json);
 	    */
-		
+		/*
 	    ArrayList<Position> p = new ArrayList<Position>();
 	    for (int i = 0; i < 1000000; i++) {
 	    	p.add(new Position(1+i,2+i));
@@ -209,8 +209,8 @@ public class Main {
 		long time = System.nanoTime() - start;
 		
 		System.out.println(time);
-		
-		//SpringApplication.run(Main.class, args);
+		*/
+		SpringApplication.run(Main.class, args);
 		
 	  
 	}

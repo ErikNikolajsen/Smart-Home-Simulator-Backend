@@ -19,6 +19,7 @@ import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
 import entities.SensorPassive;
+import entities.Entity;
 import geo.Grid;
 import geo.Position;
 import geo.Tile;

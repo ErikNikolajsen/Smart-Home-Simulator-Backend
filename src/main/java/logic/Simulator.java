@@ -16,6 +16,7 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import entities.Agent;
+import entities.Entity;
 import entities.Floorplan;
 import entities.Sensor;
 import geo.Position;
@@ -87,6 +88,7 @@ public class Simulator {
 		Pattern gotoPattern = input.getGotopattern();
 		Pattern interactPattern = input.getInteractpattern();
 		Pattern waitPattern = input.getWaitpattern();
+		Pattern entityPattern = input.getGotoentitypattern();
 		
 		System.out.println("*** Simulation has started ***"); //test
 		
@@ -111,6 +113,11 @@ public class Simulator {
 				String sensorName = interactPattern.matcher(statement).replaceAll("$1");
 				String command = interactPattern.matcher(statement).replaceAll("$2");
 				interactInstructions(sensorName, command);
+			
+			// GOTO ENTITY
+			} else if (entityPattern.matcher(statement).matches()) {
+				String entityName = entityPattern.matcher(statement).replaceAll("$1");
+				gotoEntityInstructions(entityName);
 			}
 		}
 		
@@ -168,6 +175,19 @@ public class Simulator {
 					gotoInstructions(randomTriggerPosition);
 				}
 				activeSensor.trigger(command);
+				break;
+			}
+		}
+	}
+	
+	private void gotoEntityInstructions(String entityName) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
+		for (Entity entity : floorplan.getEntities()) {
+			if (entity.getName().equals(entityName)) {
+				if (!entity.getTriggerArea().contains(agent.getPosition())) {
+					Position randomTriggerPosition = entity.getTriggerArea().get(Resources.getRandom().nextInt(entity.getTriggerArea().size()));
+					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
+					gotoInstructions(randomTriggerPosition);
+				}
 				break;
 			}
 		}
