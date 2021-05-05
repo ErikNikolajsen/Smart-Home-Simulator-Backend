@@ -189,6 +189,28 @@ public class Simulator {
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
+		for (SensorPassive sensor : passiveSensors) { 
+			long i = 0;
+			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
+				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
+			}
+			for (; i < time; i = i + sensor.getTriggerFrequency()) {
+				eventList.add(new TriggerEvent(sensor,clock.plusNanos(i)));
+				sensor.setLastTriggerTime(clock.plusNanos(i));
+			}
+		}
+		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
+		for (TriggerEvent triggerEvent : eventList) {
+			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
+			((SensorPassive) triggerEvent.getSensor()).trigger();
+		}
+		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
+	}
+	
+	/*
+	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
+		LocalDateTime newTileTime = clock.plusNanos(time);
+		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (SensorPassive sensor : grid.getNode(agent.getPosition().getX(), agent.getPosition().getY()).getPassiveTriggers()) { // for all passive sensors in the tile where the agent is present
 			long i = 0;
 			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
@@ -206,8 +228,7 @@ public class Simulator {
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
-
-	
+	*/
 	
 	
 	//Accessors and Mutators

@@ -195,8 +195,22 @@ public class Main {
 	    String json = new ObjectMapper().writeValueAsString(output);
 	    System.out.println(json);
 	    */
+		
+	    ArrayList<Position> p = new ArrayList<Position>();
+	    for (int i = 0; i < 1000000; i++) {
+	    	p.add(new Position(1+i,2+i));
+	    }
 	    
-		SpringApplication.run(Main.class, args);
+	    
+	    
+	    Position target = new Position(1000000,1100001);
+		long start = System.nanoTime();
+		p.contains(target);
+		long time = System.nanoTime() - start;
+		
+		System.out.println(time);
+		
+		//SpringApplication.run(Main.class, args);
 		
 	  
 	}

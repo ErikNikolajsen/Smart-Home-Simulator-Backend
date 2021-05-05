@@ -24,11 +24,11 @@ public class SmartTV extends SensorActive {
 		VOLUME_UP
 	}
 	
-	// Trigger behavior 
+	// Trigger behavior.
 	public void updateState(String commandString) throws MqttPersistenceException, MqttException {
 		Command command = Command.valueOf(commandString);
-		// Turn TV off
-		if (command == Command.OFF) {
+		// Set channel or turn off TV
+		if (command == Command.CHANNEL1 || command == Command.CHANNEL2 || command == Command.CHANNEL3 || command == Command.CHANNEL4 || command == Command.OFF) {
 			state.put("channel", command);
 		// Turn volume down
 		} else if (command == Command.VOLUME_DOWN && state.get("channel") != Command.OFF && (Integer) state.get("volume")>0) {
@@ -36,9 +36,6 @@ public class SmartTV extends SensorActive {
 		// Turn volume up
 		} else if (command == Command.VOLUME_UP && state.get("channel") != Command.OFF && (Integer) state.get("volume")<100) {
 			state.put("volume",(Integer) state.get("volume") + 5);
-		// Set channel
-		} else if (command == Command.CHANNEL1 || command == Command.CHANNEL2 || command == Command.CHANNEL3 || command == Command.CHANNEL4) {
-			state.put("channel", command);
 		}
 	}
 }
