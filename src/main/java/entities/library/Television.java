@@ -5,10 +5,10 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import entities.SensorActive;
 
-public class SmartTV extends SensorActive {
+public class Television extends SensorActive {
 
 	// Default constructor
-	public SmartTV()  throws MqttPersistenceException, MqttException {
+	public Television()  throws MqttPersistenceException, MqttException {
 		state.put("channel", Command.OFF);
 		state.put("volume", 50);
 	}

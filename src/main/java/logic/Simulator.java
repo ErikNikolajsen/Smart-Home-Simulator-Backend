@@ -34,6 +34,7 @@ public class Simulator {
 	private double relativeTime; // how many/few real-time seconds should a virtual second take
 	
 	private boolean mqttOutput;
+	private int qualityOfService;
 	private String mqttHost;
 	private String mqttPort;
 	private String rootTopic;
@@ -72,7 +73,7 @@ public class Simulator {
 		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
-			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic));
+			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic, qualityOfService));
 		} else if (mqttOutput == true) {
 			Resources.setMqtt(null);
 		}
@@ -282,6 +283,14 @@ public class Simulator {
 
 	public void setMqttOutput(boolean mqttOutput) {
 		this.mqttOutput = mqttOutput;
+	}
+
+	public int getQualityOfService() {
+		return qualityOfService;
+	}
+
+	public void setQualityOfService(int qualityOfService) {
+		this.qualityOfService = qualityOfService;
 	}
 
 	public String getMqttHost() {

@@ -15,7 +15,7 @@ public class Lamp extends SensorPassive {
 	}
 	
 	// Trigger behavior 
-	public boolean updateStateAnd() throws MqttPersistenceException, MqttException {
+	public void updateState() throws MqttPersistenceException, MqttException {
 		if (//Resources.getSimulator().getClock().getHour() > 20 &&
 			//Resources.getSimulator().getClock().getHour() < 6 &&
 			getTriggerArea().contains(Resources.getSimulator().getAgent().getPosition())) {

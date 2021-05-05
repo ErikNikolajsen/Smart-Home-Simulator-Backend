@@ -13,10 +13,12 @@ public class MqttPaho {
 	
 	private MqttClient client;
 	private String rootTopic;
+	private int qualityOfService;
 	
-	public MqttPaho(String host, String port, String rootTopic) throws MqttException {
+	public MqttPaho(String host, String port, String rootTopic, int qualityOfService) throws MqttException {
 		connect(host, port);
 		this.rootTopic = rootTopic;
+		this.qualityOfService = qualityOfService;
 	}
 	
 	public void connect(String host, String port) throws MqttException {
@@ -61,16 +63,16 @@ public class MqttPaho {
 		client.publish( 
 			    rootTopic, // topic 
 			    payload.getBytes(), // payload 
-			    2, // QoS 
-			    false); // retained? 
+			    qualityOfService, // QoS 
+			    false); // retained
 	}
 	
 	public void clearRetainedMessage(String topic) throws MqttPersistenceException, MqttException {
 		client.publish( 
 			    topic, // topic 
 			    "".getBytes(), // payload 
-			    2, // QoS 
-			    true); // retained? 
+			    qualityOfService, // QoS 
+			    true); // retained
 	}
 	
 	public void disconnectMqtt() throws MqttException {
