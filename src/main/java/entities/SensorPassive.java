@@ -21,8 +21,8 @@ public class SensorPassive extends Sensor {
 	
 	protected HashMap<String, Object> state = new HashMap<String, Object>();
 
-	public SensorPassive(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, LocalDateTime lastTriggerTime, long triggerFrequency) {
-		super(name, positions, triggerArea);
+	public SensorPassive(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, LocalDateTime lastTriggerTime, long triggerFrequency, Boolean walkable) {
+		super(name, positions, triggerArea, walkable);
 		this.lastTriggerTime = lastTriggerTime;
 		this.triggerFrequency = triggerFrequency;
 	}
@@ -36,7 +36,7 @@ public class SensorPassive extends Sensor {
 	
 	public void output(String message) throws MqttPersistenceException, MqttException {
 		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
-		System.out.println(Resources.getSimulator().getClock()+" : "+getName()+" : "+message); // console human-readable
+		System.out.println(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getClass().getSimpleName()+" : "+getName()+" : "+message); // console human-readable
 		
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(Resources.getSimulator().getClock()+", "+getName()+", "+message);

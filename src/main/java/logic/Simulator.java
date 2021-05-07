@@ -206,7 +206,7 @@ public class Simulator {
 		}
 		
 	}
-	
+	/*
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
@@ -227,8 +227,8 @@ public class Simulator {
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
+	*/
 	
-	/*
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
@@ -249,7 +249,7 @@ public class Simulator {
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
-	*/
+	
 	
 	
 	//Accessors and Mutators

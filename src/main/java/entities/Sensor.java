@@ -21,10 +21,11 @@ public abstract class Sensor {
 	private ArrayList<Position> triggerArea;
 	private boolean walkable;
 	
-	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea/*, long triggerFrequency*/) {
+	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, Boolean walkable) {
 		this.name = name;
 		this.positions = positions;
 		this.triggerArea = triggerArea;
+		this.walkable = walkable;
 	}
 	
 	public Sensor() {

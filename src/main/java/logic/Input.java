@@ -63,7 +63,6 @@ public class Input {
 	//Expand macros
 	for (HashMap.Entry<String, String> entry : macros.entrySet()) {
         processedInput = Pattern.compile("\\s*"+entry.getKey()+"\\(\\s*\\)\\s*;").matcher(processedInput).replaceAll(entry.getValue());
-		System.out.println(entry.getKey() + ":" + entry.getValue());
     }
 	*/
 	//Test input

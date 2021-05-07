@@ -18,8 +18,8 @@ public abstract class SensorActive extends Sensor {
 	
 	protected HashMap<String, Object> state = new HashMap<String, Object>();
 
-	public SensorActive(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea) {
-		super(name, positions, triggerArea);
+	public SensorActive(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, Boolean walkable) {
+		super(name, positions, triggerArea, walkable);
 	}
 
 	public SensorActive() throws MqttPersistenceException, MqttException {
@@ -27,9 +27,13 @@ public abstract class SensorActive extends Sensor {
 	
 	public abstract void updateState(String command) throws MqttPersistenceException, MqttException;
 	
+	//Outputs sensor reading if the interaction leads to a different sensor state
 	public void trigger(String command) throws MqttPersistenceException, MqttException, JsonProcessingException {
+		HashMap<String, Object> initialState = new HashMap<>(state);
 		updateState(command);
-		output();
+		if (!state.equals(initialState)) {
+			output();
+		}
 	}
 	
 	public void output() throws MqttPersistenceException, MqttException, JsonProcessingException {
@@ -79,6 +83,7 @@ public abstract class SensorActive extends Sensor {
 		public HashMap<String, Object> getState() {
 			return state;
 		}
+
 		
 	}
 
