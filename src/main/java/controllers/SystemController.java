@@ -1,5 +1,11 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Set;
+
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import entities.Sensor;
+import entities.SensorActive;
+import entities.SensorPassive;
 import geo.Tile;
 
 @RestController
@@ -20,8 +29,43 @@ public class SystemController {
 	public @ResponseBody String ping() {
 		return "pong";
 	}
-	// http://localhost:8080/api/v2/system/ping
+	// http://localhost:8080/api/system/ping
 	
+	@GetMapping("/passiveSensors")
+	public @ResponseBody ArrayList<String> getPassiveSensors() throws ClassNotFoundException {
+		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+		provider.addIncludeFilter(new AssignableTypeFilter(SensorPassive.class));
+
+		ArrayList<String> passiveSensorClasses = new ArrayList<String>();
+		
+		// scan in entities.library
+		Set<BeanDefinition> components = provider.findCandidateComponents("entities.library");
+		for (BeanDefinition component : components)
+		{
+		    Class cls = Class.forName(component.getBeanClassName());
+		    passiveSensorClasses.add(cls.getName());
+		}
+		return passiveSensorClasses;
+	}
+	// http://localhost:8080/api/system/passiveSensors
+	
+	@GetMapping("/activeSensors")
+	public @ResponseBody ArrayList<String> getActiveSensors() throws ClassNotFoundException {
+		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+		provider.addIncludeFilter(new AssignableTypeFilter(SensorActive.class));
+
+		ArrayList<String> activeSensorClasses = new ArrayList<String>();
+		
+		// scan in entities.library
+		Set<BeanDefinition> components = provider.findCandidateComponents("entities.library");
+		for (BeanDefinition component : components)
+		{
+		    Class cls = Class.forName(component.getBeanClassName());
+		    activeSensorClasses.add(cls.getName());
+		}
+		return activeSensorClasses;
+	}
+	// http://localhost:8080/api/system/activeSensors
 	
 	/*
 	int i = 0;

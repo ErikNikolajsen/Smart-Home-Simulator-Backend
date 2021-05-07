@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.reflections.Reflections;
 import org.eclipse.paho.client.mqttv3.*;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,7 +40,7 @@ import pathfinding2.AStarGrid;
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {
-	public static void main(String[] args) throws InterruptedException, MqttException, JsonProcessingException {
+	public static void main(String[] args) throws InterruptedException, MqttException, JsonProcessingException, ClassNotFoundException {
 		
 		/*
 		Agent testAgent = new Agent("Agent",0,0);
@@ -210,6 +215,27 @@ public class Main {
 		
 		System.out.println(time);
 		*/
+		/*
+		Reflections reflections = new Reflections("com.mycompany");    
+		Set<Class<? extends SensorActive>> classes = reflections.getSubTypesOf(SensorActive.class);
+		System.out.println(classes.toString());
+		*/
+		/*
+		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+		provider.addIncludeFilter(new AssignableTypeFilter(Sensor.class));
+
+		ArrayList<String> classesSensor = new ArrayList<String>();
+		
+		// scan in org.example.package
+		Set<BeanDefinition> components = provider.findCandidateComponents("entities.library");
+		for (BeanDefinition component : components)
+		{
+		    Class cls = Class.forName(component.getBeanClassName());
+		    // use class cls found
+		    classesSensor.add(cls.getName());
+		}
+		System.out.println(classesSensor);
+		 */
 		SpringApplication.run(Main.class, args);
 		
 	  

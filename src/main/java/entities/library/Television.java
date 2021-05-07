@@ -24,7 +24,7 @@ public class Television extends SensorActive {
 		VOLUME_UP
 	}
 	
-	// Trigger behavior.
+	// Sensor behavior
 	public void updateState(String commandString) throws MqttPersistenceException, MqttException {
 		Command command = Command.valueOf(commandString);
 		// Set channel or turn off TV

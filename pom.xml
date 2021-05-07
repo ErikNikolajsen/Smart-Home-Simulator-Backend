@@ -106,6 +106,14 @@
 		    <artifactId>jackson-databind</artifactId> 
 		    <version>2.10.2</version>
 		</dependency>
+		
+		<!-- Finding extended classes -->
+		<dependency>
+		    <groupId>org.reflections</groupId>
+		    <artifactId>reflections</artifactId>
+		    <version>0.9.12</version>
+		</dependency>
+		
 
 	</dependencies>
 	
