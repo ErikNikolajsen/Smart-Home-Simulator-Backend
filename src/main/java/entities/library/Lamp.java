@@ -11,17 +11,17 @@ public class Lamp extends SensorPassive {
 
 	// Default constructor
 	public Lamp()  throws MqttPersistenceException, MqttException {
-		state.put("triggered", true);
+		state.put("triggered", false);
 	}
 	
 	// Trigger behavior 
-	public void updateState() throws MqttPersistenceException, MqttException {
-		if (//Resources.getSimulator().getClock().getHour() > 20 &&
-			//Resources.getSimulator().getClock().getHour() < 6 &&
-			getTriggerArea().contains(Resources.getSimulator().getAgent().getPosition())) {
-			state.put("triggered", true); 
+	public boolean updateStateAndAssessTriggerConditions() {
+		if (getTriggerArea().contains(Resources.getSimulator().getAgent().getPosition())) {
+			state.put("triggered", true);
+			return true;
 		} else {
 			state.put("triggered", false);
+			return false;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package logic;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,7 +126,7 @@ public class Simulator {
 		System.out.println("*** Simulation has ended ***"); //test
 	}
 
-	private void gotoInstructions(Position gotoPosition) throws InterruptedException, MqttPersistenceException, MqttException {
+	private void gotoInstructions(Position gotoPosition) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		List<AStarNode> path;
 		path = grid.getPath(
 				agent.getPosition().getX(), 
@@ -147,7 +148,7 @@ public class Simulator {
 			triggerPassiveSensors(halfTime);
 			
 			agent.setPosition(node.getX(), node.getY()); // moves agent
-			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
+			System.out.println(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString()); // print time & position
 			
 			triggerPassiveSensors(halfTime);
 			
@@ -162,7 +163,7 @@ public class Simulator {
 		}
 	}
 
-	private void waitInstructions(long waitTime) throws InterruptedException, MqttPersistenceException, MqttException {
+	private void waitInstructions(long waitTime) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		triggerPassiveSensors(waitTime);
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
 	}
@@ -175,7 +176,7 @@ public class Simulator {
 					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
 					gotoInstructions(randomTriggerPosition);
 				}
-				activeSensor.trigger(command);
+				activeSensor.interact(command);
 				break;
 			}
 		}
@@ -206,29 +207,31 @@ public class Simulator {
 		}
 		
 	}
-	/*
-	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
+	
+	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (SensorPassive sensor : passiveSensors) { 
-			long i = 0;
-			if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
-				i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
-			}
-			for (; i < time; i = i + sensor.getTriggerFrequency()) {
-				eventList.add(new TriggerEvent(sensor,clock.plusNanos(i)));
-				sensor.setLastTriggerTime(clock.plusNanos(i));
+			if (sensor.updateStateAndAssessTriggerConditions() == true) {
+				long i = 0;
+				if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
+					i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
+				}
+				for (; i < time; i = i + sensor.getTriggerFrequency()) {
+					eventList.add(new TriggerEvent(sensor,clock.plusNanos(i)));
+					sensor.setLastTriggerTime(clock.plusNanos(i));
+				}
 			}
 		}
 		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
 		for (TriggerEvent triggerEvent : eventList) {
 			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
-			((SensorPassive) triggerEvent.getSensor()).trigger();
+			((SensorPassive) triggerEvent.getSensor()).output();
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
-	*/
 	
+	/*
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
@@ -249,7 +252,7 @@ public class Simulator {
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
-	
+	*/
 	
 	
 	//Accessors and Mutators
