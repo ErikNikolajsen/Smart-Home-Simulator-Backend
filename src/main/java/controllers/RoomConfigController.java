@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import archive.Grid;
+import archive.Tile;
 import entities.Agent;
 import entities.Floorplan;
 import entities.Sensor;
 import entities.SensorPassive;
 import entities.Entity;
-import geo.Grid;
 import geo.Position;
-import geo.Tile;
 import main.Resources;
 import pathfinding2.AStarGrid;
 import pathfinding2.AStarNode;

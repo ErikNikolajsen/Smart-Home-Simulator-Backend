@@ -12,16 +12,14 @@ public class Input {
 	private String input;
 	private String[] inputArray;
 	
-	private final static Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*");
-	private final static Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*");
-	//private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+)\\s*\\)\\s*"); // interactPattern that accepts sensorName
-	private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); // interactPattern that accepts sensorName and command
+	private final static Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*"); //gotoPattern that accepts coordinates of a tile that is within the boundaries of the specified grid and is walkable
+	private final static Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*"); //gotoEntityPattern that accepts name of Entity or SensorActive
+	private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); //interactPattern that accepts sensorName and command
 	private final static Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
-	//private final static Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*((\\d+)|(\\d*\\.\\d+)|(\\d+\\.\\d*))\\s*\\)\\s*"); //waitPattern that accepts decimal number
 	private final static Pattern emptyPattern = Pattern.compile("\\s*"); //empty statement and whitespace at end of input string 
 	
 	private final static Pattern commentLinePattern = Pattern.compile("//.*");
-	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/"); // instead of [\\s\\S] one might use . with DOTALL flag enabled 
+	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	
 	
 	private final static Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");

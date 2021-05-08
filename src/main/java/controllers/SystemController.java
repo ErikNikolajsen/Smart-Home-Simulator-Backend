@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import archive.Tile;
 import entities.Sensor;
 import entities.SensorActive;
 import entities.SensorPassive;
-import geo.Tile;
 
 @RestController
 @RequestMapping("/api/system/")
