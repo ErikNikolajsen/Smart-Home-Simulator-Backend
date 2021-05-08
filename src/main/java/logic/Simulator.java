@@ -178,9 +178,9 @@ public class Simulator {
 					Position randomInteractPosition = activeSensor.getInteractArea().get(Resources.getRandom().nextInt(activeSensor.getInteractArea().size()));
 					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
 					
-					//intersection tiles of sensor's positions tiles and interactArea tiles that should become walkable
+					//intersection tiles of sensor's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
-			        for (Position t : activeSensor.getPositions()) {
+			        for (Position t : activeSensor.getPhysicalArea()) {
 			            if(activeSensor.getInteractArea().contains(t)) {
 			            	intersectionArrayList.add(t);
 			            }
@@ -205,9 +205,9 @@ public class Simulator {
 					Position randomInteractPosition = entity.getInteractArea().get(Resources.getRandom().nextInt(entity.getInteractArea().size()));
 					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
 					
-					//intersection tiles of entity's positions tiles and interactArea tiles that should become walkable
+					//intersection tiles of entity's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
-			        for (Position t : entity.getPositions()) {
+			        for (Position t : entity.getPhysicalArea()) {
 			            if(entity.getInteractArea().contains(t)) {
 			            	intersectionArrayList.add(t);
 			            }

@@ -16,8 +16,8 @@ import main.Resources;
 
 public abstract class SensorActive extends Sensor {
 
-	public SensorActive(String name, ArrayList<Position> positions, ArrayList<Position> interactArea, Boolean walkable) {
-		super(name, positions, interactArea, walkable);
+	public SensorActive(String name, ArrayList<Position> physicalArea, ArrayList<Position> interactArea, Boolean walkable) {
+		super(name, physicalArea, interactArea, walkable);
 	}
 
 	public SensorActive() throws MqttPersistenceException, MqttException {

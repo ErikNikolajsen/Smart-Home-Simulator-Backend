@@ -75,8 +75,6 @@ public class RoomConfigController {
 	public void postFloorplan(@RequestBody Floorplan floorplan) {
 		Resources.setFloorplan(floorplan);
 		Resources.setaStarGrid(new AStarGrid(Resources.getFloorplan()));
-		
-		System.out.println(Resources.getFloorplan().getSensors().toString());
 	}
 	
 	@GetMapping("/floorplan")
