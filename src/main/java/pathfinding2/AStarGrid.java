@@ -66,7 +66,17 @@ public class AStarGrid {
 		// make nodes of tiles with non-walkable sensors not-walkable
 		for (Sensor sensor : floorplan.getSensors()) {
 			if (sensor.getWalkable() == false) {
+				
+				
 				for (Position position : sensor.getPositions()) {
+					setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+				}
+			}
+		}
+		// make nodes of tiles with non-walkable entities not-walkable
+		for (Entity entity : floorplan.getEntities()) {
+			if (entity.getWalkable() == false) {
+				for (Position position : entity.getPositions()) {
 					setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
 				}
 			}
