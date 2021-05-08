@@ -83,15 +83,15 @@ public class AStarGrid {
 			}
 		}
 		
-		// Add triggerArea of active and passive sensors to respective nodes
+		// Add interactArea of active and passive sensors to respective nodes
 		for (Sensor sensor : floorplan.getSensors()) {
 			if (sensor instanceof SensorPassive) {
-				for (Position triggerPosition : sensor.getTriggerArea()) {
-					getNode(triggerPosition.getX(), triggerPosition.getY()).addPassiveTriggers((SensorPassive) sensor);
+				for (Position interactPosition : sensor.getInteractArea()) {
+					getNode(interactPosition.getX(), interactPosition.getY()).addPassiveTriggers((SensorPassive) sensor);
 				}
 			} else if (sensor instanceof SensorActive) {
-				for (Position triggerPosition : sensor.getTriggerArea()) {
-					getNode(triggerPosition.getX(), triggerPosition.getY()).addActiveTriggers((SensorActive) sensor);
+				for (Position interactPosition : sensor.getInteractArea()) {
+					getNode(interactPosition.getX(), interactPosition.getY()).addActiveTriggers((SensorActive) sensor);
 				}
 			}
 		}

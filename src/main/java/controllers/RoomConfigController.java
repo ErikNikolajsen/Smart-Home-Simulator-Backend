@@ -46,7 +46,7 @@ public class RoomConfigController {
 	//get path tester
 	@GetMapping("/getPath")
 	public @ResponseBody List<AStarNode> getPath(@RequestParam int startx, int starty, int targetx, int targety ) {
-		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety);
+		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety, new ArrayList<Position>());
 	}
 	// http://localhost:8080/api/roomConfig/getPath?startx=0&starty=0&targetx=4&targety=4
 

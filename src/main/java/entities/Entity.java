@@ -7,14 +7,14 @@ import geo.Position;
 public class Entity {
 	private String name;
 	private ArrayList<Position> positions;
-	private ArrayList<Position> triggerArea;
+	private ArrayList<Position> interactArea;
 	private boolean walkable;
 	
 	//Constructors
-	public Entity(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, Boolean walkable) {
+	public Entity(String name, ArrayList<Position> positions, ArrayList<Position> interactArea, Boolean walkable) {
 		this.name = name;
 		this.positions = positions;
-		this.triggerArea = triggerArea;
+		this.interactArea = interactArea;
 		this.walkable = walkable;
 	}
 	
@@ -38,12 +38,12 @@ public class Entity {
 			this.positions = positions;
 		}
 
-		public ArrayList<Position> getTriggerArea() {
-			return triggerArea;
+		public ArrayList<Position> getInteractArea() {
+			return interactArea;
 		}
 
-		public void setTriggerArea(ArrayList<Position> triggerArea) {
-			this.triggerArea = triggerArea;
+		public void setInteractArea(ArrayList<Position> interactArea) {
+			this.interactArea = interactArea;
 		}
 
 		public boolean getWalkable() {

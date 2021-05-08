@@ -20,8 +20,8 @@ public abstract class SensorPassive extends Sensor {
 	@JsonIgnore private LocalDateTime lastTriggerTime;
 	private long triggerFrequency;
 
-	public SensorPassive(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, LocalDateTime lastTriggerTime, long triggerFrequency, Boolean walkable) {
-		super(name, positions, triggerArea, walkable);
+	public SensorPassive(String name, ArrayList<Position> positions, ArrayList<Position> interactArea, LocalDateTime lastTriggerTime, long triggerFrequency, Boolean walkable) {
+		super(name, positions, interactArea, walkable);
 		this.lastTriggerTime = lastTriggerTime;
 		this.triggerFrequency = triggerFrequency;
 	}

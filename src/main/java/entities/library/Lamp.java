@@ -16,7 +16,7 @@ public class Lamp extends SensorPassive {
 	
 	// Trigger behavior 
 	public boolean updateStateAndAssessTriggerConditions() {
-		if (getTriggerArea().contains(Resources.getSimulator().getAgent().getPosition())) {
+		if (getInteractArea().contains(Resources.getSimulator().getAgent().getPosition())) {
 			state.put("triggered", true);
 			return true;
 		} else {

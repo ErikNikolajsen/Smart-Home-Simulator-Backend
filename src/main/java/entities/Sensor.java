@@ -24,8 +24,8 @@ public abstract class Sensor extends Entity{
 	protected HashMap<String, Object> state = new HashMap<String, Object>();
 	ObjectMapper mapper = new ObjectMapper();
 	
-	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> triggerArea, Boolean walkable) {
-		super(name, positions, triggerArea, walkable);
+	public Sensor(String name, ArrayList<Position> positions, ArrayList<Position> interactArea, Boolean walkable) {
+		super(name, positions, interactArea, walkable);
 	}
 	
 	public Sensor() {

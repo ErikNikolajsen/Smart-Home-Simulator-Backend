@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -172,19 +174,19 @@ public class Simulator {
 	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		for (SensorActive activeSensor : activeSensors) {
 			if (activeSensor.getName().equals(sensorName)) {
-				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
-					Position randomTriggerPosition = activeSensor.getTriggerArea().get(Resources.getRandom().nextInt(activeSensor.getTriggerArea().size()));
-					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
+				if (!activeSensor.getInteractArea().contains(agent.getPosition())) {
+					Position randomInteractPosition = activeSensor.getInteractArea().get(Resources.getRandom().nextInt(activeSensor.getInteractArea().size()));
+					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
 					
-					//intersection tiles of sensor's positions tiles and triggerArea tiles that should become walkable
+					//intersection tiles of sensor's positions tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : activeSensor.getPositions()) {
-			            if(activeSensor.getTriggerArea().contains(t)) {
+			            if(activeSensor.getInteractArea().contains(t)) {
 			            	intersectionArrayList.add(t);
 			            }
 			        }
 					
-					gotoInstructions(randomTriggerPosition, intersectionArrayList);
+					gotoInstructions(randomInteractPosition, intersectionArrayList);
 				}
 				activeSensor.interact(command);
 				break;
@@ -199,19 +201,19 @@ public class Simulator {
 		
 		for (Entity entity : union) {
 			if (entity.getName().equals(entityName)) {
-				if (!entity.getTriggerArea().contains(agent.getPosition())) {
-					Position randomTriggerPosition = entity.getTriggerArea().get(Resources.getRandom().nextInt(entity.getTriggerArea().size()));
-					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
+				if (!entity.getInteractArea().contains(agent.getPosition())) {
+					Position randomInteractPosition = entity.getInteractArea().get(Resources.getRandom().nextInt(entity.getInteractArea().size()));
+					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
 					
-					//intersection tiles of entity's positions tiles and triggerArea tiles that should become walkable
+					//intersection tiles of entity's positions tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : entity.getPositions()) {
-			            if(entity.getTriggerArea().contains(t)) {
+			            if(entity.getInteractArea().contains(t)) {
 			            	intersectionArrayList.add(t);
 			            }
 			        }
 					
-					gotoInstructions(randomTriggerPosition, intersectionArrayList);
+					gotoInstructions(randomInteractPosition, intersectionArrayList);
 				}
 				break;
 			}
