@@ -103,7 +103,7 @@ public class Simulator {
 					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$1")),
 					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$2"))
 				);
-				gotoInstructions(gotoPosition);
+				gotoInstructions(gotoPosition, new ArrayList<Position>());
 			
 			// WAIT
 			} else if (waitPattern.matcher(statement).matches()) {
@@ -126,13 +126,14 @@ public class Simulator {
 		System.out.println("*** Simulation has ended ***"); //test
 	}
 
-	private void gotoInstructions(Position gotoPosition) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
+	private void gotoInstructions(Position gotoPosition, ArrayList<Position> exemptedCollisions) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		List<AStarNode> path;
 		path = grid.getPath(
 				agent.getPosition().getX(), 
 				agent.getPosition().getY(), 
 				gotoPosition.getX(), 
-				gotoPosition.getY());
+				gotoPosition.getY(),
+				exemptedCollisions);
 		
 		// detects if goto is impossible (HALTING ERROR)
 		if (path.isEmpty()) {
@@ -174,7 +175,16 @@ public class Simulator {
 				if (!activeSensor.getTriggerArea().contains(agent.getPosition())) {
 					Position randomTriggerPosition = activeSensor.getTriggerArea().get(Resources.getRandom().nextInt(activeSensor.getTriggerArea().size()));
 					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
-					gotoInstructions(randomTriggerPosition);
+					
+					//intersection tiles of sensor's positions tiles and triggerArea tiles that should become walkable
+					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
+			        for (Position t : activeSensor.getPositions()) {
+			            if(activeSensor.getTriggerArea().contains(t)) {
+			            	intersectionArrayList.add(t);
+			            }
+			        }
+					
+					gotoInstructions(randomTriggerPosition, intersectionArrayList);
 				}
 				activeSensor.interact(command);
 				break;
@@ -183,12 +193,25 @@ public class Simulator {
 	}
 	
 	private void gotoEntityInstructions(String entityName) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
-		for (Entity entity : floorplan.getEntities()) {
+		ArrayList<Entity> union = new ArrayList<Entity>();
+		union.addAll(floorplan.getEntities());
+		union.addAll(activeSensors);
+		
+		for (Entity entity : union) {
 			if (entity.getName().equals(entityName)) {
 				if (!entity.getTriggerArea().contains(agent.getPosition())) {
 					Position randomTriggerPosition = entity.getTriggerArea().get(Resources.getRandom().nextInt(entity.getTriggerArea().size()));
 					System.out.println("randomTriggerPosition: "+randomTriggerPosition); //test
-					gotoInstructions(randomTriggerPosition);
+					
+					//intersection tiles of entity's positions tiles and triggerArea tiles that should become walkable
+					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
+			        for (Position t : entity.getPositions()) {
+			            if(entity.getTriggerArea().contains(t)) {
+			            	intersectionArrayList.add(t);
+			            }
+			        }
+					
+					gotoInstructions(randomTriggerPosition, intersectionArrayList);
 				}
 				break;
 			}

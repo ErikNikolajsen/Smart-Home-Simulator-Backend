@@ -1,12 +1,13 @@
 package pathfinding2;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import entities.Entity;
 import entities.Floorplan;
 import entities.Sensor;
 import entities.SensorActive;
@@ -167,8 +168,18 @@ public class AStarGrid {
      * @param targetY target node y
      * @return the path
      */
-    public final List<AStarNode> getPath(int startX, int startY, int targetX, int targetY) {
-        return logic.getPath(grid, getNode(startX, startY), getNode(targetX, targetY));
+    ArrayList<ArrayList<Position>> exemptedCollisions = new ArrayList<ArrayList<Position>>(Arrays.asList(new ArrayList<Position>(), new ArrayList<Position>(), new ArrayList<Position>()));
+    public final List<AStarNode> getPath(int startX, int startY, int targetX, int targetY, ArrayList<Position> exempted) {
+    	exemptedCollisions.set(2, exemptedCollisions.get(1));
+    	exemptedCollisions.set(1, exemptedCollisions.get(0));
+    	exemptedCollisions.set(0, exempted);
+    	for (Position position : exemptedCollisions.get(2)) {
+    		setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+    	}
+    	for (Position position : exemptedCollisions.get(0)) {
+    		setNodeState(position.getX(), position.getY(), NodeState.WALKABLE);
+    	}
+    	return logic.getPath(grid, getNode(startX, startY), getNode(targetX, targetY));
     }
 
     /**
