@@ -64,14 +64,22 @@ public class AStarGrid {
 		for (Position i : floorplan.getWalls()) {
 			setNodeState(i.getX(), i.getY(), NodeState.NOT_WALKABLE);
 		}
-		// make nodes of tiles with non-walkable sensors not-walkable
-		for (Sensor sensor : floorplan.getSensors()) {
+		// make nodes of tiles with non-walkable passive sensors not-walkable
+		for (Sensor sensor : floorplan.getPassiveSensors()) {
 			if (sensor.getWalkable() == false) {
 				for (Position position : sensor.getPhysicalArea()) {
 					setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
 				}
 			}
 		}
+		// make nodes of tiles with non-walkable active sensors not-walkable
+				for (Sensor sensor : floorplan.getPassiveSensors()) {
+					if (sensor.getWalkable() == false) {
+						for (Position position : sensor.getPhysicalArea()) {
+							setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+						}
+					}
+				}
 		// make nodes of tiles with non-walkable entities not-walkable
 		for (Entity entity : floorplan.getEntities()) {
 			if (entity.getWalkable() == false) {
@@ -82,15 +90,14 @@ public class AStarGrid {
 		}
 		
 		// Add interactArea of active and passive sensors to respective nodes
-		for (Sensor sensor : floorplan.getSensors()) {
-			if (sensor instanceof SensorPassive) {
-				for (Position interactPosition : sensor.getInteractArea()) {
-					getNode(interactPosition.getX(), interactPosition.getY()).addPassiveTriggers((SensorPassive) sensor);
-				}
-			} else if (sensor instanceof SensorActive) {
-				for (Position interactPosition : sensor.getInteractArea()) {
-					getNode(interactPosition.getX(), interactPosition.getY()).addActiveTriggers((SensorActive) sensor);
-				}
+		for (Sensor sensor : floorplan.getPassiveSensors()) {
+			for (Position interactPosition : sensor.getInteractArea()) {
+				getNode(interactPosition.getX(), interactPosition.getY()).addPassiveTriggers((SensorPassive) sensor);
+			}
+		}
+		for (Sensor sensor : floorplan.getActiveSensors()) {
+			for (Position interactPosition : sensor.getInteractArea()) {
+				getNode(interactPosition.getX(), interactPosition.getY()).addActiveTriggers((SensorActive) sensor);
 			}
 		}
 	}

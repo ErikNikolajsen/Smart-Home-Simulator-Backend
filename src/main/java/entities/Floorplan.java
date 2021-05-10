@@ -10,31 +10,45 @@ public class Floorplan {
 	private int width; // width of floor plan in tiles
 	private int height; // height of floor plan in tiles
 	private Agent agent;
-	private ArrayList<Sensor> sensors;
 	private ArrayList<Position> walls;
+	private ArrayList<SensorActive> activeSensors;
+	private ArrayList<SensorPassive> passiveSensors;
 	private ArrayList<Entity> entities;
 	
-	/**
-	 * @param width
-	 * @param height
-	 * @param agent
-	 * @param sensors
-	 * @param walls
-	 */
-	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Sensor> sensors, ArrayList<Position> walls, ArrayList<Entity> entities) {
+	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Position> walls, ArrayList<SensorActive> activeSensors, ArrayList<SensorPassive> passiveSensors, ArrayList<Entity> entities) {
 		this.tileSideLength = tileSideLength;
 		this.width = width;
 		this.height = height;
 		this.agent = agent;
-		this.sensors = sensors;
 		this.walls = walls;
 		this.entities = entities;
+		this.activeSensors = activeSensors;
+		this.passiveSensors = passiveSensors;
 	}
 	
 	public Floorplan() {
 	}
 	
+	public void test() {
+		
+	}
+	
 	//Accessors and Mutators
+	public ArrayList<Sensor> getAllSensors() {
+		ArrayList<Sensor> allSensors = new ArrayList<Sensor>();
+		allSensors.addAll(activeSensors);
+		allSensors.addAll(passiveSensors);
+		return allSensors;
+	}
+	
+	public ArrayList<Entity> getAllEntities() {
+		ArrayList<Entity> allEntities = new ArrayList<Entity>();
+		allEntities.addAll(activeSensors);
+		allEntities.addAll(passiveSensors);
+		allEntities.addAll(entities);
+		return allEntities;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -59,14 +73,6 @@ public class Floorplan {
 		this.agent = agent;
 	}
 
-	public ArrayList<Sensor> getSensors() {
-		return sensors;
-	}
-
-	public void setSensors(ArrayList<Sensor> sensors) {
-		this.sensors = sensors;
-	}
-
 	public ArrayList<Position> getWalls() {
 		return walls;
 	}
@@ -89,6 +95,22 @@ public class Floorplan {
 
 	public void setEntities(ArrayList<Entity> entities) {
 		this.entities = entities;
+	}
+
+	public ArrayList<SensorActive> getActiveSensors() {
+		return activeSensors;
+	}
+
+	public void setActiveSensors(ArrayList<SensorActive> activeSensors) {
+		this.activeSensors = activeSensors;
+	}
+
+	public ArrayList<SensorPassive> getPassiveSensors() {
+		return passiveSensors;
+	}
+
+	public void setPassiveSensors(ArrayList<SensorPassive> passiveSensors) {
+		this.passiveSensors = passiveSensors;
 	}
 	
 	

@@ -48,22 +48,14 @@ public class Simulator {
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
 	private Agent agent = new Agent(floorplan.getAgent());
-
-	ArrayList<SensorPassive> passiveSensors = new ArrayList<SensorPassive>();
-	ArrayList<SensorActive> activeSensors = new ArrayList<SensorActive>();
+	
+	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
+	
+	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
 	
 	
 
 	public Simulator() throws MqttException { 
-		// instantiate list for active and passive sensors
-				for (int i = 0 ; i < floorplan.getSensors().size() ; i++) {
-					if (floorplan.getSensors().get(i) instanceof SensorPassive) {
-						passiveSensors.add((SensorPassive) floorplan.getSensors().get(i));
-					} else if (floorplan.getSensors().get(i) instanceof SensorActive) {
-						activeSensors.add((SensorActive) floorplan.getSensors().get(i));
-					}
-				}
-		
 		// reset sensors' lastTriggerTime variable
 		for (SensorPassive sensor : passiveSensors) {
 			sensor.setLastTriggerTime(null);
