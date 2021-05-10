@@ -25,6 +25,8 @@ public abstract class SensorActive extends Sensor {
 	
 	public abstract void updateState(String command) throws MqttPersistenceException, MqttException;
 	
+	public abstract boolean containsCommand(String test);
+	
 	//Outputs sensor reading if the interaction leads to a different sensor state
 	public void interact(String command) throws MqttPersistenceException, MqttException, JsonProcessingException {
 		HashMap<String, Object> initialState = new HashMap<>(state);

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import entities.Entity;
+import entities.SensorActive;
 import main.Resources;
 import pathfinding2.NodeState;
 
@@ -35,13 +37,6 @@ public class Input {
 	public Input() {	
 	}
 	
-	/* Tests:
-	 * Syntax
-	 * coordinates are within grid boundaries
-	 * coordinates are WALKABLE
-	 * interact IDs exist and is interactable
-	 * 
-	 */
 	//Preprocessor
 	public String test() {
 	
@@ -67,21 +62,42 @@ public class Input {
 	inputArray = processedInput.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 
 		if (gotoPattern.matcher(inputArray[i]).matches()) { 
+			// parse input
+			int x = Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$1"));
+			int y = Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$2"));
+			
 			// tests if coordinate are within grid boundaries
-			if (!Resources.getaStarGrid().isWithin(Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$1")), Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$2")))) {
+			if (!Resources.getaStarGrid().isWithin(x, y)) {
 				return "ERROR: coordinate is out of bounds in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 			}
 			// tests if coordinate is walkable
-			if (Resources.getaStarGrid().getNodeState(Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$1")), Integer.parseInt(gotoPattern.matcher(inputArray[i]).replaceAll("$2"))) == NodeState.NOT_WALKABLE) {
+			if (Resources.getaStarGrid().getNodeState(x, y) == NodeState.NOT_WALKABLE) {
 				return "ERROR: target coordinate is not walkable in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 			}
 			continue;
 		}
 		
 		if (interactPattern.matcher(inputArray[i]).matches()) {
-			// test if sensor exists in floorplan
+			// parse input
+			String sensorNameInput = interactPattern.matcher(inputArray[i]).replaceAll("$1");
+			String commandInput = interactPattern.matcher(inputArray[i]).replaceAll("$2");
 			
+			SensorActive sensorInput = null;
+			for (SensorActive activeSensor : Resources.getFloorplan().getActiveSensors()) {
+				if (activeSensor.getName().equals(sensorNameInput)) {
+					sensorInput = activeSensor;
+					break;
+				}
+			}
+			
+			// test if active sensor name exists in the floorplan
+			if (sensorInput == null) {
+				return "ERROR: No active sensor exists with the name specified in statement "+(i+1)+": "+inputArray[i]; // returns error-message
+			}
 			// test if command is applicable for the sensor
+			if (!sensorInput.containsCommand(commandInput)) {
+				return "ERROR: The specified type of sensor does not accept the command in statement "+(i+1)+": "+inputArray[i]; // returns error-message
+			}
 			continue;
 		}
 		
@@ -90,7 +106,20 @@ public class Input {
 		}
 		
 		if (gotoEntityPattern.matcher(inputArray[i]).matches()) {
+			
+			/*
+			// parse input
+			String entityNameInput = gotoEntityPattern.matcher(inputArray[i]).replaceAll("$1");
+			Entity entityInput = null;
+			for (Entity entity : Resources.getFloorplan().getEntities()) {
+				if (entity.getName().equals(sensorNameInput)) {
+					entityInput = entity;
+					break;
+				}
+			}*/
+			
 			// test if entity exists
+			
 			continue;
 		}
 		

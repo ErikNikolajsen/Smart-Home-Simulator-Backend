@@ -38,4 +38,14 @@ public class Television extends SensorActive {
 			state.put("volume",(Integer) state.get("volume") + 5);
 		}
 	}
+	
+	// Accessors (DO NOT TOUCH)
+	public boolean containsCommand(String test) {
+	    for (Command c : Command.values()) {
+	        if (c.name().equals(test)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 }
