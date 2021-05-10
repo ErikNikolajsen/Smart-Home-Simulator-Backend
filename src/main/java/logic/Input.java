@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,12 +25,8 @@ public class Input {
 	private final static Pattern commentLinePattern = Pattern.compile("//.*");
 	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	
-	
 	private final static Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
 	private final static Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
-	
-	
-	
 	
 	public Input(String input) {
 		this.input = input;
@@ -44,6 +42,7 @@ public class Input {
 	String processedInput = this.input;
 	processedInput = commentLinePattern.matcher(processedInput).replaceAll("");
 	processedInput = commentBlockPattern.matcher(processedInput).replaceAll("");
+	
 	/*
 	//Represent macros internally
 	HashMap<String, String> macros = new HashMap<String, String>();
@@ -58,6 +57,7 @@ public class Input {
         processedInput = Pattern.compile("\\s*"+entry.getKey()+"\\(\\s*\\)\\s*;").matcher(processedInput).replaceAll(entry.getValue());
     }
 	*/
+	
 	//Test input
 	inputArray = processedInput.split(";");
 	for (int i = 0; i < inputArray.length; i++) { 
@@ -107,18 +107,24 @@ public class Input {
 		
 		if (gotoEntityPattern.matcher(inputArray[i]).matches()) {
 			
-			/*
+			
 			// parse input
 			String entityNameInput = gotoEntityPattern.matcher(inputArray[i]).replaceAll("$1");
 			Entity entityInput = null;
-			for (Entity entity : Resources.getFloorplan().getEntities()) {
-				if (entity.getName().equals(sensorNameInput)) {
+			ArrayList<Entity> gotoableEntities = new ArrayList<Entity>();
+			gotoableEntities.addAll(Resources.getFloorplan().getEntities());
+			gotoableEntities.addAll(Resources.getFloorplan().getActiveSensors());
+			for (Entity entity : gotoableEntities) {
+				if (entity.getName().equals(entityNameInput)) {
 					entityInput = entity;
 					break;
 				}
-			}*/
+			}
 			
 			// test if entity exists
+			if (entityInput == null) {
+				return "ERROR: No entity or active-sensor exists with the name specified in statement "+(i+1)+": "+inputArray[i]; // returns error-message
+			}
 			
 			continue;
 		}
@@ -133,7 +139,8 @@ public class Input {
 
 	return "consumed";
 	}
-
+	
+	//Accessors and Mutators
 	public String getInput() {
 		return input;
 	}
