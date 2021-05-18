@@ -8,35 +8,31 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import entities.SensorActive;
 
-public class Television extends SensorActive {
+public class Toilet extends SensorActive {
 	
-	public Television() throws MqttPersistenceException, MqttException {
+	public Toilet() throws MqttPersistenceException, MqttException {
 	}
 
 	public ArrayList<String> defineCommands() {
 		return new ArrayList<String>(Arrays.asList(
-				"ON",
-				"OFF",
-				"CHANNEL1",
-				"CHANNEL2",
-				"CHANNEL3",
-				"CHANNEL4",
-				"VOLUME_DOWN",
-				"VOLUME_UP"
+				"FLUSH"
+				
 		));
 	}
 	
 	public void defineDefaultState() {
-		state.put("power", "OFF");
-		state.put("channel", "CHANNEL1");
-		state.put("volume", 5);
+		state.put("flush_amount", 0);
+		state.put("water_usage", 0); // in Liters
 	}
 	
 	// Sensor behavior
 	public void updateState(String command) throws MqttPersistenceException, MqttException {
 		// Set power status
-		if (command.equals("ON") || command.equals("OFF")) {
-			state.put("power", command);
+		if (command.equals("FLUSH")) {
+			state.put("flush_amount", (Integer) state.get("flush_amount") + 1);
+			state.put("water_usage", (Double) state.get("water_usage") + 3.3);
+		}
+		/*
 		// Set channel
 		} else if ((command.equals("CHANNEL1") || command.equals("CHANNEL2") || command.equals("CHANNEL3") || command.equals("CHANNEL4")) && state.get("power").equals("ON")) {
 			state.put("channel", command);
@@ -47,5 +43,6 @@ public class Television extends SensorActive {
 		} else if (command.equals("VOLUME_UP") && state.get("power").equals("ON") && (Integer) state.get("volume")<10) {
 			state.put("volume",(Integer) state.get("volume") + 1);
 		}
+		*/
 	}
 }

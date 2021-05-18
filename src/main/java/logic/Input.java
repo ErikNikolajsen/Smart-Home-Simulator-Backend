@@ -106,8 +106,6 @@ public class Input {
 		}
 		
 		if (gotoEntityPattern.matcher(inputArray[i]).matches()) {
-			
-			
 			// parse input
 			String entityNameInput = gotoEntityPattern.matcher(inputArray[i]).replaceAll("$1");
 			Entity entityInput = null;
