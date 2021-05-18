@@ -24,9 +24,9 @@ import entities.SensorPassive;
 import entities.Entity;
 import geo.Position;
 import main.Resources;
-import pathfinding2.AStarGrid;
-import pathfinding2.AStarNode;
-import pathfinding2.NodeState;
+import pathfinding.AStarGrid;
+import pathfinding.AStarNode;
+import pathfinding.NodeState;
 
 @RestController
 @RequestMapping("/api/roomConfig/")

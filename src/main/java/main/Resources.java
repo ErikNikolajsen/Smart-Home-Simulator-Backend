@@ -6,7 +6,7 @@ import entities.Agent;
 import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
-import pathfinding2.AStarGrid;
+import pathfinding.AStarGrid;
 import utils.Log;
 
 public class Resources {

@@ -27,11 +27,13 @@ public abstract class SensorPassive extends Sensor {
 	}
 
 	public SensorPassive() {
+		defineDefaultState();
 	}
 	
-	public abstract boolean updateStateAndAssessTriggerConditions();
+	// Abstract methods that must be implemented by passive sensors
+	public abstract boolean updateStateAndReturnOutputAssessment();
 	
-	
+	public abstract void defineDefaultState();
 	
 	//Accessors and Mutators
 	public LocalDateTime getLastTriggerTime() {

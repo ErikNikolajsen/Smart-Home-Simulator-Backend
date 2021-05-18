@@ -35,7 +35,7 @@ import entities.library.*;
 import geo.Position;
 import utils.*;
 import logic.*;
-import pathfinding2.AStarGrid;
+import pathfinding.AStarGrid;
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {

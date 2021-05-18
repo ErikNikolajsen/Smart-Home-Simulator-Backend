@@ -1,3 +1,4 @@
+package pathfinding4;
 /*
 package pathfinding;
 

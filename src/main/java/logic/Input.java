@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import entities.Entity;
 import entities.SensorActive;
 import main.Resources;
-import pathfinding2.NodeState;
+import pathfinding.NodeState;
 
 public class Input {
 	

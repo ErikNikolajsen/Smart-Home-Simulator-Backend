@@ -25,8 +25,8 @@ import entities.Sensor;
 import geo.Position;
 import main.MqttPaho;
 import main.Resources;
-import pathfinding2.AStarGrid;
-import pathfinding2.AStarNode;
+import pathfinding.AStarGrid;
+import pathfinding.AStarNode;
 import entities.SensorActive;
 import entities.SensorPassive;
 
@@ -135,7 +135,7 @@ public class Simulator {
 		}
 		
 		for (AStarNode node : path) {
-			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY()));
+			double distance = agent.getPosition().distance(new Position(node.getX(),node.getY())) * floorplan.getTileSideLength();
 			long time = (long) ((distance / agent.getSpeed()) * 1000000000);
 			
 			//Agent jumps from start of tile to start of tile
@@ -229,7 +229,7 @@ public class Simulator {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (SensorPassive sensor : passiveSensors) { 
-			if (sensor.updateStateAndAssessTriggerConditions() == true) {
+			if (sensor.updateStateAndReturnOutputAssessment() == true) {
 				long i = 0;
 				if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
 					i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();

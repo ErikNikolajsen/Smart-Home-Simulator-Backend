@@ -1,4 +1,4 @@
-package pathfinding2;
+package pathfinding;
 
 /**
  * Node state.

@@ -6,7 +6,7 @@ import geo.Position;
 
 public class Floorplan {
 	
-	private int tileSideLength = 1; // width and height of a square tile in meters
+	private double tileSideLength; // width and height of a square tile in meters
 	private int width; // width of floor plan in tiles
 	private int height; // height of floor plan in tiles
 	private Agent agent;
@@ -81,11 +81,11 @@ public class Floorplan {
 		this.walls = walls;
 	}
 
-	public int getTileSideLength() {
+	public double getTileSideLength() {
 		return tileSideLength;
 	}
 
-	public void setTileSideLength(int tileSideLength) {
+	public void setTileSideLength(double tileSideLength) {
 		this.tileSideLength = tileSideLength;
 	}
 
