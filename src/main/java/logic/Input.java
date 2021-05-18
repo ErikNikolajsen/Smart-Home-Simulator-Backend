@@ -95,7 +95,7 @@ public class Input {
 				return "ERROR: No active sensor exists with the name specified in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 			}
 			// test if command is applicable for the sensor
-			if (!sensorInput.containsCommand(commandInput)) {
+			if (!sensorInput.getCommands().contains(commandInput)) {
 				return "ERROR: The specified type of sensor does not accept the command in statement "+(i+1)+": "+inputArray[i]; // returns error-message
 			}
 			continue;
