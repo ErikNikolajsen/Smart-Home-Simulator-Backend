@@ -279,7 +279,20 @@ public class Simulator {
 	*/
 	
 	public String test() {
+		//--- relativeTime ---//
+		// test that relativeTime is not zero and that it has been instantiated
+		if (relativeTime == 0) {
+			return "ERROR: \"relativeTime\" has not been defined or has its value defined as zero";
+		}
+		// test that relativeTime is not negative
+		if (relativeTime < 0) {
+			return "ERROR: \"relativeTime\" has been defined as a negative integer";
+		}
 		
+		//--- qualityOfService ---//
+		if (qualityOfService < 0 || qualityOfService > 2) {
+			return "ERROR: \"qualityOfService\" has not been defined as either 0, 1, or 2";
+		}
 		return "consumed";
 	}
 	
