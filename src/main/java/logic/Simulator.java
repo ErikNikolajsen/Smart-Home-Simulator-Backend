@@ -27,6 +27,7 @@ import main.MqttPaho;
 import main.Resources;
 import pathfinding.AStarGrid;
 import pathfinding.AStarNode;
+import pathfinding.NodeState;
 import entities.SensorActive;
 import entities.SensorPassive;
 
@@ -194,7 +195,13 @@ public class Simulator {
 		for (Entity entity : union) {
 			if (entity.getName().equals(entityName)) {
 				if (!entity.getInteractArea().contains(agent.getPosition())) {
-					Position randomInteractPosition = entity.getInteractArea().get(Resources.getRandom().nextInt(entity.getInteractArea().size()));
+					ArrayList<Position> gotoAblePositions = new ArrayList<Position>();
+					for (Position position : entity.getInteractArea()) {
+						if (grid.getNode(position.getX(), position.getY()).getState() == NodeState.WALKABLE || entity.getPhysicalArea().contains(position)) {
+							gotoAblePositions.add(position);
+						}
+					}
+					Position randomInteractPosition = gotoAblePositions.get(Resources.getRandom().nextInt(gotoAblePositions.size()));
 					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
 					
 					//intersection tiles of entity's physicalArea tiles and interactArea tiles that should become walkable
