@@ -29,9 +29,137 @@ public class Floorplan {
 	public Floorplan() {
 	}
 	
-	public void test() {
+	public String test() {
+		//--- tileSideLength ---//
+		// test that tileSideLength is not zero and that it has been instantiated
+		if (tileSideLength == 0) {
+			return "ERROR: \"tileSideLength\" has not been defined or has its value defined as zero";
+		}
+		// test that tileSideLength is not negative
+		if (tileSideLength < 0) {
+			return "ERROR: \"tileSideLength\" has been defined as a negative decimal";
+		}
 		
+		//--- width ---//
+		// test that width is not zero and that it has been instantiated
+		if (width == 0) {
+			return "ERROR: \"width\" has not been defined or has its value defined as zero";
+		}
+		// test that width is not negative
+		if (width < 0) {
+			return "ERROR: \"width\" has been defined as a negative integer";
+		}
+		
+		//--- height ---//
+		// test that height is not zero and that it has been instantiated
+		if (height == 0) {
+			return "ERROR: \"height\" has not been defined or has its value defined as zero";
+		}
+		// test that height is not negative
+		if (height < 0) {
+			return "ERROR: \"height\" has been defined as a negative integer";
+		}
+		
+		//--- walls ---//
+		// test that walls are within the grid
+		for (Position wall : walls) {
+			if (!isWithin(wall)) {
+				return "ERROR: the wall at "+wall+" is not within the grid";
+			}
+		}
+		
+		//--- agent ---//
+		// test that agent position has been instantiated
+		if (agent.getPosition() == null) {
+			return "ERROR: agent \"position\" has not been defined";
+		}
+		// test that agent position is within the grid
+		if (!isWithin(agent.getPosition())) {
+			return "ERROR: agent \"position\" is not within the grid";
+		}
+		
+		// test that agent position is on a walkable surface
+		for (Entity entity : getAllEntities()) {
+			if (entity.getWalkable() == false) {
+				for (Position position : entity.getPhysicalArea()) {
+					if (position.equals(agent.getPosition())) {
+						return "ERROR: agent position is a non-walkable tile";
+					}
+				}
+			}
+		}
+		for (Position position : walls) {
+			if (position.equals(agent.getPosition())) {
+				return "ERROR: agent position is a non-walkable tile";
+			}
+		}
+		// test that agent speed is not zero and that it has been instantiated
+		if (agent.getSpeed() == 0) {
+			return "ERROR: agent \"speed\" has not been defined or has its value defined as zero";
+		}
+		
+		// test that agent speed is not negative
+		if (agent.getSpeed() < 0) {
+			return "ERROR: agent \"speed\" has been defined as a negative decimal";
+		}
+		
+		//--- entities ---//
+		for (Entity entity : entities) {
+			// test that physicalArea is within the grid
+			for (Position position : entity.getPhysicalArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the physical Area of the entity at "+position+" is not within the grid";
+				}
+			}
+			// test that interactArea is within the grid
+			for (Position position : entity.getInteractArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the interact Area of the entity at "+position+" is not within the grid";
+				}
+			}
+		}
+		
+		//--- activeSensors ---//
+		for (SensorActive activeSensor : activeSensors) {
+			// test that physicalArea is within the grid
+			for (Position position : activeSensor.getPhysicalArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the physical Area of the active sensor at "+position+" is not within the grid";
+				}
+			}
+			// test that interactArea is within the grid
+			for (Position position : activeSensor.getInteractArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the interact Area of the active sensor at "+position+" is not within the grid";
+				}
+			}
+		}
+		
+		//--- passiveSensors ---//
+		for (SensorPassive passiveSensor : passiveSensors) {
+			// test that physicalArea is within the grid
+			for (Position position : passiveSensor.getPhysicalArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the physical Area of the passive sensor at "+position+" is not within the grid";
+				}
+			}
+			// test that interactArea is within the grid
+			for (Position position : passiveSensor.getInteractArea()) {
+				if (!isWithin(position)) {
+					return "ERROR: the interact Area of the passive sensor at "+position+" is not within the grid";
+				}
+			}
+			// test that triggerFrequency is not zero and that it has been instantiated
+			if (passiveSensor.getTriggerFrequency() == 0) {
+				return "ERROR: \"triggerFrequency\" of the passive sensor "+passiveSensor.getName()+" has not been defined or has its value defined as zero";
+			}
+		}
+		return "consumed";
 	}
+	
+	public final boolean isWithin(Position position) {
+        return position.getX() >= 0 && position.getX() < width && position.getY() >= 0 && position.getY() < height;
+    }
 	
 	//Accessors and Mutators
 	public ArrayList<Sensor> getAllSensors() {

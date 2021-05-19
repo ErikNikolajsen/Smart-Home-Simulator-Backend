@@ -72,9 +72,14 @@ public class RoomConfigController {
 	*/
 	
 	@PostMapping("/floorplan")
-	public void postFloorplan(@RequestBody Floorplan floorplan) {
-		Resources.setFloorplan(floorplan);
-		Resources.setaStarGrid(new AStarGrid(Resources.getFloorplan()));
+	public String postFloorplan(@RequestBody Floorplan floorplan) {
+		String testResult = floorplan.test();
+		if (testResult == "consumed") {
+			Resources.setFloorplan(floorplan);
+			Resources.setaStarGrid(new AStarGrid(Resources.getFloorplan()));
+		}
+		return testResult;
+		
 	}
 	
 	@GetMapping("/floorplan")

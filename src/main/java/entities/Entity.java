@@ -8,7 +8,7 @@ public class Entity {
 	private String name;
 	private ArrayList<Position> physicalArea;
 	private ArrayList<Position> interactArea;
-	private boolean walkable;
+	private boolean walkable = true;
 	
 	//Constructors
 	public Entity(String name, ArrayList<Position> physicalArea, ArrayList<Position> interactArea, Boolean walkable) {
@@ -53,6 +53,7 @@ public class Entity {
 		public void setWalkable(boolean walkable) {
 			this.walkable = walkable;
 		}
+		
 	
 	
 }

@@ -5,7 +5,7 @@ import geo.Position;
 public class Agent {
 	
 	private Position position;
-	private double speed = 1; // m/s
+	private double speed; // meter per second
 	
 	public Agent(Position point, double speed) {
 		this.position = point;
