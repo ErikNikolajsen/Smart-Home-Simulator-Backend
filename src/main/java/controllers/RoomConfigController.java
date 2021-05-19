@@ -1,7 +1,6 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,20 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import archive.Grid;
-import archive.Tile;
-import entities.Agent;
 import entities.Floorplan;
-import entities.Sensor;
-import entities.SensorPassive;
-import entities.Entity;
 import geo.Position;
 import main.Resources;
 import pathfinding.AStarGrid;
 import pathfinding.AStarNode;
-import pathfinding.NodeState;
 
 @RestController
 @RequestMapping("/api/roomConfig/")

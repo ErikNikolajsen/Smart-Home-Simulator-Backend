@@ -2,7 +2,6 @@ package pathfinding;
 
 import java.util.ArrayList;
 
-import entities.Sensor;
 import entities.SensorActive;
 import entities.SensorPassive;
 

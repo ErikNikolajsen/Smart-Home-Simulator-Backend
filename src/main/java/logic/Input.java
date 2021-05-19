@@ -16,17 +16,17 @@ public class Input {
 	private String input;
 	private String[] inputArray;
 	
-	private final static Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*"); //gotoPattern that accepts coordinates of a tile that is within the boundaries of the specified grid and is walkable
-	private final static Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*"); //gotoEntityPattern that accepts name of Entity or SensorActive
-	private final static Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); //interactPattern that accepts sensorName and command
-	private final static Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
-	private final static Pattern emptyPattern = Pattern.compile("\\s*"); //empty statement and whitespace at end of input string 
+	private final Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*"); //gotoPattern that accepts coordinates of a tile that is within the boundaries of the specified grid and is walkable
+	private final Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*"); //gotoEntityPattern that accepts name of Entity or SensorActive
+	private final Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); //interactPattern that accepts sensorName and command
+	private final Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
+	private final Pattern emptyPattern = Pattern.compile("\\s*"); //empty statement and whitespace at end of input string 
 	
-	private final static Pattern commentLinePattern = Pattern.compile("//.*");
-	private final static Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
+	private final Pattern commentLinePattern = Pattern.compile("//.*");
+	private final Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	
-	private final static Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
-	private final static Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
+	private final Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
+	private final Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
 	
 	public Input(String input) {
 		this.input = input;
@@ -151,19 +151,19 @@ public class Input {
 		return inputArray;
 	}
 
-	public static Pattern getGotopattern() {
+	public Pattern getGotopattern() {
 		return gotoPattern;
 	}
 
-	public static Pattern getInteractpattern() {
+	public Pattern getInteractpattern() {
 		return interactPattern;
 	}
 
-	public static Pattern getWaitpattern() {
+	public Pattern getWaitpattern() {
 		return waitPattern;
 	}
 
-	public static Pattern getGotoentitypattern() {
+	public Pattern getGotoentitypattern() {
 		return gotoEntityPattern;
 	}
 	

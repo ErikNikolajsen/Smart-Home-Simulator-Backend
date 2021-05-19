@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;
-import main.MqttPaho;
 import main.Resources;
-import utils.Log;
 
 @RestController
 @RequestMapping("/api/simulation/")

@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,7 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import entities.Agent;
 import entities.Entity;
 import entities.Floorplan;
-import entities.Sensor;
 import geo.Position;
 import main.MqttPaho;
 import main.Resources;
@@ -51,11 +48,9 @@ public class Simulator {
 	private Agent agent = new Agent(floorplan.getAgent());
 	
 	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
-	
 	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
-	
-	
 
+	
 	public Simulator() throws MqttException { 
 		// reset sensors' lastTriggerTime variable
 		for (SensorPassive sensor : passiveSensors) {
@@ -219,10 +214,6 @@ public class Simulator {
 		}
 	}
 	
-	private void returnError(String message) {
-		System.out.println("ERROR: "+message);
-	}
-	
 	private void updateTime(long nanos) throws InterruptedException {
 		clock = clock.plusNanos(nanos);
 		
@@ -372,15 +363,6 @@ public class Simulator {
 	public Agent getAgent() {
 		return agent;
 	}
-	
-	
-	
-	
-	
-	
-
-	
-	
 	
 }
 
