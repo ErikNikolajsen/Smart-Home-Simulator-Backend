@@ -235,6 +235,8 @@ public class Main {
 		}
 		System.out.println(classesSensor);
 		 */
+		
+		
 		SpringApplication.run(Main.class, args);
 		
 	  

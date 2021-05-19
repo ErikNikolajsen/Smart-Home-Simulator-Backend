@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import main.Resources;
+
 /**
  * A* search logic.
  *
@@ -27,7 +29,7 @@ public class AStarLogic {
 
         for (int y = 0; y < grid[0].length; y++) {
             for (int x = 0; x < grid.length; x++) {
-                grid[x][y].setHCost(Math.abs(target.getX() - x) + Math.abs(target.getY() - y));
+                grid[x][y].setHCost(Math.abs(target.getX() - x) + Math.abs(target.getY() - y) + Resources.getRandom().nextInt(2)); // randomness added to heuristics
             }
         }
 
@@ -49,7 +51,7 @@ public class AStarLogic {
 
                 if (!closed.contains(neighbor)) {
                     if (open.contains(neighbor)) {
-                        int newG = current.getGCost() + 10;
+                        int newG = current.getGCost() + 1;// reduced to +1 instead of +10 for increased randomness
 
                         if (newG < neighbor.getGCost()) {
                             neighbor.setParent(current);
@@ -57,7 +59,7 @@ public class AStarLogic {
                         }
                     } else {
                         neighbor.setParent(current);
-                        neighbor.setGCost(current.getGCost() + 10);
+                        neighbor.setGCost(current.getGCost() + 1);// reduced to +1 instead of +10 for increased randomness
                         open.add(neighbor);
                     }
                 }
@@ -112,7 +114,7 @@ public class AStarLogic {
             x - 1, y + 1 	// north-west
         	
         };
-
+        
         List<AStarNode> result = new ArrayList<>();
 
         for (int i = 0; i < points.length; i++) {
@@ -126,7 +128,7 @@ public class AStarLogic {
                 result.add(grid[x1][y1]);
             }
         }
-
+        
         return result;
     }
 

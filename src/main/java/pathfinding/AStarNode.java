@@ -16,8 +16,8 @@ public class AStarNode {
     private NodeState state;
     private int x;
     private int y;
-    private int gCost; //current node to end node
-    private int hCost; //current node to start node
+    private int gCost; 
+    private int hCost;
     private Object userData = null;
     ArrayList<SensorPassive> passiveTriggers = new ArrayList<SensorPassive>();
     ArrayList<SensorActive> activeTriggers = new ArrayList<SensorActive>();
