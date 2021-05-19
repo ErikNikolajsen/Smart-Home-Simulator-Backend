@@ -26,22 +26,40 @@ public class SimulationController {
 	
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
 	public String input(@RequestBody Input input) {
-		// TODO test for prior instantiation of a Floorplan object
+		// Test for prior instantiation of a Floorplan object
+		if (Resources.getFloorplan() == null) {
+			System.out.println("ERROR: no floorplan has been instantiated");
+			return "ERROR: no floorplan has been instantiated";
+		}
+		
+		// Test instruction input
 		String testResult = input.test();
 		if (testResult == "consumed") {
 			Resources.setInput(input);
+		} else {
+			System.out.println(testResult);
 		}
 		return testResult;
 	}
 	
-	// TODO Only make runable if floorplan and input has been instantiated
 	@PostMapping("/simulator")
-	public void runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
-		//Resources.setLog(new Log("test"));
-		//Resources.getLog().createFile();
+	public String runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
+		// Test for prior instantiation of a Input object
+		if (Resources.getInput() == null) {
+			System.out.println("ERROR: no instructions input has been instantiated");
+			return "ERROR: no instructions input has been instantiated";
+		}
 		
-		Resources.setSimulator(simulator);
-		Resources.getSimulator().startSimulator();
+		// Test simulator input
+		String testResult = simulator.test();
+		if (testResult == "consumed") {
+			Resources.setSimulator(simulator);
+			Resources.getSimulator().startSimulator();
+		} else {
+			System.out.println(testResult);
+		}
+		return testResult;
+		
 	}
 	
 	@GetMapping("/getSimulator")

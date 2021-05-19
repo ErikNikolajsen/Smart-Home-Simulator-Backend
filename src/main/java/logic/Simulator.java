@@ -34,7 +34,7 @@ import entities.SensorPassive;
 public class Simulator {
 	
 	private LocalDateTime clock; // LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
-	private boolean instantSimulation;
+	private boolean instantSimulation = true;
 	private double relativeTime; // how many/few real-time seconds should a virtual second take
 	
 	private boolean mqttOutput;
@@ -278,6 +278,10 @@ public class Simulator {
 	}
 	*/
 	
+	public String test() {
+		
+		return "consumed";
+	}
 	
 	//Accessors and Mutators
 	public void setClock(LocalDateTime clock) {

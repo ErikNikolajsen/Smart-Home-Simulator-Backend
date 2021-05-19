@@ -77,9 +77,10 @@ public class RoomConfigController {
 		if (testResult == "consumed") {
 			Resources.setFloorplan(floorplan);
 			Resources.setaStarGrid(new AStarGrid(Resources.getFloorplan()));
+		} else {
+			System.out.println(testResult);
 		}
 		return testResult;
-		
 	}
 	
 	@GetMapping("/floorplan")
