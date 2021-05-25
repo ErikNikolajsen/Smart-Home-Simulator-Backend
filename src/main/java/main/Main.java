@@ -1,5 +1,18 @@
 package main;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import org.springframework.context.annotation.ComponentScan;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+/*
+//import com.hivemq.client.mqtt.MqttClient;
+//import com.hivemq.client.mqtt.datatypes.MqttQos;
+//import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
+
 import java.awt.Point;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
@@ -12,23 +25,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.eclipse.paho.client.mqttv3.*;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-//import com.hivemq.client.mqtt.MqttClient;
-//import com.hivemq.client.mqtt.datatypes.MqttQos;
-//import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 
 import entities.*;
 import entities.library.*;
@@ -36,6 +40,7 @@ import geo.Position;
 import utils.*;
 import logic.*;
 import pathfinding.AStarGrid;
+*/
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {

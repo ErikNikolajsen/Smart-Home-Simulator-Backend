@@ -6,10 +6,10 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import entities.SensorPassive;
 import main.Resources;
 
-public class MovementSensor extends SensorPassive {
+public class PresenceSensor extends SensorPassive {
 
 	// Default constructor
-	public MovementSensor()  throws MqttPersistenceException, MqttException {
+	public PresenceSensor()  throws MqttPersistenceException, MqttException {
 		
 	}
 	

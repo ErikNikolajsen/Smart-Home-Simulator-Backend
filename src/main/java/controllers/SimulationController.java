@@ -22,7 +22,7 @@ import main.Resources;
 public class SimulationController {
 	
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
-	public String input(@RequestBody Input input) {
+	public String postInput(@RequestBody Input input) {
 		// Test for prior instantiation of a Floorplan object
 		if (Resources.getFloorplan() == null) {
 			System.out.println("ERROR: no floorplan has been instantiated");
@@ -39,8 +39,13 @@ public class SimulationController {
 		return testResult;
 	}
 	
+	@GetMapping("/Input")
+	public @ResponseBody Input getInput() {
+		return Resources.getInput(); 
+	}
+	
 	@PostMapping("/simulator")
-	public String runSimulation(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
+	public String postSimulator(@RequestBody Simulator simulator) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		// Test for prior instantiation of a Input object
 		if (Resources.getInput() == null) {
 			System.out.println("ERROR: no instructions input has been instantiated");
@@ -59,7 +64,7 @@ public class SimulationController {
 		
 	}
 	
-	@GetMapping("/getSimulator")
+	@GetMapping("/simulator")
 	public @ResponseBody Simulator getSimulator() {
 		return Resources.getSimulator(); 
 	}

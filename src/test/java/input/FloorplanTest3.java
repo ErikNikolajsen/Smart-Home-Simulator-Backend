@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.tools.javac.launcher.Main;
 
 import controllers.RoomConfigController;
 import controllers.SimulationController;
@@ -26,7 +25,6 @@ import entities.SensorPassive;
 import geo.Position;
 import logic.Input;
 import logic.Simulator;
-import main.Resources;
 
 class FloorplanTest3 {
 
@@ -69,7 +67,7 @@ class FloorplanTest3 {
 		
 		Input input = new Input("goto(4,4);");
 		
-		simulationController.input(input);
+		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
 				LocalDateTime.parse("2020-01-01T00:00:00.000000000", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")),
@@ -84,7 +82,7 @@ class FloorplanTest3 {
 				);
 		//simulationController.runSimulation(simulator);
 			
-		assertEquals("consumed",simulationController.runSimulation(simulator));
+		assertEquals("consumed",simulationController.postSimulator(simulator));
 	}
 
 	@Test

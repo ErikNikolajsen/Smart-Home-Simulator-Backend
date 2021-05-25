@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +42,7 @@ public class Input {
 	processedInput = commentLinePattern.matcher(processedInput).replaceAll("");
 	processedInput = commentBlockPattern.matcher(processedInput).replaceAll("");
 	
-	/*
+	
 	//Represent macros internally
 	HashMap<String, String> macros = new HashMap<String, String>();
 	Matcher m = macroDefinePattern.matcher(processedInput);
@@ -56,7 +55,7 @@ public class Input {
 	for (HashMap.Entry<String, String> entry : macros.entrySet()) {
         processedInput = Pattern.compile("\\s*"+entry.getKey()+"\\(\\s*\\)\\s*;").matcher(processedInput).replaceAll(entry.getValue());
     }
-	*/
+	
 	
 	//Test input
 	inputArray = processedInput.split(";");

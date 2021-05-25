@@ -40,27 +40,6 @@ public class RoomConfigController {
 		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety, new ArrayList<Position>());
 	}
 	// http://localhost:8080/api/roomConfig/getPath?startx=0&starty=0&targetx=4&targety=4
-
-	
-	
-	
-	/*
-	//Floorplan get test
-	@GetMapping("/floorplanTest")
-	public @ResponseBody Floorplan getFloorplanTest() {
-		Floorplan floorplan = new Floorplan(
-				100,
-				5, 
-				5, 
-				new Agent(new Position(0,0),1), 
-				new ArrayList<Sensor>(Arrays.asList(
-						new SensorPassive("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))), 300000000),
-						new SensorChild("Light_1", new ArrayList<Position>(Arrays.asList(new Position(3,2))), new ArrayList<Position>(Arrays.asList(new Position(2,2))),300000000,1337)
-						)), 
-				new ArrayList<Position>(Arrays.asList(new Position(1,1), new Position(2,2))));
-		return floorplan; 
-	}
-	*/
 	
 	@PostMapping("/floorplan")
 	public String postFloorplan(@RequestBody Floorplan floorplan) {
