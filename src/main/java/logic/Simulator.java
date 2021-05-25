@@ -78,7 +78,7 @@ public class Simulator {
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
 			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic, qualityOfService));
-		} else if (mqttOutput == true) {
+		} else {
 			Resources.setMqtt(null);
 		}
 		
