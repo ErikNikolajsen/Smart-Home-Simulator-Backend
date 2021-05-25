@@ -2,7 +2,6 @@ package main;
 
 import java.util.Random;
 
-import entities.Agent;
 import entities.Floorplan;
 import logic.Input;
 import logic.Simulator;

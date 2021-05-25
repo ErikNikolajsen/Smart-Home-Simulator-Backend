@@ -7,17 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.tools.javac.launcher.Main;
-
-import controllers.RoomConfigController;
-import controllers.SimulationController;
 import entities.Agent;
 import entities.Entity;
 import entities.Floorplan;
@@ -28,22 +21,10 @@ import logic.Input;
 import logic.Simulator;
 import main.Resources;
 
-class FloorplanTest3 {
+class SimulatorTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
-	@Test
-	void testTest() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
-		RoomConfigController roomConfigController = new RoomConfigController();
-		SimulationController  simulationController = new SimulationController();
-		
 		Floorplan floorplan = new Floorplan(
 				1,
 				5,
@@ -58,18 +39,17 @@ class FloorplanTest3 {
 					new Position(4,3)
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
-					)),
+					
+				)),
 				new ArrayList<SensorPassive>(Arrays.asList(
-					)),
+				)),
 				new ArrayList<Entity>(Arrays.asList(
-					))
+				))
 			);
-		
-		roomConfigController.postFloorplan(floorplan);
+		Resources.setFloorplan(floorplan);
+
 		
 		Input input = new Input("goto(4,4);");
-		
-		simulationController.input(input);
 		
 		Simulator simulator = new Simulator(
 				LocalDateTime.parse("2020-01-01T00:00:00.000000000", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")),
@@ -82,23 +62,14 @@ class FloorplanTest3 {
 				"smarthome",
 				7357L
 				);
-		//simulationController.runSimulation(simulator);
-			
-		assertEquals("consumed",simulationController.runSimulation(simulator));
+	}
+
+	@AfterEach
+	void tearDown() throws Exception {
 	}
 
 	@Test
-	void testIsWithin() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testGetAllSensors() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	void testGetAllEntities() {
+	void test() {
 		fail("Not yet implemented"); // TODO
 	}
 

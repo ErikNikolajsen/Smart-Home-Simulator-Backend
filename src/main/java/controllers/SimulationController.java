@@ -31,7 +31,7 @@ public class SimulationController {
 		
 		// Test instruction input
 		String testResult = input.test();
-		if (testResult == "consumed") {
+		if (testResult.equals("consumed")) {
 			Resources.setInput(input);
 		} else {
 			System.out.println(testResult);
@@ -49,7 +49,7 @@ public class SimulationController {
 		
 		// Test simulator input
 		String testResult = simulator.test();
-		if (testResult == "consumed") {
+		if (testResult.equals("consumed")) {
 			Resources.setSimulator(simulator);
 			Resources.getSimulator().startSimulator();
 		} else {

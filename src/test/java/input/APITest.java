@@ -7,14 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sun.tools.javac.launcher.Main;
 
 import controllers.RoomConfigController;
 import controllers.SimulationController;
@@ -28,21 +23,14 @@ import logic.Input;
 import logic.Simulator;
 import main.Resources;
 
-class FloorplanTest3 {
-
+class APITest {
+	
+	
+	/*
 	@BeforeEach
 	void setUp() throws Exception {
-		
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-
-	@Test
-	void testTest() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		RoomConfigController roomConfigController = new RoomConfigController();
-		SimulationController  simulationController = new SimulationController();
+		SimulationController simulationController = new SimulationController();
 		
 		Floorplan floorplan = new Floorplan(
 				1,
@@ -58,11 +46,12 @@ class FloorplanTest3 {
 					new Position(4,3)
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
-					)),
+					
+				)),
 				new ArrayList<SensorPassive>(Arrays.asList(
-					)),
+				)),
 				new ArrayList<Entity>(Arrays.asList(
-					))
+				))
 			);
 		
 		roomConfigController.postFloorplan(floorplan);
@@ -82,24 +71,57 @@ class FloorplanTest3 {
 				"smarthome",
 				7357L
 				);
-		//simulationController.runSimulation(simulator);
-			
-		assertEquals("consumed",simulationController.runSimulation(simulator));
 	}
-
+*/
+	
 	@Test
-	void testIsWithin() {
-		fail("Not yet implemented"); // TODO
+	void testPostFloorplanReturnError() {
+		RoomConfigController roomConfigController = new RoomConfigController();
+		
+		Floorplan floorplan = new Floorplan(
+				1,
+				-5,
+				5,
+				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Position>(Arrays.asList(
+				)),
+				new ArrayList<SensorActive>(Arrays.asList(
+					
+				)),
+				new ArrayList<SensorPassive>(Arrays.asList(
+				)),
+				new ArrayList<Entity>(Arrays.asList(
+				))
+			);
+		
+		assertEquals("ERROR: \"width\" has been defined as a negative integer",roomConfigController.postFloorplan(floorplan));
 	}
-
-	@Test
-	void testGetAllSensors() {
-		fail("Not yet implemented"); // TODO
+	
+	void testPostInputLackingDependency() {
+		RoomConfigController roomConfigController = new RoomConfigController();
+		
+		Floorplan floorplan = new Floorplan(
+				1,
+				-5,
+				5,
+				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Position>(Arrays.asList(
+				)),
+				new ArrayList<SensorActive>(Arrays.asList(
+					
+				)),
+				new ArrayList<SensorPassive>(Arrays.asList(
+				)),
+				new ArrayList<Entity>(Arrays.asList(
+				))
+			);
+		
+		assertEquals("ERROR: \"width\" has been defined as a negative integer",roomConfigController.postFloorplan(floorplan));
 	}
-
+	
 	@Test
-	void testGetAllEntities() {
-		fail("Not yet implemented"); // TODO
+	void testRunSimulator() {
+		
 	}
 
 }

@@ -45,22 +45,35 @@ public class Simulator {
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
-	private Agent agent = new Agent(floorplan.getAgent());
+	private Agent agent = new Agent(Resources.getFloorplan().getAgent());
 	
 	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
 	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
-
 	
+	public Simulator(LocalDateTime clock, boolean instantSimulation, double relativeTime, boolean mqttOutput, int qualityOfService, String mqttHost, String mqttPort, String rootTopic, Long seed) {
+		this.clock = clock;
+		this.instantSimulation = instantSimulation;
+		this.relativeTime = relativeTime;
+		this.mqttOutput = mqttOutput;
+		this.qualityOfService = qualityOfService;
+		this.mqttHost = mqttHost;
+		this.mqttPort = mqttPort;
+		this.rootTopic = rootTopic;
+		this.seed = seed;
+	}
+	
+	
+
 	public Simulator() throws MqttException { 
-		// reset sensors' lastTriggerTime variable
-		for (SensorPassive sensor : passiveSensors) {
-			sensor.setLastTriggerTime(null);
-		}
-		
 	}
 	
 	// next-event time progression discrete-event simulation
 	public void startSimulator() throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
+		
+		// reset sensors' lastTriggerTime variable
+		for (SensorPassive sensor : passiveSensors) {
+			sensor.setLastTriggerTime(null);
+		}
 		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
