@@ -7,14 +7,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-/*
+import controllers.RoomConfigController;
+import controllers.SimulationController;
+import controllers.SystemController;
+
 //import com.hivemq.client.mqtt.MqttClient;
 //import com.hivemq.client.mqtt.datatypes.MqttQos;
 //import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
 
 import java.awt.Point;
 import java.io.StringWriter;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +46,7 @@ import geo.Position;
 import utils.*;
 import logic.*;
 import pathfinding.AStarGrid;
-*/
+
 
 @SpringBootApplication @ComponentScan(basePackages = {"controllers"} )
 public class Main {
@@ -240,6 +246,8 @@ public class Main {
 		}
 		System.out.println(classesSensor);
 		 */
+		
+		if (args.length == 0) {
 				
 		SpringApplication.run(Main.class, args);
 		
@@ -251,7 +259,30 @@ public class Main {
 				+ "============================================================\r\n"
 				+ "                                                    (v1.0.0)");
 		
-		
+		} else {
+			try {
+				RoomConfigController roomConfigController = new RoomConfigController();
+				SimulationController simulationController = new SimulationController();
+				SystemController systemController = new SystemController();
+				
+			    // create object mapper instance
+			    ObjectMapper mapper = new ObjectMapper();
+			    
+			    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			    mapper.setDateFormat(df);
+
+			    // convert JSON string to Book object
+			    roomConfigController.postFloorplan(mapper.readValue(Paths.get(args[0]).toFile(), Floorplan.class));
+			    simulationController.postInput(mapper.readValue(Paths.get(args[1]).toFile(), Input.class));
+			    //simulationController.postSimulator(mapper.readValue(Paths.get(args[2]).toFile(), Simulator.class));
+
+			    // print book
+			    //System.out.println(Resources.getFloorplan());
+
+			} catch (Exception ex) {
+			    ex.printStackTrace();
+			}
+		}
 	}
 
 }
