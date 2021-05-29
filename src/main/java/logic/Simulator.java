@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import controllers.NotificationController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -41,6 +44,8 @@ public class Simulator {
 	private String rootTopic;
 	
 	private Long seed;
+
+	private NotificationController notification;
 
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
@@ -96,9 +101,11 @@ public class Simulator {
 		Pattern entityPattern = input.getGotoentitypattern();
 		
 		System.out.println("*** Simulation has started ***"); //test
+		notification.notifyToClient("*** Simulation has started ***");
 		
 		for (String statement : statementArray) {
 			System.out.println("* "+statement+":"); //test
+			notification.notifyToClient("* "+statement+":");
 			
 			// GOTO
 			if (gotoPattern.matcher(statement).matches()) {
@@ -127,6 +134,7 @@ public class Simulator {
 		}
 		
 		System.out.println("*** Simulation has ended ***"); //test
+		notification.notifyToClient("*** Simulation has ended ***");
 	}
 
 	private void gotoInstructions(Position gotoPosition, ArrayList<Position> exemptedCollisions) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
@@ -141,6 +149,7 @@ public class Simulator {
 		// detects if goto is impossible (HALTING ERROR)
 		if (path.isEmpty()) {
 			System.out.println("ERROR: coordinates are not reachable");
+			notification.notifyToClient("ERROR: coordinates are not reachable");
 		}
 		
 		for (AStarNode node : path) {
@@ -153,7 +162,7 @@ public class Simulator {
 			
 			agent.setPosition(node.getX(), node.getY()); // moves agent
 			System.out.println(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString()); // print time & position
-			
+			notification.notifyToClient(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString());
 			triggerPassiveSensors(halfTime);
 			
 			
@@ -170,6 +179,7 @@ public class Simulator {
 	private void waitInstructions(long waitTime) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		triggerPassiveSensors(waitTime);
 		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
+		notification.notifyToClient(clock+" : "+agent.getPosition().toString());
 	}
 	
 	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
@@ -178,7 +188,7 @@ public class Simulator {
 				if (!activeSensor.getInteractArea().contains(agent.getPosition())) {
 					Position randomInteractPosition = activeSensor.getInteractArea().get(Resources.getRandom().nextInt(activeSensor.getInteractArea().size()));
 					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
-					
+					notification.notifyToClient("randomInteractPosition: "+randomInteractPosition);
 					//intersection tiles of sensor's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : activeSensor.getPhysicalArea()) {
@@ -211,7 +221,7 @@ public class Simulator {
 					}
 					Position randomInteractPosition = gotoAblePositions.get(Resources.getRandom().nextInt(gotoAblePositions.size()));
 					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
-					
+					notification.notifyToClient("randomInteractPosition: "+randomInteractPosition);
 					//intersection tiles of entity's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : entity.getPhysicalArea()) {
@@ -351,6 +361,10 @@ public class Simulator {
 
 	public String getMqttPort() {
 		return mqttPort;
+	}
+
+	public void setNotification(NotificationController notification){
+		this.notification = notification;
 	}
 
 	public void setMqttPort(String mqttPort) {
