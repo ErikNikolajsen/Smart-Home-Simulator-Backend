@@ -2,6 +2,7 @@ package controllers;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,9 @@ import main.Resources;
 @CrossOrigin
 public class SimulationController {
 	
+	@Autowired
+	private NotificationController notificationController;
+
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
 	public String postInput(@RequestBody Input input) {
 		// Test for prior instantiation of a Floorplan object
@@ -39,7 +43,7 @@ public class SimulationController {
 		return testResult;
 	}
 	
-	@GetMapping("/input")
+	@GetMapping("/Input")
 	public @ResponseBody Input getInput() {
 		return Resources.getInput(); 
 	}
@@ -56,6 +60,7 @@ public class SimulationController {
 		String testResult = simulator.test();
 		if (testResult.equals("consumed")) {
 			Resources.setSimulator(simulator);
+			Resources.getSimulator().setNotification(notificationController);
 			Resources.getSimulator().startSimulator();
 		} else {
 			System.out.println(testResult);
