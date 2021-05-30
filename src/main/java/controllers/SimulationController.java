@@ -43,7 +43,7 @@ public class SimulationController {
 		return testResult;
 	}
 	
-	@GetMapping("/Input")
+	@GetMapping("/input")
 	public @ResponseBody Input getInput() {
 		return Resources.getInput(); 
 	}

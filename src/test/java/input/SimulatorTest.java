@@ -63,12 +63,18 @@ class SimulatorTest {
 		
 		Resources.setFloorplan(floorplan);
 		
+		Television television2 = new Television();
+		television2.setName("television2");
+		television2.setPhysicalArea(new ArrayList<Position>(Arrays.asList(new Position(4,2))));
+		television2.setInteractArea(new ArrayList<Position>(Arrays.asList(new Position(4,2))));
+		television2.setWalkable(false);
+		
 		Television television = new Television();
 		television.setName("television");
 		television.setPhysicalArea(new ArrayList<Position>(Arrays.asList(new Position(3,2))));
 		television.setInteractArea(new ArrayList<Position>(Arrays.asList(new Position(3,1))));
 		television.setWalkable(false);
-		Resources.getFloorplan().setActiveSensors(new ArrayList<SensorActive>(Arrays.asList(television)));
+		Resources.getFloorplan().setActiveSensors(new ArrayList<SensorActive>(Arrays.asList(television2, television)));
 		
 		PresenceSensor doorSensor = new PresenceSensor();
 		doorSensor.setName("door");
@@ -78,12 +84,24 @@ class SimulatorTest {
 		doorSensor.setTriggerFrequency(1000000000L);
 		Resources.getFloorplan().setPassiveSensors(new ArrayList<SensorPassive>(Arrays.asList(doorSensor)));
 		
+		Entity window = new Entity();
+		window.setName("window");
+		window.setPhysicalArea(new ArrayList<Position>(Arrays.asList(new Position(0,3))));
+		window.setInteractArea(new ArrayList<Position>(Arrays.asList(new Position(0,2),new Position(0,4))));
+		window.setWalkable(false);
+		
+		Entity chair = new Entity();
+		chair.setName("chair");
+		chair.setPhysicalArea(new ArrayList<Position>(Arrays.asList(new Position(3,1))));
+		chair.setInteractArea(new ArrayList<Position>(Arrays.asList(new Position(3,1))));
+		chair.setWalkable(false);
+		
 		Entity vestibule = new Entity();
 		vestibule.setName("vestibule");
 		vestibule.setPhysicalArea(new ArrayList<Position>(Arrays.asList(new Position(0,0), new Position(1,0))));
 		vestibule.setInteractArea(new ArrayList<Position>(Arrays.asList(new Position(0,0), new Position(1,0))));
 		vestibule.setWalkable(true);
-		Resources.getFloorplan().setEntities(new ArrayList<Entity>(Arrays.asList(vestibule)));
+		Resources.getFloorplan().setEntities(new ArrayList<Entity>(Arrays.asList(vestibule, window, chair)));
 		
 		Resources.setaStarGrid(new AStarGrid(Resources.getFloorplan()));
 	}
@@ -110,7 +128,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationSuccess() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(4,4);wait(5);goto(vestibule);interact(television,ON)");
+		Input input = new Input("goto(4,4);wait(5);goto(0,0);goto(vestibule);interact(television,ON);interact(television,CHANNEL1);interact(television2,ON);goto(window);goto(chair)");
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
@@ -147,11 +165,65 @@ class SimulatorTest {
 		simulationController.postSimulator(simulator);	
 	}
 	
+	@Test
+	void testSimulationRelativeTimeZero() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
+		
+		Input input = new Input("goto(1,3);");
+		simulationController.postInput(input);
+		
+		Simulator simulator = new Simulator(
+			LocalDateTime.parse("2020-01-01T00:00:00.000000000", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")),
+			false,
+			0.0,
+			true,
+			0,
+			"broker.hivemq.com",
+			"1883",
+			"smarthome",
+			null
+		);
+		assertEquals("ERROR: \"relativeTime\" has not been defined or has its value defined as zero",simulationController.postSimulator(simulator));
+	}
 	
+	@Test
+	void testSimulationRelativeTimeNegative() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
+		
+		Input input = new Input("goto(1,3);");
+		simulationController.postInput(input);
+		
+		Simulator simulator = new Simulator(
+			LocalDateTime.parse("2020-01-01T00:00:00.000000000", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")),
+			false,
+			-1.0,
+			true,
+			0,
+			"broker.hivemq.com",
+			"1883",
+			"smarthome",
+			null
+		);
+		assertEquals("ERROR: \"relativeTime\" has been defined as a negative integer",simulationController.postSimulator(simulator));
+	}
 	
-	
-	
-	
+	@Test
+	void testSimulationQualityOfServiceError() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
+		
+		Input input = new Input("goto(1,3);");
+		simulationController.postInput(input);
+		
+		Simulator simulator = new Simulator(
+			LocalDateTime.parse("2020-01-01T00:00:00.000000000", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")),
+			false,
+			1.0,
+			true,
+			3,
+			"broker.hivemq.com",
+			"1883",
+			"smarthome",
+			null
+		);
+		assertEquals("ERROR: \"qualityOfService\" has not been defined as either 0, 1, or 2",simulationController.postSimulator(simulator));
+	}
 	
 	
 	
