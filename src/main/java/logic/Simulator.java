@@ -367,6 +367,10 @@ public class Simulator {
 		this.notification = notification;
 	}
 
+	public NotificationController getNotification() {
+		return notification;
+	}
+
 	public void setMqttPort(String mqttPort) {
 		this.mqttPort = mqttPort;
 	}
