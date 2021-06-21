@@ -29,7 +29,7 @@ public class AStarLogic {
 
         for (int y = 0; y < grid[0].length; y++) {
             for (int x = 0; x < grid.length; x++) {
-                grid[x][y].setHCost(Math.abs(target.getX() - x) + Math.abs(target.getY() - y) + Resources.getRandom().nextInt(2)); // randomness added to heuristics
+                grid[x][y].setHCost(Math.abs(target.getX() - x) + Math.abs(target.getY() - y) + Resources.getRandom().nextInt(4)); // randomness added to heuristics
             }
         }
 
@@ -51,7 +51,7 @@ public class AStarLogic {
 
                 if (!closed.contains(neighbor)) {
                     if (open.contains(neighbor)) {
-                        int newG = current.getGCost() + 1;// reduced to +1 instead of +10 for increased randomness
+                        int newG = current.getGCost() + 1;// reduced to +1 instead of +10 
 
                         if (newG < neighbor.getGCost()) {
                             neighbor.setParent(current);
@@ -59,7 +59,7 @@ public class AStarLogic {
                         }
                     } else {
                         neighbor.setParent(current);
-                        neighbor.setGCost(current.getGCost() + 1);// reduced to +1 instead of +10 for increased randomness
+                        neighbor.setGCost(current.getGCost() + 1);// reduced to +1 instead of +10
                         open.add(neighbor);
                     }
                 }

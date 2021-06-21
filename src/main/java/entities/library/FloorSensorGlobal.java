@@ -17,7 +17,7 @@ public class FloorSensorGlobal extends SensorPassive {
 	}
 	
 	// Trigger behavior 
-	public boolean updateStateAndReturnOutputAssessment() {
+	public boolean updateState() {
 		state.put("pressurePosition", Resources.getSimulator().getAgent().getPosition());
 		return true;
 

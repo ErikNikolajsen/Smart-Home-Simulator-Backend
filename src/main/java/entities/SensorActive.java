@@ -31,7 +31,7 @@ public abstract class SensorActive extends Sensor {
 		HashMap<String, Object> initialState = new HashMap<>(state);
 		updateState(command);
 		if (!state.equals(initialState)) {
-			output();
+			outputSensorReading();
 		}
 	}
 	

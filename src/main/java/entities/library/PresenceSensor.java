@@ -18,7 +18,7 @@ public class PresenceSensor extends SensorPassive {
 	}
 	
 	// Trigger behavior 
-	public boolean updateStateAndReturnOutputAssessment() {
+	public boolean updateState() {
 		if (getInteractArea().contains(Resources.getSimulator().getAgent().getPosition())) {
 			state.put("triggered", true);
 			return true;

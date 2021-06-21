@@ -31,7 +31,7 @@ public abstract class Sensor extends Entity{
 	public Sensor() {
 	}
 	
-	public void output() throws MqttPersistenceException, MqttException, JsonProcessingException {
+	public void outputSensorReading() throws MqttPersistenceException, MqttException, JsonProcessingException {
 		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		Output output = new Output(Resources.getSimulator().getClock(),getClass().getSimpleName(),getName(),state);
 		String json = mapper.writeValueAsString(output);

@@ -35,7 +35,7 @@ public class Simulator {
 	
 	private LocalDateTime clock; // LocalDateTime.of(2020, 1, 1, 0, 0, 0, 0); 
 	private boolean instantSimulation = true;
-	private double relativeTime; // how many/few real-time seconds should a virtual second take
+	private double relativeTime; // how many/few real-time seconds should a simulated second take
 	
 	private boolean mqttOutput;
 	private int qualityOfService;
@@ -250,7 +250,7 @@ public class Simulator {
 		LocalDateTime newTileTime = clock.plusNanos(time);
 		ArrayList<TriggerEvent> eventList = new ArrayList<TriggerEvent>();
 		for (SensorPassive sensor : passiveSensors) { 
-			if (sensor.updateStateAndReturnOutputAssessment() == true) {
+			if (sensor.updateState() == true) {
 				long i = 0;
 				if (sensor.getLastTriggerTime() != null && sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) < sensor.getTriggerFrequency()) {
 					i = -sensor.getLastTriggerTime().until(clock,ChronoUnit.NANOS) + sensor.getTriggerFrequency();
@@ -264,7 +264,7 @@ public class Simulator {
 		eventList.sort(Comparator.comparing(TriggerEvent::getDateTime));
 		for (TriggerEvent triggerEvent : eventList) {
 			updateTime(clock.until(triggerEvent.getDateTime(),ChronoUnit.NANOS));
-			((SensorPassive) triggerEvent.getSensor()).output();
+			((SensorPassive) triggerEvent.getSensor()).outputSensorReading();
 		}
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}

@@ -22,7 +22,7 @@ public abstract class SensorPassive extends Sensor {
 	}
 	
 	// Abstract methods that must be implemented by passive sensors
-	public abstract boolean updateStateAndReturnOutputAssessment();
+	public abstract boolean updateState();
 	
 	public abstract void defineDefaultState();
 	
