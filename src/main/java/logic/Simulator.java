@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import controllers.NotificationController;
 

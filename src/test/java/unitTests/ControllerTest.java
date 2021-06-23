@@ -1,4 +1,4 @@
-package input;
+package unitTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +12,10 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -26,11 +30,15 @@ import entities.SensorPassive;
 import geo.Position;
 import logic.Input;
 import logic.Simulator;
+import main.Main;
 import main.Resources;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Main.class)
 class ControllerTest {
 	
 	RoomConfigController roomConfigController = new RoomConfigController();
+	@Autowired
 	SimulationController simulationController = new SimulationController();
 	SystemController systemController = new SystemController();
 	

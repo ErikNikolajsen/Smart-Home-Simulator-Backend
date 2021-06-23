@@ -1,4 +1,4 @@
-package input;
+package unitTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,9 +14,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import controllers.NotificationController;
 import controllers.RoomConfigController;
 import controllers.SimulationController;
 import controllers.SystemController;
@@ -30,12 +37,15 @@ import entities.library.Television;
 import geo.Position;
 import logic.Input;
 import logic.Simulator;
+import main.Main;
 import main.Resources;
 import pathfinding.AStarGrid;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Main.class)
 class SimulatorTest {
 	
-	
+	@Autowired
 	SimulationController simulationController = new SimulationController();
 	
 	@BeforeAll
@@ -142,8 +152,10 @@ class SimulatorTest {
 			"smarthome",
 			7357L
 		);
+		
 		simulationController.postSimulator(simulator);	
 	}
+	
 
 	@Test
 	void testSimulationSuccess2() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
