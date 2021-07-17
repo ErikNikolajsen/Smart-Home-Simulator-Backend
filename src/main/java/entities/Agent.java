@@ -1,48 +1,53 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import geo.Position;
 
 public class Agent {
 	
 	private String id;
-	private Position position;
+	private Position initialPosition;
 	private double speed; // meter per second
+	
+	@JsonIgnore private Position position;
 	
 	public Agent(String id, Position point, double speed) {
 		this.id = id;
-		this.position = point;
+		this.initialPosition = point;
 		this.speed = speed;
 	}
 	
 	public Agent() {
 	}
 	
-	// copy constructor
-	public Agent(Agent another) {
-		this.id = another.id;
-		this.position = another.position;
-		this.speed = another.speed;
+	//Accessors and Mutators
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
-	//Accessors and Mutators
+	public Position getInitialPosition() {
+		return initialPosition;
+	}
+
+	public void setInitialPosition(Position initialPosition) {
+		this.initialPosition = initialPosition;
+	}
+	
+	public void setInitialPosition(int x, int y) {
+		this.initialPosition = new Position(x,y);
+	}
+	
 	public Position getPosition() {
 		return position;
 	}
 
-	public String getID() {
-		return id;
-	}
-
-	public void setID(String id) {
-		this.id = id;
-	}
-
 	public void setPosition(Position position) {
 		this.position = position;
-	}
-	
-	public void setPosition(int x, int y) {
-		this.position = new Position(x,y);
 	}
 
 	public double getSpeed() {

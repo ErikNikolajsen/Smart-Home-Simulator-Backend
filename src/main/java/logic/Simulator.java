@@ -49,7 +49,7 @@ public class Simulator {
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
-	private Agent agent = new Agent(Resources.getFloorplan().getAgent());
+	private ArrayList<Agent> agents = Resources.getFloorplan().getAgents();
 	
 	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
 	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
@@ -77,6 +77,11 @@ public class Simulator {
 		// reset sensors' lastTriggerTime variable
 		for (SensorPassive sensor : passiveSensors) {
 			sensor.setLastTriggerTime(null);
+		}
+		
+		// reset agents' positions
+		for (Agent agent : floorplan.getAgents()) {
+			agent.setPosition(agent.getInitialPosition());
 		}
 		
 		// start MQTT client if appropriate
@@ -159,7 +164,7 @@ public class Simulator {
 			long halfTime = time/2;
 			triggerPassiveSensors(halfTime);
 			
-			agent.setPosition(node.getX(), node.getY()); // moves agent
+			agent.setInitialPosition(node.getX(), node.getY()); // moves agent
 			System.out.println(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString()); // print time & position
 			notification.notifyToClient(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString());
 			triggerPassiveSensors(halfTime);
