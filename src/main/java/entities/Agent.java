@@ -4,10 +4,12 @@ import geo.Position;
 
 public class Agent {
 	
+	private String ID;
 	private Position position;
 	private double speed; // meter per second
 	
-	public Agent(Position point, double speed) {
+	public Agent(String ID, Position point, double speed) {
+		this.ID = ID;
 		this.position = point;
 		this.speed = speed;
 	}
@@ -17,18 +19,10 @@ public class Agent {
 	
 	// copy constructor
 	public Agent(Agent another) {
+		this.ID = another.ID;
 		this.position = another.position;
 		this.speed = another.speed;
 	}
-	
-	
-	/*
-	public void interact(ActiveObject object, String interactionName) throws InteractionException {
-		object.interact(this, interactionName);
-	}
-	*/
-	
-	
 	
 	//Accessors and Mutators
 	public Position getPosition() {
