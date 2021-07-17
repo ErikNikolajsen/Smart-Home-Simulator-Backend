@@ -9,17 +9,17 @@ public class Floorplan {
 	private double tileSideLength; // width and height of a square tile in meters
 	private int width; // width of floor plan in tiles
 	private int height; // height of floor plan in tiles
-	private Agent agent;
+	private ArrayList<Agent> agents;
 	private ArrayList<Position> walls;
 	private ArrayList<SensorActive> activeSensors;
 	private ArrayList<SensorPassive> passiveSensors;
 	private ArrayList<Entity> entities;
 	
-	public Floorplan(int tileSideLength, int width, int height, Agent agent, ArrayList<Position> walls, ArrayList<SensorActive> activeSensors, ArrayList<SensorPassive> passiveSensors, ArrayList<Entity> entities) {
+	public Floorplan(int tileSideLength, int width, int height, ArrayList<Agent> agents, ArrayList<Position> walls, ArrayList<SensorActive> activeSensors, ArrayList<SensorPassive> passiveSensors, ArrayList<Entity> entities) {
 		this.tileSideLength = tileSideLength;
 		this.width = width;
 		this.height = height;
-		this.agent = agent;
+		this.agents = agents;
 		this.walls = walls;
 		this.entities = entities;
 		this.activeSensors = activeSensors;
@@ -67,7 +67,7 @@ public class Floorplan {
 				return "ERROR: the wall at "+wall+" is not within the grid";
 			}
 		}
-		
+/*
 		//--- agent ---//
 		// test that agent position has been instantiated
 		if (agent.getPosition() == null) {
@@ -102,7 +102,7 @@ public class Floorplan {
 		if (agent.getSpeed() < 0) {
 			return "ERROR: agent \"speed\" has been defined as a negative decimal";
 		}
-		
+*/
 		//--- entities ---//
 		for (Entity entity : entities) {
 			// test that physicalArea is within the grid
@@ -193,12 +193,12 @@ public class Floorplan {
 		this.height = height;
 	}
 
-	public Agent getAgent() {
-		return agent;
+	public ArrayList<Agent> getAgents() {
+		return agents;
 	}
 
-	public void setAgent(Agent agent) {
-		this.agent = agent;
+	public void setAgents(ArrayList<Agent> agents) {
+		this.agents = agents;
 	}
 
 	public ArrayList<Position> getWalls() {

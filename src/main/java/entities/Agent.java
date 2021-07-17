@@ -4,12 +4,12 @@ import geo.Position;
 
 public class Agent {
 	
-	private String ID;
+	private String id;
 	private Position position;
 	private double speed; // meter per second
 	
-	public Agent(String ID, Position point, double speed) {
-		this.ID = ID;
+	public Agent(String id, Position point, double speed) {
+		this.id = id;
 		this.position = point;
 		this.speed = speed;
 	}
@@ -19,7 +19,7 @@ public class Agent {
 	
 	// copy constructor
 	public Agent(Agent another) {
-		this.ID = another.ID;
+		this.id = another.id;
 		this.position = another.position;
 		this.speed = another.speed;
 	}
@@ -27,6 +27,14 @@ public class Agent {
 	//Accessors and Mutators
 	public Position getPosition() {
 		return position;
+	}
+
+	public String getID() {
+		return id;
+	}
+
+	public void setID(String id) {
+		this.id = id;
 	}
 
 	public void setPosition(Position position) {
