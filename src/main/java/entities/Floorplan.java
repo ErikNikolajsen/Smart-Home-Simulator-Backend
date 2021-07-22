@@ -1,6 +1,8 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import geo.Position;
 
@@ -67,42 +69,63 @@ public class Floorplan {
 				return "ERROR: the wall at "+wall+" is not within the grid";
 			}
 		}
-/*
+
 		//--- agent ---//
-		// test that agent position has been instantiated
-		if (agent.getPosition() == null) {
-			return "ERROR: agent \"position\" has not been defined";
+		// test that agents' initial positions has been instantiated
+		for (Agent agent : agents) {
+			if (agent.getInitialPosition() == null) {
+				return "ERROR: an agent's \"initialPosition\" has not been defined";
+			}
 		}
-		// test that agent position is within the grid
-		if (!isWithin(agent.getPosition())) {
-			return "ERROR: agent \"position\" is not within the grid";
+		// test that agents' initial positions are within the grid
+		for (Agent agent : agents) {
+			if (!isWithin(agent.getInitialPosition())) {
+				return "ERROR: an agent's \"initialPosition\" is not within the grid";
+			}
 		}
-		
 		// test that agent position is on a walkable surface
 		for (Entity entity : getAllEntities()) {
 			if (entity.getWalkable() == false) {
 				for (Position position : entity.getPhysicalArea()) {
-					if (position.equals(agent.getPosition())) {
-						return "ERROR: agent position is a non-walkable tile";
+					for (Agent agent : agents) {
+						if (position.equals(agent.getInitialPosition())) {
+							return "ERROR: an agent's initial position is a non-walkable tile";
+						}
 					}
 				}
 			}
 		}
 		for (Position position : walls) {
-			if (position.equals(agent.getPosition())) {
-				return "ERROR: agent position is a non-walkable tile";
+			for (Agent agent : agents) {
+				if (position.equals(agent.getInitialPosition())) {
+					return "ERROR: agent's initial position is a non-walkable tile";
+				}
 			}
 		}
+		
 		// test that agent speed is not zero and that it has been instantiated
-		if (agent.getSpeed() == 0) {
-			return "ERROR: agent \"speed\" has not been defined or has its value defined as zero";
+		for (Agent agent : agents) {
+			if (agent.getSpeed() == 0) {
+				return "ERROR: an agent's \"speed\" has not been defined or has its value defined as zero";
+			}
 		}
 		
 		// test that agent speed is not negative
-		if (agent.getSpeed() < 0) {
-			return "ERROR: agent \"speed\" has been defined as a negative decimal";
+		for (Agent agent : agents) {
+			if (agent.getSpeed() < 0) {
+				return "ERROR: an agent's \"speed\" has been defined as a negative value";
+			}
 		}
-*/
+		
+		// test to ensure that agents have unique IDs
+		Set<String> uniquesIds = new HashSet<String>();
+		for (Agent agent : agents) {
+			uniquesIds.add(agent.getId());
+		}
+		if(uniquesIds.size() < agents.size()){
+			return "ERROR: the IDs of the agents are not unique";
+		}
+
 		//--- entities ---//
 		for (Entity entity : entities) {
 			// test that physicalArea is within the grid
