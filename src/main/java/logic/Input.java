@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import entities.Entity;
 import entities.SensorActive;
 import main.Resources;
@@ -12,20 +14,23 @@ import pathfinding.NodeState;
 
 public class Input {
 	
+	private String agentId;
 	private String input;
-	private String[] inputArray;
+	@JsonIgnore private String[] inputArray;
 	
-	private final Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*"); //gotoPattern that accepts coordinates of a tile that is within the boundaries of the specified grid and is walkable
-	private final Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*"); //gotoEntityPattern that accepts name of Entity or SensorActive
-	private final Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); //interactPattern that accepts sensorName and command
-	private final Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
-	private final Pattern emptyPattern = Pattern.compile("\\s*"); //empty statement and whitespace at end of input string 
+	@JsonIgnore private final Pattern gotoPattern = Pattern.compile("\\s*goto\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)\\s*"); //gotoPattern that accepts coordinates of a tile that is within the boundaries of the specified grid and is walkable
+	@JsonIgnore private final Pattern gotoEntityPattern = Pattern.compile("\\s*goto\\(\\s*(\\w+)\\s*\\)\\s*"); //gotoEntityPattern that accepts name of Entity or SensorActive
+	@JsonIgnore private final Pattern interactPattern = Pattern.compile("\\s*interact\\(\\s*(\\w+),(\\w+)\\s*\\)\\s*"); //interactPattern that accepts sensorName and command
+	@JsonIgnore private final Pattern waitPattern = Pattern.compile("\\s*wait\\(\\s*(\\d+)\\s*\\)\\s*"); //waitPattern that accepts integer
+	@JsonIgnore private final Pattern emptyPattern = Pattern.compile("\\s*"); //empty statement and whitespace at end of input string 
 	
-	private final Pattern commentLinePattern = Pattern.compile("//.*");
-	private final Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
+	@JsonIgnore private final Pattern commentLinePattern = Pattern.compile("//.*");
+	@JsonIgnore private final Pattern commentBlockPattern = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	
-	private final Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
-	private final Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
+	@JsonIgnore private final Pattern macroDefinePattern = Pattern.compile("\\s*let\\s+(\\w+)\\b(?<!\\bgoto|wait|interact)\\s*\\{([^}]*)\\}");
+	//@JsonIgnore private final Pattern macroCallPattern = Pattern.compile("\\s*(\\w+)\\(\\s*\\)\\s*;");
+	
+	
 	
 	public Input(String input) {
 		this.input = input;
@@ -140,6 +145,14 @@ public class Input {
 	//Accessors and Mutators
 	public String getInput() {
 		return input;
+	}
+
+	public String getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(String agentId) {
+		this.agentId = agentId;
 	}
 
 	public void setInput(String input) {

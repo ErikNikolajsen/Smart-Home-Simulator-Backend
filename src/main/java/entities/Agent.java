@@ -38,8 +38,8 @@ public class Agent {
 		this.initialPosition = initialPosition;
 	}
 	
-	public void setInitialPosition(int x, int y) {
-		this.initialPosition = new Position(x,y);
+	public void setPosition(int x, int y) {
+		this.position = new Position(x,y);
 	}
 	
 	public Position getPosition() {

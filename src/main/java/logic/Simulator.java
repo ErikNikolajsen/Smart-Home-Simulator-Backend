@@ -49,10 +49,13 @@ public class Simulator {
 	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
-	private ArrayList<Agent> agents = Resources.getFloorplan().getAgents();
-	
 	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
 	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
+	
+	// B-event properties
+	ArrayList<BEvent> bEvents = new ArrayList<BEvent>();
+	LocalDateTime bEventClock;
+	Position bEventAgentPosition;
 	
 	public Simulator(LocalDateTime clock, boolean instantSimulation, double relativeTime, boolean mqttOutput, int qualityOfService, String mqttHost, String mqttPort, String rootTopic, Long seed) {
 		this.clock = clock;
@@ -66,8 +69,6 @@ public class Simulator {
 		this.seed = seed;
 	}
 	
-	
-
 	public Simulator() throws MqttException { 
 	}
 	
@@ -91,57 +92,92 @@ public class Simulator {
 			Resources.setMqtt(null);
 		}
 		
-		// instantiate Random object with specified seed
+		// instantiate Random object with specified seed. Null or 0 will ensure a random seed.
 		if (seed == null) {
 			Resources.setRandom(new Random());
 		} else {
 			Resources.setRandom(new Random(seed));
 		}
-				
+		
+		// Converting instructions to B-events
+		print("Computing B-events...");
+		
 		String[] statementArray = input.getInputArray();
 		Pattern gotoPattern = input.getGotopattern();
 		Pattern interactPattern = input.getInteractpattern();
 		Pattern waitPattern = input.getWaitpattern();
 		Pattern entityPattern = input.getGotoentitypattern();
 		
-		System.out.println("*** Simulation has started ***"); //test
-		notification.notifyToClient("*** Simulation has started ***");
-		
-		for (String statement : statementArray) {
-			System.out.println("* "+statement+":"); //test
-			notification.notifyToClient("* "+statement+":");
+		for (Agent agent : Resources.getFloorplan().getAgents()) {
 			
-			// GOTO
-			if (gotoPattern.matcher(statement).matches()) {
-				Position gotoPosition = new Position(
-					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$1")),
-					Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$2"))
-				);
-				gotoInstructions(gotoPosition, new ArrayList<Position>());
+			bEventClock = clock;
 			
-			// WAIT
-			} else if (waitPattern.matcher(statement).matches()) {
-				long waitTime = Long.parseLong(waitPattern.matcher(statement).replaceAll("$1")) * 1000000000; // converts seconds to nanoseconds
-				waitInstructions(waitTime);
-			
-			// INTERACT
-			} else if (interactPattern.matcher(statement).matches()) {
-				String sensorName = interactPattern.matcher(statement).replaceAll("$1");
-				String command = interactPattern.matcher(statement).replaceAll("$2");
-				interactInstructions(sensorName, command);
-			
-			// GOTO ENTITY
-			} else if (entityPattern.matcher(statement).matches()) {
-				String entityName = entityPattern.matcher(statement).replaceAll("$1");
-				gotoEntityInstructions(entityName);
+			for (String statement : statementArray) {
+				//print("* "+statement+":");
+				
+				// GOTO
+				if (gotoPattern.matcher(statement).matches()) {
+					Position gotoPosition = new Position(
+						Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$1")),
+						Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$2"))
+					);
+					gotoInstructions(agent, gotoPosition, new ArrayList<Position>());
+				
+				// WAIT
+				} else if (waitPattern.matcher(statement).matches()) {
+					long waitTime = Long.parseLong(waitPattern.matcher(statement).replaceAll("$1")) * 1000000000; // converts seconds to nanoseconds
+					waitInstructions(waitTime);
+				
+				// INTERACT
+				} else if (interactPattern.matcher(statement).matches()) {
+					String sensorName = interactPattern.matcher(statement).replaceAll("$1");
+					String command = interactPattern.matcher(statement).replaceAll("$2");
+					interactInstructions(agent, sensorName, command);
+				
+				// GOTO ENTITY
+				} else if (entityPattern.matcher(statement).matches()) {
+					String entityName = entityPattern.matcher(statement).replaceAll("$1");
+					gotoEntityInstructions(agent, entityName);
+				}
 			}
 		}
 		
-		System.out.println("*** Simulation has ended ***"); //test
-		notification.notifyToClient("*** Simulation has ended ***");
+		// Sort B-events by time of event
+		bEvents.sort(Comparator.comparing(BEvent::getEventDateTime));
+		
+		// reset agents' positions
+		for (Agent agent : floorplan.getAgents()) {
+			agent.setPosition(agent.getInitialPosition());
+		}
+		
+		// Three-phase simulation start
+		print("*** Simulation has started ***");
+		for (BEvent event : bEvents) {
+			
+			//Update clock to next B-event
+			long diff = ChronoUnit.NANOS.between(clock, event.getEventDateTime());
+			
+			triggerPassiveSensors(diff);
+			
+			// Movement event
+			if (event instanceof logic.BEventMovement) {
+				
+				//update agent position
+				((logic.BEventMovement) event).getAgent().setPosition(
+						((logic.BEventMovement) event).getNode().getX(), 
+						((logic.BEventMovement) event).getNode().getY()
+						);
+				print(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+((logic.BEventMovement) event).getAgent().getId()+" : "+((logic.BEventMovement) event).getAgent().getPosition().toString()); // print time & position
+			
+			// Active sensor activation event
+			} else if (event instanceof logic.BEventSensorActivation) {
+				((logic.BEventSensorActivation) event).getSensor().interact(((logic.BEventSensorActivation) event).getCommand());
+			} 
+		}
+		print("*** Simulation has ended ***");
 	}
 
-	private void gotoInstructions(Position gotoPosition, ArrayList<Position> exemptedCollisions) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
+	private void gotoInstructions(Agent agent, Position gotoPosition, ArrayList<Position> exemptedCollisions) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
 		List<AStarNode> path;
 		path = grid.getPath(
 				agent.getPosition().getX(), 
@@ -152,8 +188,7 @@ public class Simulator {
 		
 		// detects if goto is impossible (HALTING ERROR)
 		if (path.isEmpty()) {
-			System.out.println("ERROR: coordinates are not reachable");
-			notification.notifyToClient("ERROR: coordinates are not reachable");
+			print("ERROR: coordinates are not reachable");
 		}
 		
 		for (AStarNode node : path) {
@@ -162,37 +197,23 @@ public class Simulator {
 			
 			//Agent jumps from start of tile to start of tile
 			long halfTime = time/2;
-			triggerPassiveSensors(halfTime);
-			
-			agent.setInitialPosition(node.getX(), node.getY()); // moves agent
-			System.out.println(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString()); // print time & position
-			notification.notifyToClient(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+agent.getPosition().toString());
-			triggerPassiveSensors(halfTime);
-			
-			
-			/*
-			//Agent jumps from middle of tile to middle of tile instead of start of tile to start of tile
-			triggerPassiveSensors(time);
-			agent.setPosition(node.getX(), node.getY()); // moves agent
-			System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
-			 */
-			
+			bEventClock = bEventClock.plusNanos(halfTime);
+			bEvents.add(new BEventMovement(bEventClock, agent, node));
+			bEventClock = bEventClock.plusNanos(halfTime);
+			agent.setPosition(new Position(node.getX(),node.getY()));
 		}
 	}
 
 	private void waitInstructions(long waitTime) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
-		triggerPassiveSensors(waitTime);
-		System.out.println(clock+" : "+agent.getPosition().toString()); // print time & position
-		notification.notifyToClient(clock+" : "+agent.getPosition().toString());
+		bEventClock = bEventClock.plusNanos(waitTime);
 	}
 	
-	private void interactInstructions(String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
+	private void interactInstructions(Agent agent, String sensorName, String command) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		for (SensorActive activeSensor : activeSensors) {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getInteractArea().contains(agent.getPosition())) {
 					Position randomInteractPosition = activeSensor.getInteractArea().get(Resources.getRandom().nextInt(activeSensor.getInteractArea().size()));
-					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
-					notification.notifyToClient("randomInteractPosition: "+randomInteractPosition);
+					print("randomInteractPosition: "+randomInteractPosition); //test
 					//intersection tiles of sensor's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : activeSensor.getPhysicalArea()) {
@@ -201,15 +222,15 @@ public class Simulator {
 			            }
 			        }
 					
-					gotoInstructions(randomInteractPosition, intersectionArrayList);
+					gotoInstructions(agent, randomInteractPosition, intersectionArrayList);
 				}
-				activeSensor.interact(command);
+				bEvents.add(new BEventSensorActivation(bEventClock, activeSensor, command));
 				break;
 			}
 		}
 	}
 	
-	private void gotoEntityInstructions(String entityName) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
+	private void gotoEntityInstructions(Agent agent, String entityName) throws MqttPersistenceException, InterruptedException, MqttException, JsonProcessingException {
 		ArrayList<Entity> union = new ArrayList<Entity>();
 		union.addAll(floorplan.getEntities());
 		union.addAll(activeSensors);
@@ -224,8 +245,7 @@ public class Simulator {
 						}
 					}
 					Position randomInteractPosition = gotoAblePositions.get(Resources.getRandom().nextInt(gotoAblePositions.size()));
-					System.out.println("randomInteractPosition: "+randomInteractPosition); //test
-					notification.notifyToClient("randomInteractPosition: "+randomInteractPosition);
+					print("randomInteractPosition: "+randomInteractPosition); //test
 					//intersection tiles of entity's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : entity.getPhysicalArea()) {
@@ -234,7 +254,7 @@ public class Simulator {
 			            }
 			        }
 					
-					gotoInstructions(randomInteractPosition, intersectionArrayList);
+					gotoInstructions(agent, randomInteractPosition, intersectionArrayList);
 				}
 				break;
 			}
@@ -273,6 +293,11 @@ public class Simulator {
 		updateTime(clock.until(newTileTime,ChronoUnit.NANOS));
 	}
 	
+	// Prints to both console and WebSocket - meant for human consumption.
+	private void print(String message) {
+		System.out.println(message);
+		notification.notifyToClient(message);
+	}
 	/*
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
 		LocalDateTime newTileTime = clock.plusNanos(time);
@@ -393,10 +418,6 @@ public class Simulator {
 
 	public void setSeed(Long seed) {
 		this.seed = seed;
-	}
-
-	public Agent getAgent() {
-		return agent;
 	}
 	
 }

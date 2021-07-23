@@ -1,9 +1,13 @@
 package entities.library;
 
+import java.util.ArrayList;
+
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
+import entities.Agent;
 import entities.SensorPassive;
+import geo.Position;
 import main.Resources;
 
 public class FloorSensorGlobal extends SensorPassive {
@@ -18,7 +22,11 @@ public class FloorSensorGlobal extends SensorPassive {
 	
 	// Trigger behavior 
 	public boolean updateState() {
-		state.put("pressurePosition", Resources.getSimulator().getAgent().getPosition());
+		ArrayList<Position> agentPositions = new ArrayList<Position>();
+		for (Agent agent : Resources.getFloorplan().getAgents()) {
+			agentPositions.add(agent.getPosition());
+		}
+		state.put("pressurePosition", agentPositions);
 		return true;
 
 	}
