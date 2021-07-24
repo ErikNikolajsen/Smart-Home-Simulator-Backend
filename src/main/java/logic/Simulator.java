@@ -102,7 +102,6 @@ public class Simulator {
 		// Converting instructions to B-events
 		print("Computing B-events...");
 		
-		String[] statementArray = input.getInputArray();
 		Pattern gotoPattern = input.getGotopattern();
 		Pattern interactPattern = input.getInteractpattern();
 		Pattern waitPattern = input.getWaitpattern();
@@ -112,7 +111,7 @@ public class Simulator {
 			
 			bEventClock = clock;
 			
-			for (String statement : statementArray) {
+			for (String statement : Resources.getInput().getAgentInstructionLists().get(agent.getId())) {
 				//print("* "+statement+":");
 				
 				// GOTO

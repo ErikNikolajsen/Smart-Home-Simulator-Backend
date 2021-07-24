@@ -26,14 +26,18 @@ public class SimulationController {
 	private NotificationController notificationController;
 
 	@PostMapping("/input") // requires the prior instantiation of a Floorplan object
-	public String postInput(@RequestBody Input input) {
+	public String postInput(@RequestBody String inputString) {
 		// Test for prior instantiation of a Floorplan object
 		if (Resources.getFloorplan() == null) {
 			System.out.println("ERROR: no floorplan has been instantiated");
 			return "ERROR: no floorplan has been instantiated";
 		}
 		
-		// Test instruction input
+		// Instantiate a Input object
+		Input input = new Input();
+		input.setInput(inputString);
+		
+		// Test agent instructions input
 		String testResult = input.test();
 		if (testResult.equals("consumed")) {
 			Resources.setInput(input);
