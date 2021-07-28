@@ -47,7 +47,6 @@ public class Simulator {
 
 	private NotificationController notification;
 
-	private Input input = Resources.getInput();
 	private Floorplan floorplan = Resources.getFloorplan();
 	private AStarGrid grid = Resources.getaStarGrid();
 	ArrayList<SensorPassive> passiveSensors = floorplan.getPassiveSensors();
@@ -106,11 +105,6 @@ public class Simulator {
 		// Converting instructions to B-events
 		print("Computing B-events...");
 		
-		Pattern gotoPattern = input.getGotopattern();
-		Pattern interactPattern = input.getInteractpattern();
-		Pattern waitPattern = input.getWaitpattern();
-		Pattern entityPattern = input.getGotoentitypattern();
-		
 		for (Agent agent : Resources.getFloorplan().getAgents()) {
 			
 			bEventClock = clock;
@@ -119,27 +113,27 @@ public class Simulator {
 				//print("* "+statement+":");
 				
 				// GOTO
-				if (gotoPattern.matcher(statement).matches()) {
+				if (Resources.getInput().getGotoentitypattern().matcher(statement).matches()) {
 					Position gotoPosition = new Position(
-						Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$1")),
-						Integer.parseInt(gotoPattern.matcher(statement).replaceAll("$2"))
+						Integer.parseInt(Resources.getInput().getGotoentitypattern().matcher(statement).replaceAll("$1")),
+						Integer.parseInt(Resources.getInput().getGotoentitypattern().matcher(statement).replaceAll("$2"))
 					);
 					gotoInstructions(agent, gotoPosition, new ArrayList<Position>());
 				
 				// WAIT
-				} else if (waitPattern.matcher(statement).matches()) {
-					long waitTime = Long.parseLong(waitPattern.matcher(statement).replaceAll("$1")) * 1000000000; // converts seconds to nanoseconds
+				} else if (Resources.getInput().getWaitpattern().matcher(statement).matches()) {
+					long waitTime = Long.parseLong(Resources.getInput().getWaitpattern().matcher(statement).replaceAll("$1")) * 1000000000; // converts seconds to nanoseconds
 					waitInstructions(waitTime);
 				
 				// INTERACT
-				} else if (interactPattern.matcher(statement).matches()) {
-					String sensorName = interactPattern.matcher(statement).replaceAll("$1");
-					String command = interactPattern.matcher(statement).replaceAll("$2");
+				} else if (Resources.getInput().getInteractpattern().matcher(statement).matches()) {
+					String sensorName = Resources.getInput().getInteractpattern().matcher(statement).replaceAll("$1");
+					String command = Resources.getInput().getInteractpattern().matcher(statement).replaceAll("$2");
 					interactInstructions(agent, sensorName, command);
 				
 				// GOTO ENTITY
-				} else if (entityPattern.matcher(statement).matches()) {
-					String entityName = entityPattern.matcher(statement).replaceAll("$1");
+				} else if (Resources.getInput().getGotoentitypattern().matcher(statement).matches()) {
+					String entityName = Resources.getInput().getGotoentitypattern().matcher(statement).replaceAll("$1");
 					gotoEntityInstructions(agent, entityName);
 				}
 			}
