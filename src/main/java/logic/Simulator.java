@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -149,6 +150,9 @@ public class Simulator {
 			agent.setPosition(agent.getInitialPosition());
 		}
 		
+		// reset exemptedAreas
+		Resources.getaStarGrid().resetExemptedAreas(Resources.getFloorplan().getAgents());
+		
 		// Three-phase simulation start
 		print("*** Simulation has started ***");
 		for (BEvent event : bEvents) {
@@ -183,7 +187,8 @@ public class Simulator {
 				agent.getPosition().getY(), 
 				gotoPosition.getX(), 
 				gotoPosition.getY(),
-				exemptedCollisions);
+				exemptedCollisions,
+				agent);
 		
 		// detects if goto is impossible (HALTING ERROR)
 		if (path.isEmpty()) {

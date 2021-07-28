@@ -2,8 +2,11 @@ package pathfinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+import entities.Agent;
 import entities.Entity;
 import entities.Floorplan;
 import entities.Sensor;
@@ -170,19 +173,49 @@ public class AStarGrid {
      * @param targetY target node y
      * @return the path
      */
-    ArrayList<ArrayList<Position>> exemptedCollisions = new ArrayList<ArrayList<Position>>(Arrays.asList(new ArrayList<Position>(), new ArrayList<Position>(), new ArrayList<Position>()));
-    public final List<AStarNode> getPath(int startX, int startY, int targetX, int targetY, ArrayList<Position> exempted) {
-    	exemptedCollisions.set(2, exemptedCollisions.get(1));
-    	exemptedCollisions.set(1, exemptedCollisions.get(0));
-    	exemptedCollisions.set(0, exempted);
-    	for (Position position : exemptedCollisions.get(2)) {
-    		setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+    HashMap<Agent, ArrayList<ArrayList<Position>>> exemptedAreas = new HashMap<Agent, ArrayList<ArrayList<Position>>>();
+    public final List<AStarNode> getPath(int startX, int startY, int targetX, int targetY, ArrayList<Position> exempted, Agent agent) {
+    	
+    	//removes areas in exemptedAreas where the agent is not in anymore. Also makes those areas not-walkable again.
+    	if (exemptedAreas.get(agent) != null) {
+    		
+    		ArrayList<ArrayList<Position>> exemptedAreasClone = new ArrayList<ArrayList<Position>>();
+    		for (ArrayList<Position> area : exemptedAreas.get(agent)) {
+    			exemptedAreasClone.add(area);
+    		}
+	    	for (ArrayList<Position> area : exemptedAreasClone) {
+	    		if (!area.contains(agent.getPosition())) {
+	    			for (Position position : area) {
+	    	    		setNodeState(position.getX(), position.getY(), NodeState.NOT_WALKABLE);
+	    	    	} 
+	    			exemptedAreas.get(agent).remove(area);
+	    		}
+	    	}
     	}
-    	for (Position position : exemptedCollisions.get(0)) {
+    	
+    	//adds new exempted area to exemptedAreas - and makes exempted area walkable.
+    	ArrayList<ArrayList<Position>> list = exemptedAreas.get(agent);
+    	if (exemptedAreas.get(agent) == null) {
+    		list = new ArrayList<ArrayList<Position>>();
+    		list.add(exempted);
+	    	exemptedAreas.put(agent, list);
+    	} else {
+    		list.add(exempted);
+    	}
+    	for (Position position : exempted) {
     		setNodeState(position.getX(), position.getY(), NodeState.WALKABLE);
     	}
+    	
+    	//calculates path
     	return logic.getPath(grid, getNode(startX, startY), getNode(targetX, targetY));
     }
+    
+    public void resetExemptedAreas(ArrayList<Agent> agents) {
+		exemptedAreas.clear();
+		for (Agent agent : agents) {
+			exemptedAreas.put(agent, new ArrayList<ArrayList<Position>>());
+		}
+	}
 
     /**
      * Returns a node at x, y. There is no bounds checking.
@@ -216,4 +249,12 @@ public class AStarGrid {
 
         return nodes;
     }
+
+	
+
+
+
+
+    
+    
 }
