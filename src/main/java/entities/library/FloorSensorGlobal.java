@@ -17,7 +17,7 @@ public class FloorSensorGlobal extends SensorPassive {
 	}
 	
 	public void defineDefaultState() {
-		state.put("pressurePosition", "N/A");
+		state.put("pressurePositions", null);
 	}
 	
 	// Trigger behavior 
@@ -26,7 +26,7 @@ public class FloorSensorGlobal extends SensorPassive {
 		for (Agent agent : Resources.getFloorplan().getAgents()) {
 			agentPositions.add(agent.getPosition());
 		}
-		state.put("pressurePosition", agentPositions);
+		state.put("pressurePositions", agentPositions);
 		return true;
 
 	}

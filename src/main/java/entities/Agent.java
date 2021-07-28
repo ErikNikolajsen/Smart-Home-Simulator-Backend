@@ -12,6 +12,7 @@ public class Agent {
 	
 	@JsonIgnore private Position position;
 	
+	//Constructors
 	public Agent(String id, Position point, double speed) {
 		this.id = id;
 		this.initialPosition = point;

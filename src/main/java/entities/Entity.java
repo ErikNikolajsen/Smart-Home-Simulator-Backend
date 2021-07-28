@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import geo.Position;
 
 public class Entity {
+	
 	private String name;
 	private ArrayList<Position> physicalArea;
 	private ArrayList<Position> interactArea;
