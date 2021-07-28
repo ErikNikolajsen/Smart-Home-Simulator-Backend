@@ -86,6 +86,9 @@ public class Simulator {
 			agent.setPosition(agent.getInitialPosition());
 		}
 		
+		// reset exemptedAreas of the grid
+		Resources.getaStarGrid().resetExemptedAreas();
+		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
 			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic, qualityOfService));
@@ -149,9 +152,6 @@ public class Simulator {
 		for (Agent agent : floorplan.getAgents()) {
 			agent.setPosition(agent.getInitialPosition());
 		}
-		
-		// reset exemptedAreas
-		Resources.getaStarGrid().resetExemptedAreas(Resources.getFloorplan().getAgents());
 		
 		// Three-phase simulation start
 		print("*** Simulation has started ***");

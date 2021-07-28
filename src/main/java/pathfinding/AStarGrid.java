@@ -210,11 +210,8 @@ public class AStarGrid {
     	return logic.getPath(grid, getNode(startX, startY), getNode(targetX, targetY));
     }
     
-    public void resetExemptedAreas(ArrayList<Agent> agents) {
+    public void resetExemptedAreas() {
 		exemptedAreas.clear();
-		for (Agent agent : agents) {
-			exemptedAreas.put(agent, new ArrayList<ArrayList<Position>>());
-		}
 	}
 
     /**
