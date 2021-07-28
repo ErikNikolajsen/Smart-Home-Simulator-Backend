@@ -53,9 +53,8 @@ public class Simulator {
 	ArrayList<SensorActive> activeSensors = floorplan.getActiveSensors();
 	
 	// B-event properties
-	ArrayList<BEvent> bEvents = new ArrayList<BEvent>();
+	ArrayList<BEvent> bEvents;
 	LocalDateTime bEventClock;
-	Position bEventAgentPosition;
 	
 	public Simulator(LocalDateTime clock, boolean instantSimulation, double relativeTime, boolean mqttOutput, int qualityOfService, String mqttHost, String mqttPort, String rootTopic, Long seed) {
 		this.clock = clock;
@@ -88,6 +87,9 @@ public class Simulator {
 		// reset exemptedAreas of the grid
 		Resources.getaStarGrid().resetExemptedAreas();
 		
+		// reset B-events list
+		bEvents = new ArrayList<BEvent>();
+		
 		// start MQTT client if appropriate
 		if (mqttOutput == true) {
 			Resources.setMqtt(new MqttPaho(mqttHost, mqttPort, rootTopic, qualityOfService));
@@ -113,10 +115,10 @@ public class Simulator {
 				//print("* "+statement+":");
 				
 				// GOTO
-				if (Resources.getInput().getGotoentitypattern().matcher(statement).matches()) {
+				if (Resources.getInput().getGotopattern().matcher(statement).matches()) {
 					Position gotoPosition = new Position(
-						Integer.parseInt(Resources.getInput().getGotoentitypattern().matcher(statement).replaceAll("$1")),
-						Integer.parseInt(Resources.getInput().getGotoentitypattern().matcher(statement).replaceAll("$2"))
+						Integer.parseInt(Resources.getInput().getGotopattern().matcher(statement).replaceAll("$1")),
+						Integer.parseInt(Resources.getInput().getGotopattern().matcher(statement).replaceAll("$2"))
 					);
 					gotoInstructions(agent, gotoPosition, new ArrayList<Position>());
 				
