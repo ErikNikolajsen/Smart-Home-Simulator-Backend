@@ -163,18 +163,18 @@ public class Simulator {
 			triggerPassiveSensors(diff);
 			
 			// Movement event
-			if (event instanceof logic.BEventMovement) {
+			if (event.getEventType() == BEventType.MOVEMENT) {
 				
 				//update agent position
-				((logic.BEventMovement) event).getAgent().setPosition(
-						((logic.BEventMovement) event).getNode().getX(), 
-						((logic.BEventMovement) event).getNode().getY()
+				event.getAgent().setPosition(
+						event.getNode().getX(), 
+						event.getNode().getY()
 						);
-				print(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+((logic.BEventMovement) event).getAgent().getId()+" : "+((logic.BEventMovement) event).getAgent().getPosition().toString()); // print time & position
+				print(clock.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+event.getAgent().getId()+" : "+event.getAgent().getPosition().toString()); // print time & position
 			
 			// Active sensor activation event
-			} else if (event instanceof logic.BEventSensorActivation) {
-				((logic.BEventSensorActivation) event).getSensor().interact(((logic.BEventSensorActivation) event).getCommand());
+			} else if (event.getEventType() == BEventType.SENSOR_ACTIVATION) {
+				event.getSensor().interact(event.getCommand());
 			} 
 		}
 		print("*** Simulation has ended ***");
@@ -202,7 +202,7 @@ public class Simulator {
 			//Agent jumps from start of tile to start of tile
 			long halfTime = time/2;
 			bEventClock = bEventClock.plusNanos(halfTime);
-			bEvents.add(new BEventMovement(bEventClock, agent, node));
+			bEvents.add(new BEvent(BEventType.MOVEMENT, bEventClock, agent, node));
 			bEventClock = bEventClock.plusNanos(halfTime);
 			agent.setPosition(new Position(node.getX(),node.getY()));
 		}
@@ -228,7 +228,7 @@ public class Simulator {
 					
 					gotoInstructions(agent, randomInteractPosition, intersectionArrayList);
 				}
-				bEvents.add(new BEventSensorActivation(bEventClock, activeSensor, command));
+				bEvents.add(new BEvent(BEventType.SENSOR_ACTIVATION, bEventClock, activeSensor, command));
 				break;
 			}
 		}
