@@ -14,6 +14,7 @@ public class BEvent {
 	private AStarNode node;
 	private SensorActive sensor;
 	private String command;
+	private String output;
 	
 	// Movement constructor
 	public BEvent(BEventType eventType, LocalDateTime eventDateTime, Agent agent, AStarNode node) {
@@ -29,6 +30,13 @@ public class BEvent {
 		this.eventDateTime = eventDateTime;
 		this.sensor = sensor;
 		this.command = command;
+	}
+	
+	// Output constructor
+	public BEvent(BEventType eventType, LocalDateTime eventDateTime, String output) {
+		this.eventType = eventType;
+		this.eventDateTime = eventDateTime;
+		this.output = output;
 	}
 	
 	
@@ -84,5 +92,15 @@ public class BEvent {
 	public void setCommand(String command) {
 		this.command = command;
 	}
+
+	public String getOutput() {
+		return output;
+	}
+
+	public void setOutput(String output) {
+		this.output = output;
+	}
+	
+	
 
 }

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -114,6 +114,13 @@ public class Simulator {
 			for (String statement : Resources.getInput().getAgentInstructionLists().get(agent.getId())) {
 				//print("* "+statement+":");
 				
+				// Add output B-event
+				String statementSansWhitespace = statement.replaceAll("\\s+","");
+				if (!statementSansWhitespace.equals("")) {
+					bEvents.add(new BEvent(BEventType.OUTPUT, bEventClock, "* "+agent.getId()+" - "+statement.replaceAll("\\s+","")+":"));
+				}
+				
+				
 				// GOTO
 				if (Resources.getInput().getGotopattern().matcher(statement).matches()) {
 					Position gotoPosition = new Position(
@@ -142,7 +149,7 @@ public class Simulator {
 		}
 		
 		// Sort B-events by time of event
-		bEvents.sort(Comparator.comparing(BEvent::getEventDateTime));
+        bEvents.sort(Comparator.comparing(BEvent::getEventDateTime));
 		
 		// reset agents' positions
 		for (Agent agent : floorplan.getAgents()) {
@@ -171,6 +178,10 @@ public class Simulator {
 			// Active sensor activation event
 			} else if (event.getEventType() == BEventType.SENSOR_ACTIVATION) {
 				event.getSensor().interact(event.getCommand());
+			
+			// Output event
+			} else if (event.getEventType() == BEventType.OUTPUT) {
+				print(event.getOutput());
 			} 
 		}
 		print("*** Simulation has ended ***");
