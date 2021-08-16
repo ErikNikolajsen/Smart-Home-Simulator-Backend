@@ -224,7 +224,7 @@ public class Simulator {
 			if (activeSensor.getName().equals(sensorName)) {
 				if (!activeSensor.getInteractArea().contains(agent.getPosition())) {
 					Position randomInteractPosition = activeSensor.getInteractArea().get(Resources.getRandom().nextInt(activeSensor.getInteractArea().size()));
-					print("randomInteractPosition: "+randomInteractPosition); //test
+					//print("randomInteractPosition: "+randomInteractPosition); //test
 					//intersection tiles of sensor's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : activeSensor.getPhysicalArea()) {
@@ -256,7 +256,7 @@ public class Simulator {
 						}
 					}
 					Position randomInteractPosition = gotoAblePositions.get(Resources.getRandom().nextInt(gotoAblePositions.size()));
-					print("randomInteractPosition: "+randomInteractPosition); //test
+					//print("randomInteractPosition: "+randomInteractPosition); //test
 					//intersection tiles of entity's physicalArea tiles and interactArea tiles that should become walkable
 					ArrayList<Position> intersectionArrayList = new ArrayList<Position>();
 			        for (Position t : entity.getPhysicalArea()) {
