@@ -37,7 +37,7 @@ public class SystemController {
 		Set<BeanDefinition> components = provider.findCandidateComponents("entities.library");
 		for (BeanDefinition component : components)
 		{
-		    Class cls = Class.forName(component.getBeanClassName());
+		    Class<?> cls = Class.forName(component.getBeanClassName());
 		    passiveSensorClasses.add(cls.getName());
 		}
 		return passiveSensorClasses;
@@ -55,7 +55,7 @@ public class SystemController {
 		Set<BeanDefinition> components = provider.findCandidateComponents("entities.library");
 		for (BeanDefinition component : components)
 		{
-		    Class cls = Class.forName(component.getBeanClassName());
+		    Class<?> cls = Class.forName(component.getBeanClassName());
 		    activeSensorClasses.add(cls.getName());
 		}
 		

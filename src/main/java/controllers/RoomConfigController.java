@@ -1,45 +1,21 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import entities.Floorplan;
-import geo.Position;
 import main.Resources;
 import pathfinding.AStarGrid;
-import pathfinding.AStarNode;
 
 @RestController
 @RequestMapping("/api/roomConfig/")
 @CrossOrigin
 public class RoomConfigController {
-
-	@PostMapping("/grid")
-	public void instantiateGrid(@RequestBody AStarGrid aStarGrid) {
-		Resources.setaStarGrid(aStarGrid);
-	}
-	
-	@GetMapping("/grid")
-	public @ResponseBody AStarGrid getGrid() {
-		return Resources.getaStarGrid();
-	}
-	
-	//get path tester
-	@GetMapping("/getPath")
-	public @ResponseBody List<AStarNode> getPath(@RequestParam int startx, int starty, int targetx, int targety ) {
-		return Resources.getaStarGrid().getPath(startx, starty, targetx, targety, new ArrayList<Position>());
-	}
-	// http://localhost:8080/api/roomConfig/getPath?startx=0&starty=0&targetx=4&targety=4
 	
 	@PostMapping("/floorplan")
 	public String postFloorplan(@RequestBody Floorplan floorplan) {
