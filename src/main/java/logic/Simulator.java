@@ -95,7 +95,7 @@ public class Simulator {
 		}
 		
 		// instantiate Random object with specified seed. Null or 0 will ensure a random seed.
-		if (seed == null) {
+		if (seed == null || seed == 0) {
 			Resources.setRandom(new Random());
 		} else {
 			Resources.setRandom(new Random(seed));
