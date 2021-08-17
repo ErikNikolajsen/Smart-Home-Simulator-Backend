@@ -44,8 +44,10 @@ public class MqttPaho {
 		
 		MqttConnectOptions options = new MqttConnectOptions();
 		options.setAutomaticReconnect(true);
-		options.setCleanSession(true);
-		//options.setConnectionTimeout(10);
+		options.setCleanSession(true); // Whether the client and server should remember state for the client across reconnects (default is true)
+		options.setConnectionTimeout(0); // This value, measured in seconds, defines the maximum time interval the client will wait for the network connection to the MQTT server to be established (default is 30 seconds). A value of 0 has the effect of turning off the mechanism.
+		options.setKeepAliveInterval(0); // This value, measured in seconds, defines the maximum time interval between messages sent or received (default is 60 seconds). A value of 0 has the effect of turning off the mechanism.
+		options.setAutomaticReconnect(true);
 		
 		client.connect(options);
 	}
