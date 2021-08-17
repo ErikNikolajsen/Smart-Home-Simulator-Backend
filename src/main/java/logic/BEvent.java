@@ -39,11 +39,15 @@ public class BEvent {
 		this.output = output;
 	}
 	
-	
-	public BEvent() {
+	// Output constructor
+	public BEvent(BEventType eventType, LocalDateTime eventDateTime) {
+		this.eventType = eventType;
+		this.eventDateTime = eventDateTime;
 	}
 	
-	
+	// Default constructor
+	public BEvent() {
+	}
 
 	public BEventType getEventType() {
 		return eventType;

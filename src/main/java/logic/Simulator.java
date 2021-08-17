@@ -146,6 +146,9 @@ public class Simulator {
 					gotoEntityInstructions(agent, entityName);
 				}
 			}
+			
+			// Add end simulation event (for the scenario where the last instruction is wait, to allow for C-events in waiting period)
+			bEvents.add(new BEvent(BEventType.SIMULATION_END, bEventClock));
 		}
 		
 		// Sort B-events by time of event
