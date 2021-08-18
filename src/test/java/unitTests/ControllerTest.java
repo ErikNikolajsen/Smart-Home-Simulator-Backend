@@ -10,7 +10,6 @@ import java.util.Arrays;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ import entities.Floorplan;
 import entities.SensorActive;
 import entities.SensorPassive;
 import geo.Position;
-import logic.Input;
 import logic.Simulator;
 import main.Main;
 import main.Resources;
@@ -55,7 +53,7 @@ class ControllerTest {
 
 	@Test
 	void testPostInputLackingDependency() {
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		assertEquals("ERROR: no floorplan has been instantiated",simulationController.postInput(input));
 	}
@@ -66,7 +64,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -100,7 +98,7 @@ class ControllerTest {
 				1,
 				-5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -122,7 +120,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -144,7 +142,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -157,7 +155,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(5,5);");
+		String input = "agent(John_Doe){goto(5,5);}";
 		
 		assertEquals("ERROR: coordinate is out of bounds in statement 1: goto(5,5)",simulationController.postInput(input));
 	}
@@ -169,7 +167,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -182,7 +180,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		assertEquals("consumed",simulationController.postInput(input));
 	}
@@ -194,7 +192,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -207,7 +205,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		simulationController.postInput(input);
 		
@@ -233,7 +231,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -246,7 +244,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		simulationController.postInput(input);
 		
@@ -272,7 +270,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -285,7 +283,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		simulationController.postInput(input);
 		
@@ -312,7 +310,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(
@@ -325,7 +323,7 @@ class ControllerTest {
 			);
 		roomConfigController.postFloorplan(floorplan);
 		
-		Input input = new Input("goto(4,4);");
+		String input = "agent(John_Doe){goto(4,4);}";
 		
 		simulationController.postInput(input);
 		
@@ -339,7 +337,7 @@ class ControllerTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 				)),
 				new ArrayList<SensorActive>(Arrays.asList(

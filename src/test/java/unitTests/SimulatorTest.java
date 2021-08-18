@@ -16,17 +16,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import controllers.NotificationController;
-import controllers.RoomConfigController;
 import controllers.SimulationController;
-import controllers.SystemController;
 import entities.Agent;
 import entities.Entity;
 import entities.Floorplan;
@@ -35,7 +30,6 @@ import entities.SensorPassive;
 import entities.library.PresenceSensor;
 import entities.library.Television;
 import geo.Position;
-import logic.Input;
 import logic.Simulator;
 import main.Main;
 import main.Resources;
@@ -54,7 +48,7 @@ class SimulatorTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 					new Position(0,1),
 					new Position(0,3),
@@ -138,7 +132,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationSuccess() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(4,4);wait(5);goto(0,0);goto(vestibule);interact(television,ON);interact(television,CHANNEL1);interact(television2,ON);goto(window);goto(chair)");
+		String input = "agent(John_Doe){goto(4,4);wait(5);goto(0,0);goto(vestibule);interact(television,ON);interact(television,CHANNEL1);interact(television2,ON);goto(window);goto(chair)}";
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
@@ -160,7 +154,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationSuccess2() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(1,3);");
+		String input = "agent(John_Doe){goto(1,3);}";
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
@@ -180,7 +174,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationRelativeTimeZero() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(1,3);");
+		String input = "agent(John_Doe){goto(1,3);}";
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
@@ -200,7 +194,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationRelativeTimeNegative() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(1,3);");
+		String input = "agent(John_Doe){goto(1,3);}";
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(
@@ -220,7 +214,7 @@ class SimulatorTest {
 	@Test
 	void testSimulationQualityOfServiceError() throws MqttPersistenceException, JsonProcessingException, InterruptedException, MqttException {
 		
-		Input input = new Input("goto(1,3);");
+		String input = "agent(John_Doe){goto(1,3);}";
 		simulationController.postInput(input);
 		
 		Simulator simulator = new Simulator(

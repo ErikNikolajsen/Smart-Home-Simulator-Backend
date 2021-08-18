@@ -31,7 +31,7 @@ class InputTest {
 				1,
 				5,
 				5,
-				new Agent(new Position(0,0), 1.0),
+				new ArrayList<Agent>(Arrays.asList(new Agent("John_Doe", new Position(0,0), 1.0))),
 				new ArrayList<Position>(Arrays.asList(
 					new Position(0,1),
 					new Position(0,3),
@@ -89,50 +89,57 @@ class InputTest {
 
 	@Test
 	void testInputSuccess() {
-		Input input = new Input("let makeTea{goto(4,4);} makeTea();wait(5);;goto(vestibule);interact(television,ON)");
-		Resources.setInput(input);
+		String input = "macro(makeTea){goto(4,4);} agent(John_Doe){makeTea();wait(5);;goto(vestibule);interact(television,ON)}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("consumed",Resources.getInput().test());
 	}
 
 	@Test
 	void testInputGotoOutOfBounds() {
-		Input input = new Input("goto(5,5);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){goto(5,5);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: coordinate is out of bounds in statement 1: goto(5,5)",Resources.getInput().test());
 	}
 	
 	@Test
 	void testInputGotoNonWalkable() {
-		Input input = new Input("goto(0,1);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){goto(0,1);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: target coordinate is not walkable in statement 1: goto(0,1)",Resources.getInput().test());
 	}
 	
 	@Test
 	void testInputInteractNameNonExistent() {
-		Input input = new Input("interact(radio,TURN_ON);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){interact(radio,TURN_ON);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: No active sensor exists with the name specified in statement 1: interact(radio,TURN_ON)",Resources.getInput().test());
 	}
 	
 	@Test
 	void testInputInteractCommandNonExistent() {
-		Input input = new Input("interact(television,CHANNEL5);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){interact(television,CHANNEL5);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: The specified type of sensor does not accept the command in statement 1: interact(television,CHANNEL5)",Resources.getInput().test());
 	}
 	
 	@Test
 	void testInputGotoNameNonExistent() {
-		Input input = new Input("goto(kitchen);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){goto(kitchen);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: No entity or active-sensor exists with the name specified in statement 1: goto(kitchen)",Resources.getInput().test());
 	}
 	
 	@Test
 	void testInputSyntaxError() {
-		Input input = new Input("gote(2,2);");
-		Resources.setInput(input);
+		String input = "agent(John_Doe){gote(2,2);}";
+		Resources.setInput(new Input());
+		Resources.getInput().setInput(input);
 		assertEquals("ERROR: syntax error in statement 1: gote(2,2)",Resources.getInput().test());
 	}
 	

@@ -48,8 +48,8 @@ public class SimulationController {
 	}
 	
 	@GetMapping("/Input")
-	public @ResponseBody Input getInput() {
-		return Resources.getInput(); 
+	public @ResponseBody String getInput() {
+		return Resources.getInput().getInput(); 
 	}
 	
 	@PostMapping("/simulator")
