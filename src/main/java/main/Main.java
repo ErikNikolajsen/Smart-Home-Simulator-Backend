@@ -25,6 +25,7 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException, MqttException, ClassNotFoundException, IOException {
 		
         if (args.length == 0) {
+        	// If the program is started without any arguments, then it waits to receive them via its API
         	websocketOutput = true;
 			SpringApplication.run(Main.class, args);
 			System.out.println(" ___    _____    ____  _                 _       _             \r\n"
@@ -34,21 +35,29 @@ public class Main {
 					+ "|___\\___/|_|    |____/|_|_| |_| |_|\\__,_|_|\\__,_|\\__\\___/|_|  \r\n"
 					+ "============================================================\r\n"
 					+ "                                                    (v1.0.0)");
-        } else {
+        } else if (args.length == 3) {
         	websocketOutput = false;
             RoomConfigController roomConfigController = new RoomConfigController();
             SimulationController simulationController = new SimulationController();
             
-            // create object mapper instance
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             
-            roomConfigController.postFloorplan(mapper.readValue(Paths.get(args[0]).toFile(), Floorplan.class));
-            simulationController.postInput(Files.readString(Path.of(args[1])));
-            simulationController.postSimulator(mapper.readValue(Paths.get(args[2]).toFile(), Simulator.class));
+            haltIfError(roomConfigController.postFloorplan(mapper.readValue(Paths.get(args[0]).toFile(), Floorplan.class)));
+            haltIfError(simulationController.postInput(Files.readString(Path.of(args[1]))));
+            haltIfError(simulationController.postSimulator(mapper.readValue(Paths.get(args[2]).toFile(), Simulator.class)));
             System.exit(0);
+        } else {
+        	System.out.println("ERROR: Invalid number of arguments");
+        	System.exit(0);
         }
     }
+	
+	private static void haltIfError(String inputResult) {
+		if (!inputResult.equals("consumed")) {
+        	System.exit(0);
+        }
+	}
 
 	public static boolean isWebsocketOutput() {
 		return websocketOutput;
