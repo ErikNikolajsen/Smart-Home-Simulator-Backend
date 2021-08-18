@@ -20,6 +20,7 @@ import entities.Agent;
 import entities.Entity;
 import entities.Floorplan;
 import geo.Position;
+import main.Main;
 import main.MqttPaho;
 import main.Resources;
 import pathfinding.AStarGrid;
@@ -102,8 +103,6 @@ public class Simulator {
 		}
 		
 		// Converting instructions to B-events
-		print("Computing B-events...");
-		
 		for (Agent agent : Resources.getFloorplan().getAgents()) {
 			
 			bEventClock = clock;
@@ -307,7 +306,9 @@ public class Simulator {
 	// Prints to both console and WebSocket - meant for human consumption.
 	private void print(String message) {
 		System.out.println(message);
-		notification.notifyToClient(message);
+		if (Main.isWebsocketOutput() == true) {
+			notification.notifyToClient(message);
+		}
 	}
 	/*
 	private void triggerPassiveSensors(long time) throws InterruptedException, MqttPersistenceException, MqttException {
