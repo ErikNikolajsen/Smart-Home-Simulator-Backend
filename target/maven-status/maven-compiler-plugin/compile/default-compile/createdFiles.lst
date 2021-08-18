@@ -1,11 +1,7 @@
-entities\Sensor.class
-Pathfinding\Node.class
-utils\Log.class
-entities\Agent.class
-main\Model.class
-geo\Environment.class
-logic\Simulator.class
 entities\Entity.class
-geo\Position.class
-entities\library\Lamp.class
 main\Main.class
+utils\Log.class
+logic\Simulator.class
+entities\Agent.class
+geo\Position.class
+entities\Sensor.class
