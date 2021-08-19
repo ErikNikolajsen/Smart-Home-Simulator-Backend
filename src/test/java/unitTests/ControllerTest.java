@@ -85,6 +85,8 @@ class ControllerTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			7357L
 		);
 		
@@ -218,6 +220,8 @@ class ControllerTest {
 				"broker.hivemq.com",
 				"1883",
 				"smarthome",
+				false,
+				"test_simulation",
 				7357L
 				);
 		
@@ -257,6 +261,8 @@ class ControllerTest {
 				"broker.hivemq.com",
 				"1883",
 				"smarthome",
+				false,
+				"test_simulation",
 				7357L
 				);
 		
@@ -296,6 +302,8 @@ class ControllerTest {
 				"broker.hivemq.com",
 				"1883",
 				"smarthome",
+				false,
+				"test_simulation",
 				7357L
 				);
 		simulationController.postSimulator(simulator);

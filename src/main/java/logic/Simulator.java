@@ -58,7 +58,7 @@ public class Simulator {
 	ArrayList<BEvent> bEvents;
 	LocalDateTime bEventClock;
 	
-	public Simulator(LocalDateTime clock, boolean instantSimulation, double relativeTime, boolean mqttOutput, int qualityOfService, String mqttHost, String mqttPort, String rootTopic, Long seed) {
+	public Simulator(LocalDateTime clock, boolean instantSimulation, double relativeTime, boolean mqttOutput, int qualityOfService, String mqttHost, String mqttPort, String rootTopic, boolean csvOutput, String csvFileName, Long seed) {
 		this.clock = clock;
 		this.instantSimulation = instantSimulation;
 		this.relativeTime = relativeTime;
@@ -67,6 +67,8 @@ public class Simulator {
 		this.mqttHost = mqttHost;
 		this.mqttPort = mqttPort;
 		this.rootTopic = rootTopic;
+		this.csvOutput = csvOutput;
+		this.csvFileName = csvFileName;
 		this.seed = seed;
 	}
 	
@@ -455,7 +457,7 @@ public class Simulator {
 		this.seed = seed;
 	}
 
-	public boolean isCsvOutput() {
+	public boolean getCsvOutput() {
 		return csvOutput;
 	}
 

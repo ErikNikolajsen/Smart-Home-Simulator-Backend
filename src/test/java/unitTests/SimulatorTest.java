@@ -144,6 +144,8 @@ class SimulatorTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			7357L
 		);
 		
@@ -166,6 +168,8 @@ class SimulatorTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			null
 		);
 		simulationController.postSimulator(simulator);	
@@ -186,6 +190,8 @@ class SimulatorTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			null
 		);
 		assertEquals("ERROR: \"relativeTime\" has not been defined or has its value defined as zero",simulationController.postSimulator(simulator));
@@ -206,6 +212,8 @@ class SimulatorTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			null
 		);
 		assertEquals("ERROR: \"relativeTime\" has been defined as a negative integer",simulationController.postSimulator(simulator));
@@ -226,6 +234,8 @@ class SimulatorTest {
 			"broker.hivemq.com",
 			"1883",
 			"smarthome",
+			false,
+			"test_simulation",
 			null
 		);
 		assertEquals("ERROR: \"qualityOfService\" has not been defined as either 0, 1, or 2",simulationController.postSimulator(simulator));
