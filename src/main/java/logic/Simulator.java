@@ -364,6 +364,13 @@ public class Simulator {
 		if (qualityOfService < 0 || qualityOfService > 2) {
 			return "ERROR: \"qualityOfService\" has not been defined as either 0, 1, or 2";
 		}
+		
+		//--- CSV ---//
+		// test to ensure that a csvFileName has been given
+		if (csvFileName == null || csvFileName == "") {
+			return "ERROR: no filename for the CSV output has been set";
+		}
+		
 		return "consumed";
 	}
 	
