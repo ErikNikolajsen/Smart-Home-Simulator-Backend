@@ -26,6 +26,7 @@ import main.Resources;
 import pathfinding.AStarGrid;
 import pathfinding.AStarNode;
 import pathfinding.NodeState;
+import utils.Log;
 import entities.SensorActive;
 import entities.SensorPassive;
 
@@ -40,6 +41,9 @@ public class Simulator {
 	private String mqttHost;
 	private String mqttPort;
 	private String rootTopic;
+	
+	private boolean csvOutput = false;
+	private String csvFileName;
 	
 	private Long seed;
 
@@ -100,6 +104,13 @@ public class Simulator {
 			Resources.setRandom(new Random());
 		} else {
 			Resources.setRandom(new Random(seed));
+		}
+		
+		// instantiate Log object if user wants to generate a CSV file 
+		if (csvOutput == true) {
+			Resources.setLog(new Log(csvFileName));
+			Resources.getLog().createFile();
+			Resources.getLog().openFileWriter();
 		}
 		
 		// Converting instructions to B-events
@@ -184,6 +195,11 @@ public class Simulator {
 			} 
 		}
 		print("*** Simulation has ended ***");
+		
+		// close fileWriter if user wants to generate a CSV file 
+		if (csvOutput == true) {
+			Resources.getLog().closeFileWriter();
+		}
 	}
 
 	private void gotoInstructions(Agent agent, Position gotoPosition, ArrayList<Position> exemptedCollisions) throws InterruptedException, MqttPersistenceException, MqttException, JsonProcessingException {
@@ -431,5 +447,22 @@ public class Simulator {
 	public void setSeed(Long seed) {
 		this.seed = seed;
 	}
+
+	public boolean isCsvOutput() {
+		return csvOutput;
+	}
+
+	public void setCsvOutput(boolean csvOutput) {
+		this.csvOutput = csvOutput;
+	}
+
+	public String getCsvFileName() {
+		return csvFileName;
+	}
+
+	public void setCsvFileName(String csvFileName) {
+		this.csvFileName = csvFileName;
+	}
+	
 	
 }

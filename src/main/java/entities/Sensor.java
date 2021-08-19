@@ -33,7 +33,6 @@ public abstract class Sensor extends Entity{
 	}
 	
 	public void outputSensorReading() throws MqttPersistenceException, MqttException, JsonProcessingException {
-		//Resources.getLog().writeToFile(Resources.getSimulator().getClock().toString(), getName(), "true");
 		Output output = new Output(Resources.getSimulator().getClock(),getClass().getSimpleName(),getName(),state);
 		String json = mapper.writeValueAsString(output);
 	    //System.out.println(json);
@@ -43,8 +42,14 @@ public abstract class Sensor extends Entity{
 			Resources.getSimulator().getNotification().notifyToClient(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+" : "+getClass().getSimpleName()+" : "+getName()+" : "+state.toString());
 		}
 		//System.out.println("{\"time\":\""+Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+"\",\"type\":\""+getClass().getSimpleName()+"\",\"name\":\""+getName()+"\",\"state\":"+mapper.writeValueAsString(state)+"}"); // JSON format for MQTT output
+		// MQTT output
 		if (Resources.getSimulator().getMqttOutput() == true) {
 			Resources.getMqtt().publish(json);
+		}
+		
+		// CSV output
+		if (Resources.getSimulator().isCsvOutput() == true) {
+			Resources.getLog().writeToFile(Resources.getSimulator().getClock().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.nnnnnnnnn")).toString()+","+getClass().getSimpleName()+","+getName()+","+state.toString());
 		}
 	}
 	

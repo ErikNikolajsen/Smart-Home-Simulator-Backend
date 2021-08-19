@@ -7,6 +7,7 @@ import java.io.IOException;
 public class Log {
 	
 	private String fileName;
+	private FileWriter myWriter;
 
 	public Log(String name) {
 		fileName = name;
@@ -14,29 +15,39 @@ public class Log {
 	
 	public void createFile() {
 	    try {
-	      File myObj = new File("logs\\"+fileName+".csv");
-	      if (myObj.createNewFile()) {
-	        System.out.println("File created: " + myObj.getName());
-	        writeToFile("timestamp", "sensor", "value"); //write .csv column headers
-	      } else {
-	        System.out.println("File already exists.");
-	      }
+	      File myObj = new File(fileName+".csv");
+	      myObj.createNewFile();
+	      System.out.println("File created: " + myObj.getName());
 	    } catch (IOException e) {
 	      System.out.println("An error occurred.");
 	      e.printStackTrace();
 	    }
 	}
 	
-	public void writeToFile(String timestamp, String sensorName, String value) {
+	public void writeToFile(String output) {
 	    try {
-	      FileWriter myWriter = new FileWriter("logs\\"+fileName+".csv", true); //the true will append the new data instead of overwriting
-	      myWriter.write(timestamp + "," + sensorName + "," + value + "\n");
-	      myWriter.close();
-	      //System.out.println("Logged: " + timestamp + ", " + sensorName + ", " + value);
+	      myWriter.write(output + "\n");
 	    } catch (IOException e) {
 	      System.out.println("An error occurred.");
 	      e.printStackTrace();
 	    }
 	}
 	
+	public void openFileWriter() {
+		try {
+			myWriter = new FileWriter(fileName+".csv");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	public void closeFileWriter() {
+		try {
+			myWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
